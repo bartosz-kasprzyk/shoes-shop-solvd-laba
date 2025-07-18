@@ -30,7 +30,7 @@ export default function RootLayout({
           <ThemeProvider theme={theme}>
             <AppBar position='static'>
               <Toolbar>
-                <div className='flex gap-2 flex-grow'>
+                <div className='flex flex-grow gap-2'>
                   <Button color='inherit' component={Link} href='/'>
                     Home
                   </Button>

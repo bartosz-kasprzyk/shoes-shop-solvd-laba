@@ -8,6 +8,10 @@
 
 @theme inline {
   --font-default: 'Work Sans';
+  --color-primary: #fe645e;
+  --color-secondary: #6e314a;
+  --color-tertiary-light: #141e7a;
+  --color-tertiary-dark: #0a1047;
 }
 
 /* @media (prefers-color-scheme: dark) {
