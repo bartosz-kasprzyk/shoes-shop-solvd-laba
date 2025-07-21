@@ -1,3 +1,4 @@
 import CustomButton from './ui/button';
+import Input, { InputsRow } from './ui/input';
 
-export { CustomButton };
+export { CustomButton, Input, InputsRow };

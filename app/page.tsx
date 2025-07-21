@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomButton } from './components';
+import { CustomButton, Input, InputsRow } from './components';
 
 export default function HomePage() {
   return (
@@ -64,6 +64,37 @@ export default function HomePage() {
           Disabled Button
         </CustomButton>
       </div>
+      <h1 className='mb-6 text-2xl font-bold'>Input Examples</h1>
+      <InputsRow>
+        <Input title='Name' id='name' placeholder='Hayman Andrews' required />
+        <Input
+          title='Email'
+          id='email'
+          type='email'
+          placeholder='example@mail.com'
+        />
+        <Input
+          title='Password'
+          id='password'
+          type='password'
+          placeholder='at least 8 characters'
+          required
+        />
+        <Input
+          title='Confirm password'
+          id='confirm-password'
+          type='password'
+          placeholder='at least 8 characters'
+          required
+        />
+      </InputsRow>
+      <InputsRow>
+        <Input
+          title='Address'
+          id='address'
+          placeholder='street, apartment, block'
+        />
+      </InputsRow>
     </main>
   );
 }

@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-        <body className='font-default antialiased'>
+        <body className='font-default text-xs antialiased'>
           <ThemeProvider theme={theme}>
             <AppBar position='static'>
               <Toolbar>
