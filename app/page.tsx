@@ -1,8 +1,13 @@
 'use client';
 
-import { CustomButton, Input, InputsRow } from './components';
+import { CustomButton, Dropdown, Input, InputsRow } from './components';
+import { useState } from 'react';
 
 export default function HomePage() {
+  const [selectedColor, setSelectedColor] = useState('black');
+  const [selectedGender, setSelectedGender] = useState('male');
+  const [selectedBrand, setSelectedBrand] = useState('nike');
+
   return (
     <main className='space-y-4 p-8'>
       <h1 className='mb-6 text-2xl font-bold'>Custom Button Examples</h1>
@@ -95,6 +100,48 @@ export default function HomePage() {
           placeholder='street, apartment, block'
         />
       </InputsRow>
+      <h1 className='mb-6 text-2xl font-bold'>Dropdown Examples</h1>
+      <div className='w-100'>
+        <InputsRow>
+          <Dropdown
+            id='color'
+            title='Color'
+            value={selectedColor}
+            onChange={(e) => setSelectedColor(e.target.value)}
+            options={[
+              { value: 'black', label: 'Black' },
+              { value: 'white', label: 'White' },
+              { value: 'red', label: 'Red' },
+              { value: 'blue', label: 'Blue' },
+            ]}
+          />
+        </InputsRow>
+        <InputsRow>
+          <Dropdown
+            id='country'
+            title='Gender'
+            value={selectedGender}
+            onChange={(e) => setSelectedGender(e.target.value)}
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+          />
+          <Dropdown
+            id='brand'
+            title='Brand'
+            value={selectedBrand}
+            onChange={(e) => setSelectedBrand(e.target.value)}
+            options={[
+              { value: 'nike', label: 'Nike' },
+              { value: 'adidas', label: 'Adidas' },
+              { value: 'puma', label: 'Puma' },
+              { value: 'reebok', label: 'Reebok' },
+              { value: 'new_balance', label: 'New Balance' },
+            ]}
+          />
+        </InputsRow>
+      </div>
     </main>
   );
 }
