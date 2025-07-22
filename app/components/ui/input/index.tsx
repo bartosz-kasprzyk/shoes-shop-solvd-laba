@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { InputProps } from './interface';
-import { Box, FormLabel, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
+import Label from '../common/Label';
 
 export const InputsRow = ({ children }: { children: React.ReactNode }) => {
   return <Box sx={{ mb: 3, display: 'flex', gap: 3 }}>{children}</Box>;
@@ -18,23 +19,9 @@ export default function Input({
 }: InputProps) {
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}>
-      <FormLabel
-        htmlFor={id}
-        sx={{
-          color: 'var(--color-text-primary)',
-          mb: { xs: 0.5, sm: 1 },
-          fontWeight: 500,
-          fontSize: { xs: '10px', sm: '12px', lg: '15px' },
-        }}
-      >
+      <Label id={id} required={required}>
         {title}
-        {required && (
-          <Box component='span' sx={{ color: 'var(--color-primary)' }}>
-            {' '}
-            *
-          </Box>
-        )}
-      </FormLabel>
+      </Label>
       <TextField
         id={id}
         variant='outlined'
