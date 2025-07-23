@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomButton, Input, InputsRow } from './components';
+import { CustomButton, CardsContainer, Input, InputsRow } from './components';
 
 export default function HomePage() {
   return (
@@ -95,6 +95,7 @@ export default function HomePage() {
           placeholder='street, apartment, block'
         />
       </InputsRow>
+      <CardsContainer />
     </main>
   );
 }
