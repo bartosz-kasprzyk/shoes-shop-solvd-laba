@@ -30,10 +30,14 @@ export default function Input({
         sx={{
           '& .MuiOutlinedInput-root': {
             height: { xs: '33px', sm: '40px', lg: '48px' },
-          },
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'var(--color-text-primary)',
-            borderRadius: '8px',
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--color-text-primary)',
+              borderRadius: '8px',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--color-primary)',
+              borderWidth: '1px',
+            },
           },
           '& .MuiOutlinedInput-input': {
             fontSize: { xs: '10px', sm: '12px', lg: '15px' },

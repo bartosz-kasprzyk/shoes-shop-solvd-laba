@@ -40,6 +40,10 @@ export default function Dropdown({
             borderColor: 'var(--color-text-primary)',
             borderRadius: '8px',
           },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--color-primary)',
+            borderWidth: '1px',
+          },
           '& .MuiSelect-select': {
             fontSize: { xs: '10px', sm: '12px', lg: '15px' },
             paddingY: 0,
@@ -49,7 +53,23 @@ export default function Dropdown({
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
+          <MenuItem
+            key={option.value}
+            value={option.value}
+            sx={{
+              '&.Mui-selected': {
+                bgcolor: 'var(--color-primary)',
+                color: 'white',
+              },
+              '&.Mui-selected:hover': {
+                bgcolor: 'color-mix(in srgb, var(--color-primary) 90%, black)',
+              },
+              '&:hover': {
+                bgcolor:
+                  'color-mix(in srgb, var(--color-primary) 15%, transparent)',
+              },
+            }}
+          >
             {option.label}
           </MenuItem>
         ))}
