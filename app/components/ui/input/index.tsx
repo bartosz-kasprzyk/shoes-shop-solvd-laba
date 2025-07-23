@@ -30,9 +30,10 @@ export default function Input({
         sx={{
           '& .MuiOutlinedInput-root': {
             height: { xs: '33px', sm: '40px', lg: '48px' },
+            borderRadius: '8px',
+            overflow: 'hidden',
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: 'var(--color-text-primary)',
-              borderRadius: '8px',
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
               borderColor: 'var(--color-primary)',
