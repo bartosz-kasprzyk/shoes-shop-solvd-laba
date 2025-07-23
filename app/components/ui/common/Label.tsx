@@ -15,6 +15,9 @@ export default function Label({ id, required, children }: LabelProps) {
         mb: { xs: 0.5, sm: 1 },
         fontWeight: 500,
         fontSize: { xs: '10px', sm: '12px', lg: '15px' },
+        '&.Mui-focused': {
+          color: 'var(--color-text-primary)',
+        },
       }}
     >
       {children}

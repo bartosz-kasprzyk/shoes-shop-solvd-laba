@@ -61,7 +61,7 @@ export default function Dropdown({
                 bgcolor: 'var(--color-primary)',
                 color: 'white',
               },
-              '&.Mui-selected:hover': {
+              '&.Mui-selected:hover, &.Mui-selected.Mui-focusVisible': {
                 bgcolor: 'color-mix(in srgb, var(--color-primary) 90%, black)',
               },
               '&:hover': {
