@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { InputProps } from './interface';
+import type { InputProps } from './interface';
 import { Box, FormLabel, TextField } from '@mui/material';
 
 export const InputsRow = ({ children }: { children: React.ReactNode }) => {
