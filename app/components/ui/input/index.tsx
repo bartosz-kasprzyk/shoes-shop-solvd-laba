@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { InputProps } from './interface';
+import type { InputProps } from './interface';
 import { Box, TextField } from '@mui/material';
 import Label from '../common/Label';
 
