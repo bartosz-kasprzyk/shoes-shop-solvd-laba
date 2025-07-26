@@ -1,10 +1,14 @@
+
 import type { Card } from '../components/productCard/interface';
+
 import img1 from './assets/img-1.png';
 import img2 from './assets/img-2.png';
 import img3 from './assets/img-3.png';
 import img4 from './assets/img-4.png';
 
+
 const cards: Card[] = [
+
   {
     id: 1,
     img: img1,

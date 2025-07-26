@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 export default function ProductCard({ card }: ProductCardProps) {
   const { img, name, price, gender } = card;
-
   return (
     <Card
       sx={{
