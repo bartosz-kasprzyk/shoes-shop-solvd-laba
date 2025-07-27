@@ -4,6 +4,7 @@ import type { ProductCardProps } from './interface';
 import { Card, CardMedia, Typography, Box } from '@mui/material';
 import DropDownMenu from '../ui/DropDownMenu';
 import Link from 'next/link';
+import ImageOverlay from '../ui/ImageOverlay';
 
 export default function ProductCard({ card }: ProductCardProps) {
   const { img, name, price, gender } = card;
@@ -29,13 +30,15 @@ export default function ProductCard({ card }: ProductCardProps) {
         href={`/products/${card.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <CardMedia
-          component='img'
-          image={img.src}
-          alt={name}
-          title={name}
-          sx={{ aspectRatio: '320 / 380', objectFit: 'cover', width: '100%' }}
-        />
+        <ImageOverlay variant='addToCart'>
+          <CardMedia
+            component='img'
+            image={img.src}
+            alt={name}
+            title={name}
+            sx={{ aspectRatio: '320 / 380', objectFit: 'cover', width: '100%' }}
+          />
+        </ImageOverlay>
         <div>
           <Box
             sx={{

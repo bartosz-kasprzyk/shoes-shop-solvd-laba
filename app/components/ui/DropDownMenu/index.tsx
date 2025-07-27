@@ -33,6 +33,7 @@ export default function DropDownMenu() {
           top: 14,
           right: 14,
           borderRadius: '20%',
+          zIndex: 1,
         }}
         onClick={handleClick}
       >
