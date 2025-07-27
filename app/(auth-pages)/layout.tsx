@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import ReviewCarousel from '../components/ui/review-carousel';
-import { Testimonial } from '../components/ui/review-carousel/interface';
+import type { Testimonial } from '../components/ui/review-carousel/interface';
 import { Box, Button } from '@mui/material';
 import Link from 'next/link';
 

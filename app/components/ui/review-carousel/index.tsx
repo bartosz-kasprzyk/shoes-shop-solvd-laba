@@ -4,7 +4,7 @@ import { Box, Typography, Rating, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { ReviewCarouselProps } from './interface';
+import type { ReviewCarouselProps } from './interface';
 
 const GlassCard = styled(Box)(({ theme }) => ({
   backdropFilter: 'blur(12px)',

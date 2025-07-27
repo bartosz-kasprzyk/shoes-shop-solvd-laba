@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@mui/material';
+import type { TextFieldProps } from '@mui/material';
 
 export type InputProps = TextFieldProps & {
   title: string;

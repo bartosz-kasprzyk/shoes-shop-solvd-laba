@@ -70,7 +70,7 @@ export const StyledButton = styled(Button, {
   ...(customVariant === 'outline' && {
     backgroundColor: 'transparent',
     color: 'var(--color-primary)',
-    border: '2px solid var(--color-primary)',
+    border: '1px solid var(--color-primary)',
     '&:hover': {
       backgroundColor: 'var(--color-primary)',
       color: 'white',
