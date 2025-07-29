@@ -7,7 +7,6 @@ export default function CustomButton({
   children,
   onClick,
   variant = 'primary',
-  size = 'medium',
   className,
   disabled,
   sx,
@@ -16,7 +15,6 @@ export default function CustomButton({
   return (
     <StyledButton
       customVariant={variant}
-      customSize={size}
       onClick={onClick}
       disabled={disabled}
       className={className}
@@ -26,6 +24,7 @@ export default function CustomButton({
         ...(disabled && {
           cursor: 'not-allowed',
           opacity: 0.5,
+          bgcolor: '#F0F0F0',
         }),
         ...sx,
       }}

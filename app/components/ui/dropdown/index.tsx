@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
-import { DropdownProps } from './interface';
+import type { DropdownProps } from './interface';
 import Label from '../common/Label';
 import DropdownArrow from './icons/Arrow.svg';
 

@@ -2,65 +2,22 @@ import styled from '@emotion/styled';
 import { Button } from '@mui/material';
 
 export const StyledButton = styled(Button, {
-  shouldForwardProp: (prop) =>
-    prop !== 'customVariant' && prop !== 'customSize',
+  shouldForwardProp: (prop) => prop !== 'customVariant',
 })<{
   customVariant?: string;
-  customSize?: string;
-}>(({ customVariant, customSize }) => ({
+}>(({ customVariant }) => ({
   textTransform: 'none',
   fontWeight: 500,
   borderRadius: '8px',
   transition: 'all 0.2s ease-in-out',
 
-  // Size styles
-  ...(customSize === 'small' && {
-    padding: '6px 16px',
-    fontSize: '0.875rem',
-  }),
-  ...(customSize === 'medium' && {
-    padding: '8px 20px',
-    fontSize: '1rem',
-  }),
-  ...(customSize === 'large' && {
-    padding: '12px 24px',
-    fontSize: '1.125rem',
-  }),
-
-  // Variant styles
   ...(customVariant === 'primary' && {
     backgroundColor: 'var(--color-primary)',
     color: 'white',
     '&:hover': {
       backgroundColor: 'color-mix(in srgb, var(--color-primary) 80%, black)',
-      transform: 'translateY(-1px)',
+      transform: 'translateY(-2px)',
       boxShadow: '0 4px 12px rgba(254, 100, 94, 0.3)',
-    },
-    '&:active': {
-      transform: 'translateY(0)',
-    },
-  }),
-
-  ...(customVariant === 'secondary' && {
-    backgroundColor: 'var(--color-secondary)',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: 'color-mix(in srgb, var(--color-secondary) 80%, black)',
-      transform: 'translateY(-1px)',
-      boxShadow: '0 4px 12px rgba(110, 49, 74, 0.3)',
-    },
-    '&:active': {
-      transform: 'translateY(0)',
-    },
-  }),
-
-  ...(customVariant === 'tertiary' && {
-    backgroundColor: 'var(--color-tertiary-light)',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: 'var(--color-tertiary-dark)',
-      transform: 'translateY(-1px)',
-      boxShadow: '0 4px 12px rgba(20, 30, 122, 0.3)',
     },
     '&:active': {
       transform: 'translateY(0)',
@@ -74,20 +31,21 @@ export const StyledButton = styled(Button, {
     '&:hover': {
       backgroundColor: 'var(--color-primary)',
       color: 'white',
-      transform: 'translateY(-1px)',
+      transform: 'translateY(-2px)',
     },
     '&:active': {
       transform: 'translateY(0)',
     },
   }),
 
-  ...(customVariant === 'text' && {
+  ...(customVariant === 'outline-black' && {
     backgroundColor: 'transparent',
-    color: 'var(--color-primary)',
+    color: '#5c5c5c',
+    border: '1px solid #494949',
     '&:hover': {
-      backgroundColor:
-        'color-mix(in srgb, var(--color-primary) 10%, transparent)',
-      transform: 'translateY(-1px)',
+      backgroundColor: '#494949',
+      color: 'white',
+      transform: 'translateY(-2px)',
     },
     '&:active': {
       transform: 'translateY(0)',

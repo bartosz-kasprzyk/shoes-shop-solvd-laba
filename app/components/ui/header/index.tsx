@@ -70,7 +70,6 @@ export default function CustomHeader() {
             <TextField
               fullWidth
               placeholder='Search'
-              variant='outlined'
               size='small'
               slotProps={{
                 input: {
@@ -84,7 +83,8 @@ export default function CustomHeader() {
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '9999px',
-                  '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#494949',
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'black',
                   },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
