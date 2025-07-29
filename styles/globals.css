@@ -4,12 +4,14 @@
   font-family: var(--font-work-sans);
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
   --font-default: 'Work Sans';
   --color-primary: #fe645e;
   --color-secondary: #6e314a;

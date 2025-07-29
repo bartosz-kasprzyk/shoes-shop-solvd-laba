@@ -6,10 +6,16 @@ declare module '@mui/material/styles' {
     primaryGrey: {
       main: string;
     };
+    textPrimary: {
+      main: string;
+    };
   }
 
   interface PaletteOptions {
     primaryGrey?: {
+      main: string;
+    };
+    textPrimary?: {
       main: string;
     };
   }
@@ -22,6 +28,9 @@ const theme = createTheme({
     },
     primaryGrey: {
       main: '#6e7378',
+    },
+    textPrimary: {
+      main: '#494949',
     },
   },
   typography: {

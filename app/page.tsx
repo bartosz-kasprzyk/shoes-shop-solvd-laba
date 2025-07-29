@@ -1,11 +1,12 @@
 'use client';
+import TopBar from '@/features/layout/components/TopBar';
+import { Button } from '@/shared/components/ui';
 import { Box } from '@mui/material';
 
 export default function HomePage() {
   return (
     <Box>
-      Landing page works <br />/ note: if you want to have topbar, move this
-      page.tsx to (main) folder
+      <TopBar />
     </Box>
   );
 }
