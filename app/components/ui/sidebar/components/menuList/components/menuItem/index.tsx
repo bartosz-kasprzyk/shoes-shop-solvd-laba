@@ -3,43 +3,44 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useTheme,
 } from '@mui/material';
-import Link from 'next/link';
 import type { MenuItemProps } from './interface';
+import Link from 'next/link';
 
 export default function MenuItem({ item, isActive }: MenuItemProps) {
-  const iconColor = isActive ? '#FE645E' : '#6e7378';
+  const theme = useTheme();
+  const iconColor = isActive
+    ? theme.palette.primary.main
+    : theme.palette.primaryGrey.main;
 
   return (
-    <Link href={item.href}>
-      <ListItem disablePadding>
-        <ListItemButton
-          className='rounded-lg'
+    <ListItem disablePadding>
+      <ListItemButton
+        component={Link}
+        href={item.href}
+        sx={{
+          py: 1.5,
+          px: 2,
+          mb: 0.5,
+          borderRadius: 2,
+        }}
+      >
+        <ListItemIcon sx={{ minWidth: 40 }}>
+          <item.icon color={iconColor} />
+        </ListItemIcon>
+        <ListItemText
+          primary={item.label}
           sx={{
-            py: 1.5,
-            px: 2,
-            mb: 0.5,
+            '& .MuiListItemText-primary': {
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              color: isActive ? theme.palette.primary.main : '#000',
+              textDecoration: 'none',
+            },
           }}
-        >
-          <ListItemIcon
-            sx={{
-              minWidth: 40,
-            }}
-          >
-            <item.icon color={iconColor} />
-          </ListItemIcon>
-          <ListItemText
-            primary={item.label}
-            sx={{
-              '& .MuiListItemText-primary': {
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                color: isActive ? '#FE645E' : '#000',
-              },
-            }}
-          />
-        </ListItemButton>
-      </ListItem>
-    </Link>
+        />
+      </ListItemButton>
+    </ListItem>
   );
 }

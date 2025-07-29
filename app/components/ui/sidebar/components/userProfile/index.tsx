@@ -1,22 +1,40 @@
-import { Avatar } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import type { UserProfileProps } from './interface';
 
 export default function UserProfile({ user }: UserProfileProps) {
   return (
-    <div className='p-6'>
-      <div className='flex items-center space-x-3'>
-        <Avatar
-          src={user?.avatar}
-          alt={user?.name || 'User'}
-          sx={{ width: 48, height: 48 }}
+    <Box
+      sx={{
+        p: 3,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 3,
+      }}
+    >
+      <Avatar
+        src={user?.avatar}
+        alt={user?.name || 'User'}
+        sx={{ width: 48, height: 48 }}
+      >
+        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+      </Avatar>
+      <Box>
+        <Typography
+          sx={{
+            fontSize: '0.875rem',
+            color: '#98A2B3',
+          }}
         >
-          {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-        </Avatar>
-        <div>
-          <p className='text-sm text-[#98A2B3]'>Welcome</p>
-          <p className='font-medium'>{user?.name || 'Jane Meldrum'}</p>
-        </div>
-      </div>
-    </div>
+          Welcome
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: 500,
+          }}
+        >
+          {user?.name || 'Jane Meldrum'}
+        </Typography>
+      </Box>
+    </Box>
   );
 }

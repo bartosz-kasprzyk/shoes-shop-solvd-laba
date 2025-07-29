@@ -5,6 +5,8 @@ import CompanyLogo from './companyLogo';
 import CartLogo from './cartLogo';
 import { usePathname } from 'next/navigation';
 import SearchIcon from './searchIcon';
+import Link from 'next/link';
+import { makeHeaderTitle } from './utils';
 
 export default function CustomHeader() {
   const pathname = usePathname();
@@ -17,10 +19,15 @@ export default function CustomHeader() {
         borderBottom: '1px solid #e5e7eb',
         backgroundColor: 'white',
         boxShadow: 'none',
+        position: 'fixed',
+        height: { xs: 60, lg: 120 },
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
       <Box
         sx={{
+          flexBasis: '100%',
           maxWidth: '1920px',
           margin: '0 auto',
           px: { xs: 2, sm: 3, lg: 4 },
@@ -42,16 +49,15 @@ export default function CustomHeader() {
               flexShrink: 0,
             }}
           >
-            <CompanyLogo />
+            <Link href='/' style={{ display: 'flex', alignItems: 'center' }}>
+              <CompanyLogo />
+            </Link>
             <Box
               sx={{
                 textTransform: 'capitalize',
               }}
             >
-              {pathname
-                .replace('/', '')
-                .replace(/-/g, ' ')
-                .replace(/\b\w/g, (l) => l.toUpperCase())}
+              {makeHeaderTitle(pathname)}
             </Box>
           </Box>
           <Box

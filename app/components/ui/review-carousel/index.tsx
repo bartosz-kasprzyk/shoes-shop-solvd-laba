@@ -2,7 +2,6 @@
 
 import { Box, Typography, Rating, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import clsx from 'clsx';
 import { useState } from 'react';
 import type { ReviewCarouselProps } from './interface';
 
@@ -41,12 +40,12 @@ const GlassButton = styled(IconButton)(() => ({
 const ArrowIcon = ({ flip = false }: { flip?: boolean }) => (
   <Box
     component='svg'
-    width='50%'
-    height='80%'
     viewBox='0 0 10 19'
     fill='none'
     xmlns='http://www.w3.org/2000/svg'
     sx={{
+      width: '50%',
+      height: '80%',
       transform: flip ? 'rotate(180deg)' : 'none',
     }}
   >
@@ -68,7 +67,7 @@ export default function ReviewCarousel({
     setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
   return (
-    <GlassCard className={clsx(className)}>
+    <GlassCard className={className}>
       {/* Navigation Buttons */}
       <Box
         sx={{
@@ -89,9 +88,9 @@ export default function ReviewCarousel({
       {/* Quote Text */}
       <Typography
         variant='h5'
-        mr='20%'
         color='black'
         sx={{
+          mr: '20%',
           display: '-webkit-box',
           WebkitLineClamp: 7,
           WebkitBoxOrient: 'vertical',
@@ -102,10 +101,28 @@ export default function ReviewCarousel({
       </Typography>
 
       {/* Author Info */}
-      <Box display='flex' alignItems='center' mt={3}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          mt: 3,
+        }}
+      >
         <Box>
-          <Box display='flex' alignItems='center' gap={2}>
-            <Typography variant='h5' fontWeight={600} color='black'>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Typography
+              variant='h5'
+              color='black'
+              sx={{
+                fontWeight: 600,
+              }}
+            >
               {current.author}
             </Typography>
             {current.rating && <StyledRating value={current.rating} readOnly />}

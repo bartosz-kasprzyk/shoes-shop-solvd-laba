@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Work_Sans } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import theme from './theme';
 import CustomHeader from './components/ui/header';
 import { Sidebar } from './components';
@@ -26,17 +27,38 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-        <body className='font-default text-black antialiased'>
-          <ThemeProvider theme={theme}>
-            <div className='flex h-screen flex-col'>
+        <ThemeProvider theme={theme}>
+          <Box
+            component='body'
+            className={workSans.variable}
+            sx={{
+              color: 'black',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                height: '100vh',
+                flexDirection: 'column',
+              }}
+            >
               <CustomHeader />
-              <div className='flex flex-1'>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flex: 1,
+                }}
+              >
                 <Sidebar />
                 {children}
-              </div>
-            </div>
-          </ThemeProvider>
-        </body>
+              </Box>
+            </Box>
+          </Box>
+        </ThemeProvider>
       </AppRouterCacheProvider>
     </html>
   );

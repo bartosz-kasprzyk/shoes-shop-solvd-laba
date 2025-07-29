@@ -1,5 +1,8 @@
 @layer theme, base, mui, components, utilities;
-@import 'tailwindcss';
+
+* {
+  font-family: var(--font-work-sans);
+}
 
 :root {
   --background: #ffffff;
@@ -13,6 +16,10 @@
   --color-tertiary-light: #141e7a;
   --color-tertiary-dark: #0a1047;
   --color-text-primary: #494949;
+}
+
+.MuiListItem-root .MuiTouchRipple-child {
+  background-color: #fe645e;
 }
 
 /* @media (prefers-color-scheme: dark) {

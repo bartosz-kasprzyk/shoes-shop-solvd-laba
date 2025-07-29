@@ -55,7 +55,7 @@ export default function ProductCard({ card }: ProductCardProps) {
               fontWeight={500}
               sx={{ ml: 'auto' }}
             >
-              {`$${price}`}
+              {price}
             </Typography>
           </Box>
           <Typography

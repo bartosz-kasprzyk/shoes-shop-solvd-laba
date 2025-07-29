@@ -1,6 +1,5 @@
 'use client';
 
-import clsx from 'clsx';
 import type { CustomButtonProps } from './interface';
 import { StyledButton } from './variants';
 
@@ -11,6 +10,7 @@ export default function CustomButton({
   size = 'medium',
   className,
   disabled,
+  sx,
   ...props
 }: CustomButtonProps) {
   return (
@@ -19,11 +19,16 @@ export default function CustomButton({
       customSize={size}
       onClick={onClick}
       disabled={disabled}
-      className={clsx(
-        'font-medium transition-all duration-200 ease-in-out',
-        disabled && 'cursor-not-allowed opacity-50',
-        className,
-      )}
+      className={className}
+      sx={{
+        fontWeight: 500,
+        transition: 'all 0.2s ease-in-out',
+        ...(disabled && {
+          cursor: 'not-allowed',
+          opacity: 0.5,
+        }),
+        ...sx,
+      }}
       {...props}
     >
       {children}

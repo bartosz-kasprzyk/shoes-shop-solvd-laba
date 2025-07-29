@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
-import AddToCartIcon from './icons/Bag';
-import DeleteIcon from './icons/Delete';
+import AddToCartIcon from './icons/bag';
+import DeleteIcon from './icons/delete';
 import type { ImageOverlayProps } from './interface';
 
 export default function ImageOverlay({ children, variant }: ImageOverlayProps) {
