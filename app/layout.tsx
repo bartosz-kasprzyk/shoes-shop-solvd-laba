@@ -1,12 +1,10 @@
-import './globals.css';
+import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Work_Sans } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import theme from './theme';
-import CustomHeader from './components/ui/header';
-import { Sidebar } from './components';
 
 export const workSans = Work_Sans({
   variable: '--font-work-sans',
@@ -25,40 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' className={workSans.className}>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-        <ThemeProvider theme={theme}>
-          <Box
-            component='body'
-            className={workSans.variable}
-            sx={{
-              color: 'black',
-              WebkitFontSmoothing: 'antialiased',
-              MozOsxFontSmoothing: 'grayscale',
-              margin: 0,
-              padding: 0,
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                height: '100vh',
-                flexDirection: 'column',
-              }}
-            >
-              <CustomHeader />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flex: 1,
-                }}
-              >
-                <Sidebar />
-                {children}
-              </Box>
-            </Box>
-          </Box>
-        </ThemeProvider>
+        <body className='font-default text-black antialiased'>
+          <ThemeProvider theme={theme}>
+            <div className='flex h-screen flex-col'>
+              <div className='flex flex-1'>{children}</div>
+            </div>
+          </ThemeProvider>
+        </body>
       </AppRouterCacheProvider>
     </html>
   );

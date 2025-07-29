@@ -1,0 +1,17 @@
+export default function DropdownArrowIcon() {
+  return (
+    <svg
+      width='15'
+      height='9'
+      viewBox='0 0 15 9'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+    >
+      <path
+        d='M1 1L7.34437 7.34452L13.6889 1'
+        stroke='#494949'
+        strokeWidth='1.5'
+      />
+    </svg>
+  );
+}
