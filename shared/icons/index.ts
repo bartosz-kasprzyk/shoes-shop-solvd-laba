@@ -16,9 +16,11 @@ import SearchIcon from './SearchIcon';
 import SettingsIcon from './SettingsIcon';
 import TrashIcon from './TrashIcon';
 import DropdownDotsIcon from './DropdownDotsIcon';
+import DiscountIcon from './DiscountIcon';
 
 export {
   HorizontalArrowIcon,
+  DiscountIcon,
   DropdownArrowIcon,
   BagIcon,
   CartLogoIcon,
