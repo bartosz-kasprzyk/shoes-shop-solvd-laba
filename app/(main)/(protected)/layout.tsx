@@ -1,6 +1,6 @@
 'use client';
 
-import UserSideBar from '@/shared/components/UserSideBar';
+import UserSideBar from '@/features/layout/components/UserSideBar';
 import { Box } from '@mui/material';
 
 export default function Layout({
