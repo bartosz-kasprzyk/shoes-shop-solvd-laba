@@ -1,10 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+
 import ReviewCarousel from '@/features/layout/components/ReviewCarousel';
 import type { Testimonial } from '@/features/layout/components/ReviewCarousel/interface';
+
 import { Box, Button } from '@mui/material';
-import Link from 'next/link';
+import { CompanyLogoIcon } from '@/shared/icons';
 
 const testimonials: Testimonial[] = [
   {
@@ -39,9 +41,6 @@ export default function Layout({
       {/* Layout container */}
       <Box
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
           height: '100vh',
           width: '100vw',
           bgcolor: 'white',
@@ -51,14 +50,21 @@ export default function Layout({
         {/* Left content */}
         <Box
           sx={{
-            width: '50%',
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <Button sx={{ width: 'auto' }} component={Link} href='/'>
-            Home
-          </Button>
+          <Box
+            padding={2}
+            borderBottom={{
+              xs: '1px solid color-mix(in srgb, black 20%, transparent)',
+              sm: 'none',
+            }}
+          >
+            <CompanyLogoIcon />
+          </Box>
+
           {children}
         </Box>
 
@@ -66,10 +72,9 @@ export default function Layout({
         <Box
           sx={{
             position: 'relative',
-            flex: 1,
             height: '100%',
-            width: '50%',
-            display: { xs: 'none', lg: 'flex' },
+            width: '100%',
+            display: { xs: 'none', xl: 'flex' },
             alignItems: 'flex-end',
           }}
         >

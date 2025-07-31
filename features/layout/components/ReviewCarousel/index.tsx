@@ -4,6 +4,7 @@ import { Box, Typography, Rating, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import type { ReviewCarouselProps } from './interface';
+
 import { HorizontalArrowIcon } from '@/shared/icons';
 
 const GlassCard = styled(Box)(({ theme }) => ({
