@@ -33,15 +33,28 @@ export default function Input({
             borderRadius: '8px',
             overflow: 'hidden',
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'var(--color-text-primary)',
+              borderColor: error
+                ? 'var(--color-primary)'
+                : 'var(--color-text-primary)',
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
               borderColor: 'var(--color-primary)',
               borderWidth: '1px',
             },
           },
+          '& .MuiFormHelperText-root': {
+            color: error ? 'var(--color-primary) !important' : 'inherit',
+            marginLeft: '5px',
+          },
           '& .MuiOutlinedInput-input': {
+            fontWeight: 500,
             fontSize: { xs: '10px', sm: '12px', lg: '15px' },
+            color: error ? 'var(--color-primary)' : 'inherit',
+            '&::placeholder': {
+              fontWeight: 300,
+              color: '#5c5c5c',
+              opacity: 1,
+            },
           },
         }}
         {...props}
