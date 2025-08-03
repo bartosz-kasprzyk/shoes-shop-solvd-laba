@@ -4,7 +4,7 @@ import { Card, CardMedia, Typography, Box } from '@mui/material';
 import { DropDownMenu, ImageOverlay } from '@/shared/components/ui';
 import Link from 'next/link';
 
-import type { ProductCardProps } from './interface';
+import type { ProductCardProps } from '../../types';
 
 export default function ProductCard({ card }: ProductCardProps) {
   const { img, name, price, gender } = card;

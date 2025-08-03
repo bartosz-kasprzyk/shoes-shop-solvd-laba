@@ -10,7 +10,7 @@ export default function MenuList() {
 
   return (
     <Box>
-      <List disablePadding>
+      <List disablePadding sx={{ paddingLeft: '16px' }}>
         {menuItems.map((item) => {
           const isActive = pathname.includes(item.href);
           return <MenuItem key={item.href} item={item} isActive={isActive} />;
