@@ -1,0 +1,141 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Box, styled, Typography } from '@mui/material';
+import Button from '@/shared/components/ui/Button';
+import { useProduct } from './hooks/useProduct';
+import ProductImages from './components/ProductImages';
+import SizeSelector from './components/SizeSelector';
+import type { ProductApiResponse } from './interface';
+import NotFound from '@/app/not-found';
+
+const ActionButton = styled(Button)(() => ({
+  width: '100px',
+  height: '61px',
+  flex: 1,
+}));
+
+interface ProductDetailsProps {
+  id: string;
+  initialData?: ProductApiResponse | null;
+}
+
+export default function ProductDetails({
+  id,
+  initialData,
+}: ProductDetailsProps) {
+  const { data } = useProduct(id, initialData);
+  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const [showSizeWarning, setShowSizeWarning] = useState(false);
+
+  if (!data?.data) return <NotFound />;
+
+  const product = data.data.attributes;
+
+  const availableSizes = new Set(
+    product.sizes.data.map(({ attributes }) => attributes.value),
+  );
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      setShowSizeWarning(true);
+    } else {
+      alert('Product added to the bag!');
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: 4,
+        margin: { xs: '100px auto', md: '220px auto' },
+        paddingX: { xs: 2, sm: 4 },
+        justifyContent: 'center',
+        width: '90%',
+        maxWidth: '1454px',
+      }}
+    >
+      <ProductImages images={product.images.data} />
+
+      <Box
+        sx={{
+          maxWidth: { xs: '100%', sm: '567px', md: '522px' },
+          width: '100%',
+          margin: 'auto',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            gap: { xs: '10px', lg: '105px' },
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+          }}
+        >
+          <Typography
+            sx={{
+              lineHeight: 1,
+              fontSize: { xs: 22, sm: 30, md: 35, lg: 38, xl: 45 },
+              fontWeight: 500,
+            }}
+          >
+            {product.name}
+          </Typography>
+          <Typography
+            sx={{
+              lineHeight: 1,
+              fontSize: { xs: 19, xl: 22 },
+              fontWeight: 500,
+              display: 'block',
+            }}
+          >
+            {`$${product.price}`}
+          </Typography>
+        </Box>
+        <Typography
+          sx={{
+            fontSize: { xs: 15, lg: 18 },
+            fontWeight: 500,
+            color: '#A29F9F',
+            marginBottom: { xs: '20px', xl: '47px' },
+            marginLeft: '2px',
+          }}
+        >
+          {product.color.data.attributes.name}
+        </Typography>
+
+        <SizeSelector
+          availableSizes={availableSizes}
+          selectedSize={selectedSize}
+          setSelectedSize={setSelectedSize}
+          showSizeWarning={showSizeWarning}
+          setShowSizeWarning={setShowSizeWarning}
+        />
+
+        <Box sx={{ display: 'flex', gap: '26px', marginBottom: '65px' }}>
+          <ActionButton
+            variant='outline'
+            onClick={() => alert('Added to wishlist!')}
+          >
+            Add to Wishlist
+          </ActionButton>
+          <ActionButton onClick={handleAddToCart}>Add to Bag</ActionButton>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '15px',
+            color: 'var(--color-text-primary)',
+          }}
+        >
+          <Typography fontWeight={500}>Description</Typography>
+          <Typography fontWeight={300}>{product.description}</Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
