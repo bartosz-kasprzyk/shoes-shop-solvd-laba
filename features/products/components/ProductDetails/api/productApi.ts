@@ -1,4 +1,4 @@
-import type { ProductApiResponse } from '@/features/products/types/productDetailsTypes';
+import type { ProductApiResponse } from '@/features/products/types/shared.interface';
 
 export const fetchProductById = async (
   id: string,

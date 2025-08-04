@@ -19,10 +19,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        padding: '120px 0 0 320px',
       }}
     >
-      {/* <TopBar /> */}
+      <TopBar />
       {children}
     </Box>
   );

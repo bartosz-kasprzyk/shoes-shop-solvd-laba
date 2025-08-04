@@ -6,14 +6,8 @@ import Button from '@/shared/components/ui/Button';
 import { useProduct } from './hooks/useProduct';
 import ProductImages from './components/ProductImages';
 import SizeSelector from './components/SizeSelector';
-import type { ProductDetailsProps } from '@/features/products/types/productDetailsTypes';
+import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import NotFound from '@/app/not-found';
-
-const ActionButton = styled(Button)(() => ({
-  width: '100px',
-  height: '61px',
-  flex: 1,
-}));
 
 export default function ProductDetails({
   id,
@@ -28,7 +22,7 @@ export default function ProductDetails({
   const product = data.data.attributes;
 
   const availableSizes = new Set(
-    product.sizes.data.map(({ attributes }) => attributes.value),
+    product.sizes?.data.map(({ attributes }) => attributes.value) || [],
   );
 
   const handleAddToCart = () => {
@@ -98,7 +92,7 @@ export default function ProductDetails({
             marginLeft: '2px',
           }}
         >
-          {product.color.data.attributes.name}
+          {product.color?.data ? product.color.data.attributes.name : ''}
         </Typography>
 
         <SizeSelector
@@ -109,14 +103,19 @@ export default function ProductDetails({
           setShowSizeWarning={setShowSizeWarning}
         />
 
-        <Box sx={{ display: 'flex', gap: '26px', marginBottom: '65px' }}>
-          <ActionButton
-            variant='outline'
-            onClick={() => alert('Added to wishlist!')}
-          >
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '26px',
+            marginBottom: '65px',
+            height: '61px',
+          }}
+        >
+          <Button variant='outline' onClick={() => alert('Added to wishlist!')}>
             Add to Wishlist
-          </ActionButton>
-          <ActionButton onClick={handleAddToCart}>Add to Bag</ActionButton>
+          </Button>
+          <Button onClick={handleAddToCart}>Add to Bag</Button>
         </Box>
 
         <Box

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchProductById } from '../api/productApi';
-import type { ProductApiResponse } from '@/features/products/types/productDetailsTypes';
+import type { ProductApiResponse } from '@/features/products/types/shared.interface';
 
 export const useProduct = (
   id: string,

@@ -1,27 +1,11 @@
-import { Box, IconButton, styled } from '@mui/material';
+import { Box } from '@mui/material';
 import Image from 'next/image';
 import ArrowIcon from '@/shared/icons/HorizontalArrowIcon';
 import { useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { ProductImagesProps } from '@/features/products/types/productDetailsTypes';
-
-const RoundButton = styled(IconButton)(() => ({
-  borderRadius: '100%',
-  width: '24px',
-  height: '24px',
-  backgroundColor: 'white',
-
-  '&:hover': {
-    backgroundColor: '#F0F0F0',
-  },
-
-  '&.Mui-disabled': {
-    backgroundColor: 'white',
-    opacity: 0.5,
-    cursor: 'default',
-  },
-}));
+import type { ProductImagesProps } from '@/features/products/types/components.interface';
+import { RoundButton } from '../RoundButton';
 
 export default function ProductImages({ images }: ProductImagesProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -52,7 +36,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
   };
 
   const handleNext = () => {
-    if (selectedIndex < images.length - 1) {
+    if (selectedIndex < images?.length - 1) {
       setDirection(1);
       setSelectedIndex(selectedIndex + 1);
     }
@@ -83,7 +67,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           gap: { sm: '12px', md: '10px', lg: '12px', xl: '16px' },
         }}
       >
-        {images.map((img, index) => (
+        {images?.map((img, index) => (
           <Box
             key={index}
             onClick={() => handleClick(index)}
@@ -124,45 +108,47 @@ export default function ProductImages({ images }: ProductImagesProps) {
           overflow: 'hidden',
         }}
       >
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.div
-            key={images[selectedIndex].attributes.url}
-            custom={direction}
-            variants={variants}
-            initial='enter'
-            animate='center'
-            exit='exit'
-            transition={{ duration: 0.3 }}
-            {...(isMobile && {
-              drag: 'x',
-              dragConstraints: { left: 0, right: 0 },
-              onDragEnd: (_, info) => {
-                if (info.offset.x < -50) {
-                  handleNext();
-                } else if (info.offset.x > 50) {
-                  handlePrev();
-                }
-              },
-              whileTap: { cursor: 'grabbing' },
-            })}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <Image
-              src={images[selectedIndex].attributes.url}
-              alt='Main product image'
-              fill
-              sizes='(max-width: 600px) 100vw, 588px'
-              style={{ objectFit: 'cover', pointerEvents: 'none' }}
-              priority
-            />
-          </motion.div>
-        </AnimatePresence>
+        {images ? (
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={images[selectedIndex].attributes.url}
+              custom={direction}
+              variants={variants}
+              initial='enter'
+              animate='center'
+              exit='exit'
+              transition={{ duration: 0.3 }}
+              {...(isMobile && {
+                drag: 'x',
+                dragConstraints: { left: 0, right: 0 },
+                onDragEnd: (_, info) => {
+                  if (info.offset.x < -50) {
+                    handleNext();
+                  } else if (info.offset.x > 50) {
+                    handlePrev();
+                  }
+                },
+                whileTap: { cursor: 'grabbing' },
+              })}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <Image
+                src={images[selectedIndex].attributes.url}
+                alt='Main product image'
+                fill
+                sizes='(max-width: 600px) 100vw, 588px'
+                style={{ objectFit: 'cover', pointerEvents: 'none' }}
+                priority
+              />
+            </motion.div>
+          </AnimatePresence>
+        ) : null}
         {/* Desktop arrows bottom-right */}
         <Box
           sx={{
@@ -183,7 +169,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           <RoundButton
             size='small'
             onClick={handleNext}
-            disabled={selectedIndex === images.length - 1}
+            disabled={selectedIndex === images?.length - 1}
           >
             <ArrowIcon />
           </RoundButton>
@@ -198,7 +184,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           gap: '8px',
         }}
       >
-        {images.map((_, index) => (
+        {images?.map((_, index) => (
           <Box
             key={index}
             onClick={() => handleClick(index)}
