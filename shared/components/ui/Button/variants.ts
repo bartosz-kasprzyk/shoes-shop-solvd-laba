@@ -15,9 +15,8 @@ export const StyledButton = styled(Button, {
     backgroundColor: 'var(--color-primary)',
     color: 'white',
     '&:hover': {
-      backgroundColor: 'color-mix(in srgb, var(--color-primary) 80%, black)',
+      backgroundColor: 'color-mix(in srgb, var(--color-primary) 90%, black)',
       transform: 'translateY(-2px)',
-      boxShadow: '0 4px 12px rgba(254, 100, 94, 0.3)',
     },
     '&:active': {
       transform: 'translateY(0)',
@@ -29,8 +28,8 @@ export const StyledButton = styled(Button, {
     color: 'var(--color-primary)',
     border: '1px solid var(--color-primary)',
     '&:hover': {
-      backgroundColor: 'var(--color-primary)',
-      color: 'white',
+      backgroundColor:
+        'color-mix(in srgb, var(--color-primary) 20%, transparent)',
       transform: 'translateY(-2px)',
     },
     '&:active': {
@@ -43,8 +42,7 @@ export const StyledButton = styled(Button, {
     color: '#5c5c5c',
     border: '1px solid #494949',
     '&:hover': {
-      backgroundColor: '#494949',
-      color: 'white',
+      backgroundColor: 'color-mix(in srgb, #494949 20%, transparent)',
       transform: 'translateY(-2px)',
     },
     '&:active': {
