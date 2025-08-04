@@ -34,7 +34,7 @@ export default function Dropdown({
           width={'5%'}
           display={'flex'}
           alignItems={'center'}
-          right={0}
+          right='10px'
         >
           <DropdownArrowIcon />
         </Box>

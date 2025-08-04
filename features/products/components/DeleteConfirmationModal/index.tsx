@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal, Button, Box, Typography, Divider } from '@mui/material';
-import type { DeleteModalProps } from './interface';
+import type { DeleteModalProps } from '../../types';
 import { useState } from 'react';
 import CloseIcon from '../../../../shared/icons/CloseIcon';
 import CustomButton from '../../../../shared/components/ui/Button';

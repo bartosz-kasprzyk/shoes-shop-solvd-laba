@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import type { ProductCardProps } from '../interface';
+import type { ProductCardProps } from '../../../interfaces/ProductCardProps';
 import ProductCard from '..';
 
 jest.mock('../../../../../shared/components/ui/DropDownMenu', () => {

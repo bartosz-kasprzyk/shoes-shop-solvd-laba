@@ -29,7 +29,9 @@ export default function Input({
         helperText={error ? helperText : ''}
         sx={{
           '& .MuiOutlinedInput-root': {
-            height: { xs: '33px', sm: '40px', lg: '48px' },
+            height: props.multiline
+              ? 'auto'
+              : { xs: '33px', sm: '40px', lg: '48px' },
             borderRadius: '8px',
             overflow: 'hidden',
             '& .MuiOutlinedInput-notchedOutline': {

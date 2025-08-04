@@ -11,6 +11,7 @@ export default function Sidebar({ user }: SidebarProps) {
       sx={{
         height: '100%',
         position: 'fixed',
+        left: 0,
         top: 121,
         width: 320,
         backgroundColor: 'white',

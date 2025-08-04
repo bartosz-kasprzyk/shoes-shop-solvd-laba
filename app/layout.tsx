@@ -31,15 +31,11 @@ export default async function RootLayout({
     <html lang='en' className={workSans.className}>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <body className='font-default text-black antialiased'>
-          <SessionProvider session={session}>
-            <QueryProvider>
-              <ThemeProvider theme={theme}>
-                <div className='flex h-screen flex-col'>
-                  <div className='flex flex-1'>{children}</div>
-                </div>
-              </ThemeProvider>
-            </QueryProvider>
-          </SessionProvider>
+          <QueryProvider>
+            <SessionProvider session={session}>
+              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            </SessionProvider>
+          </QueryProvider>
         </body>
       </AppRouterCacheProvider>
     </html>
