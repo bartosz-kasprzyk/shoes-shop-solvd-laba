@@ -4,7 +4,7 @@ import ArrowIcon from '@/shared/icons/HorizontalArrowIcon';
 import { useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { ProductImagesProps } from './interface';
+import type { ProductImagesProps } from '@/features/products/types/productDetailsTypes';
 
 const RoundButton = styled(IconButton)(() => ({
   borderRadius: '100%',

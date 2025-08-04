@@ -6,7 +6,7 @@ import Button from '@/shared/components/ui/Button';
 import { useProduct } from './hooks/useProduct';
 import ProductImages from './components/ProductImages';
 import SizeSelector from './components/SizeSelector';
-import type { ProductApiResponse } from './interface';
+import type { ProductDetailsProps } from '@/features/products/types/productDetailsTypes';
 import NotFound from '@/app/not-found';
 
 const ActionButton = styled(Button)(() => ({
@@ -14,11 +14,6 @@ const ActionButton = styled(Button)(() => ({
   height: '61px',
   flex: 1,
 }));
-
-interface ProductDetailsProps {
-  id: string;
-  initialData?: ProductApiResponse | null;
-}
 
 export default function ProductDetails({
   id,

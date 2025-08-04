@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import Button from '@/shared/components/ui/Button';
-import type { SizeSelectorProps } from './interface';
+import type { SizeSelectorProps } from '@/features/products/types/productDetailsTypes';
 
 export default function SizeSelector({
   availableSizes,
