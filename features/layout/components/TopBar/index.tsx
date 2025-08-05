@@ -12,17 +12,15 @@ export default function TopBar() {
     <Box
       component='header'
       sx={{
+        position: 'fixed',
         width: '100%',
         borderBottom: '1px solid #e5e7eb',
         backgroundColor: 'white',
         boxShadow: 'none',
-        position: 'fixed',
-        left: 0,
-        top: 0,
         height: { xs: 60, lg: 120 },
         display: 'flex',
         alignItems: 'center',
-        zIndex: '10',
+        zIndex: 1,
       }}
     >
       <Box
