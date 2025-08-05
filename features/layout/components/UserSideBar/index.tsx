@@ -1,11 +1,10 @@
 'use client';
 
 import { Box, Divider } from '@mui/material';
-import type { SidebarProps } from './interface';
 import MenuList from '../MenuList';
 import UserProfile from '../UserProfile';
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar() {
   return (
     <Box
       sx={{
@@ -27,7 +26,7 @@ export default function Sidebar({ user }: SidebarProps) {
           flexDirection: 'column',
         }}
       >
-        <UserProfile user={user} />
+        <UserProfile />
         <Divider />
         <MenuList />
       </Box>

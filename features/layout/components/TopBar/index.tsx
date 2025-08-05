@@ -3,7 +3,6 @@
 import { TextField, Box, Button } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
-import Link from 'next/link';
 import { makeHeaderTitle } from '@/shared/icons/utils';
 
 export default function TopBar() {

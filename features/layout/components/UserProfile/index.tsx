@@ -1,7 +1,15 @@
 import { Avatar, Box, Typography } from '@mui/material';
-import type { UserProfileProps } from './interface';
+import { useSession } from 'next-auth/react';
 
-export default function UserProfile({ user }: UserProfileProps) {
+export default function UserProfile() {
+  const { data: session } = useSession();
+
+  const user = session?.user
+    ? {
+        name: session.user.name ?? 'Anonymous',
+        avatar: session.user.image || undefined,
+      }
+    : undefined;
   return (
     <Box
       sx={{

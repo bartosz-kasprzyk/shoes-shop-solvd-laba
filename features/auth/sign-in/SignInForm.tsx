@@ -75,7 +75,7 @@ export function SignInForm({ onSubmit, serverError }: SignInFormProps) {
             </Typography>
             <Link
               underline='hover'
-              href='/auth/forgot-password'
+              href='/forgot-password'
               color='var(--color-primary)'
             >
               Forgot password?
@@ -99,9 +99,9 @@ export function SignInForm({ onSubmit, serverError }: SignInFormProps) {
       </form>
 
       <TextUnderButton
-        text='Don’t have an account?'
+        text="Don't have an account?"
         linkText='Sign up'
-        href='/auth/sign-up'
+        href='/sign-up'
       />
     </Box>
   );

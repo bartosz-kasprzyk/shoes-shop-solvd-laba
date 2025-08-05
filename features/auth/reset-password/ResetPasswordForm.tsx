@@ -4,11 +4,8 @@ import { Box, Typography, Collapse, Link } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from '@/shared/components/ui';
-import type {
-  ResetPasswordFormData} from './resetPassword.schema';
-import {
-  resetPasswordSchema
-} from './resetPassword.schema';
+import type { ResetPasswordFormData } from './resetPassword.schema';
+import { resetPasswordSchema } from './resetPassword.schema';
 
 type Props = {
   onSubmit: (data: ResetPasswordFormData) => void;
@@ -62,7 +59,7 @@ export const ResetPasswordForm = ({ onSubmit, status, serverError }: Props) => {
       </Button>
 
       <Typography textAlign='center'>
-        <Link underline='hover' color='inherit' href='/auth/sign-in'>
+        <Link underline='hover' color='inherit' href='/sign-in'>
           Back to log in
         </Link>
       </Typography>

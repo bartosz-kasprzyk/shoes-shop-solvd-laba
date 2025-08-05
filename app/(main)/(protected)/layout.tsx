@@ -1,5 +1,3 @@
-'use client';
-
 import UserSideBar from '@/features/layout/components/UserSideBar';
 import { Box } from '@mui/material';
 
@@ -18,7 +16,9 @@ export default function Layout({
       }}
     >
       <UserSideBar />
-      {children}
+      <Box sx={{ paddingLeft: '320px', paddingTop: '120px', width: '100%' }}>
+        {children}
+      </Box>
     </Box>
   );
 }

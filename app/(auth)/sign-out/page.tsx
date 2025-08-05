@@ -16,7 +16,7 @@ export default function SignOutPage() {
         mb={3}
         sx={{ color: 'color-mix(in srgb, black 60%, transparent)' }}
       >
-        Redirecting to login page.
+        Redirecting to home page.
       </Typography>
     </Box>
   );

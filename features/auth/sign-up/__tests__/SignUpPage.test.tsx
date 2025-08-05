@@ -83,6 +83,6 @@ describe('SignUp Page', () => {
   it('should redirect - forgot sign in link', () => {
     render(<SignUpPage />);
     const link = screen.getByRole('link', { name: /log in/i });
-    expect(link).toHaveAttribute('href', '/auth/sign-in');
+    expect(link).toHaveAttribute('href', '/sign-in');
   });
 });

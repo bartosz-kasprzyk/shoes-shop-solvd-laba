@@ -40,7 +40,7 @@ export const useResetPassword = () => {
       }
 
       setStatus('success');
-      setTimeout(() => router.push('/auth/sign-in'), 3000);
+      setTimeout(() => router.push('/sign-in'), 3000);
     } catch {
       setStatus('error');
       setServerError('Something went wrong. Please try again.');

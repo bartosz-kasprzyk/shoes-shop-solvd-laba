@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Typography, Collapse } from '@mui/material';
 import { Button, Input } from '@/shared/components/ui';
-import type { SignUpFormData} from './signUp.schema';
+import type { SignUpFormData } from './signUp.schema';
 import { signUpSchema } from './signUp.schema';
 
 type Props = {

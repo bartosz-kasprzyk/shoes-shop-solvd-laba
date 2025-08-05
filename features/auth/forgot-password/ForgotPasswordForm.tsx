@@ -4,11 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Typography, Collapse, Link } from '@mui/material';
 import { Input, Button } from '@/shared/components/ui';
-import type {
-  ForgotPasswordFormData} from './forgotPassword.schema';
-import {
-  forgotPasswordSchema
-} from './forgotPassword.schema';
+import type { ForgotPasswordFormData } from './forgotPassword.schema';
+import { forgotPasswordSchema } from './forgotPassword.schema';
 
 type Props = {
   onSubmit: (data: ForgotPasswordFormData) => void;
@@ -56,7 +53,7 @@ export const ForgotPasswordForm = ({
       </Button>
 
       <Typography textAlign='center'>
-        <Link underline='hover' color='inherit' href='/auth/sign-in'>
+        <Link underline='hover' color='inherit' href='/sign-in'>
           Back to log in
         </Link>
       </Typography>

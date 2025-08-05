@@ -70,11 +70,11 @@ describe('SignIn Page', () => {
   it('should redirect - sign up link', () => {
     render(<SignInPage />);
     const link = screen.getByRole('link', { name: /sign up/i });
-    expect(link).toHaveAttribute('href', '/auth/sign-up');
+    expect(link).toHaveAttribute('href', '/sign-up');
   });
   it('should redirect - forgot passwor link', () => {
     render(<SignInPage />);
     const link = screen.getByRole('link', { name: /forgot password/i });
-    expect(link).toHaveAttribute('href', '/auth/forgot-password');
+    expect(link).toHaveAttribute('href', '/forgot-password');
   });
 });

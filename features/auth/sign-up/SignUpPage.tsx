@@ -30,7 +30,7 @@ export default function SignUpPage() {
       <TextUnderButton
         text='Already have an account?'
         linkText='Log in'
-        href='/auth/sign-in'
+        href='/sign-in'
       />
     </Box>
   );

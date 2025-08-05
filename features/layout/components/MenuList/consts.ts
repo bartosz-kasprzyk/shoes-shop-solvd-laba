@@ -35,13 +35,8 @@ export const menuItems: MenuItem[] = [
     href: '/settings',
   },
   {
-    label: 'Sign in',
-    icon: SettingsIcon,
-    href: '/auth/sign-in',
-  },
-  {
     label: 'Sign out',
     icon: LogoutIcon,
-    href: '/auth/sign-out',
+    href: '/sign-out',
   },
 ];
