@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Work_Sans } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
-
 import theme from './theme';
 import { getServerSession } from 'next-auth';
 import SessionProvider from './SessionProvider';
@@ -33,11 +32,10 @@ export default async function RootLayout({
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <body className='font-default text-black antialiased'>
           <QueryProvider>
-        <SessionProvider session={session}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-          </SessionProvider>
-             </QueryProvider>
-
+            <SessionProvider session={session}>
+              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            </SessionProvider>
+          </QueryProvider>
         </body>
       </AppRouterCacheProvider>
     </html>
