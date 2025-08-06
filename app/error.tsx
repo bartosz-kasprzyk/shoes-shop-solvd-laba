@@ -39,7 +39,7 @@ export default function LostPage() {
           style={{ objectFit: 'cover', objectPosition: 'right center' }}
           fill
           priority
-          sizes='(max-width: 900px) 100vw, 50vw'
+          sizes='100vw'
         />
       </Box>
 
@@ -168,7 +168,7 @@ export default function LostPage() {
               alt='background image'
               fill
               priority
-              sizes='(max-width: 900px) 100vw, 50vw'
+              sizes='150vw'
               style={{ objectFit: 'cover', objectPosition: '82% center' }}
             />
           </Box>
