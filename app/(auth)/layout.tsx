@@ -1,11 +1,7 @@
-'use client';
-
 import Image from 'next/image';
-
 import ReviewCarousel from '@/features/layout/components/ReviewCarousel';
 import type { Testimonial } from '@/features/layout/components/ReviewCarousel/interface';
-
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { CompanyLogoIcon } from '@/shared/icons';
 
 const testimonials: Testimonial[] = [
@@ -74,7 +70,7 @@ export default function Layout({
             position: 'relative',
             height: '100%',
             width: '100%',
-            display: { xs: 'none', xl: 'flex' },
+            display: { xs: 'none', lg: 'flex' },
             alignItems: 'flex-end',
           }}
         >

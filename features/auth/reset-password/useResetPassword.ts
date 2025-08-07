@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ResetPasswordFormData } from './resetPassword.schema';
 
-export const useResetPassword = () => {
+export const useResetPassword = (): {
+  resetPassword: (data: ResetPasswordFormData) => Promise<void>;
+  status: 'idle' | 'loading' | 'success' | 'error';
+  serverError: string;
+} => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get('code');

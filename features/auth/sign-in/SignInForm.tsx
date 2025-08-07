@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { SignInFormData } from './signIn.schema';
 import { signInSchema } from './signIn.schema';
+import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper';
 
 type SignInFormProps = {
   onSubmit: (data: SignInFormData) => Promise<void | boolean>;
@@ -27,7 +28,7 @@ export function SignInForm({ onSubmit, serverError }: SignInFormProps) {
   });
 
   return (
-    <Box mx='auto' px={2} maxWidth='600px' width='100%' my={4}>
+    <AuthPagesWrapper>
       <Typography variant='h3' fontWeight={500} mb={1}>
         Welcome back
       </Typography>
@@ -103,6 +104,6 @@ export function SignInForm({ onSubmit, serverError }: SignInFormProps) {
         linkText='Sign up'
         href='/sign-up'
       />
-    </Box>
+    </AuthPagesWrapper>
   );
 }

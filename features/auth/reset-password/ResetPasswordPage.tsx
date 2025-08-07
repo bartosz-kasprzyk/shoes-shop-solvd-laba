@@ -2,13 +2,14 @@
 
 import { ResetPasswordForm } from '@/features/auth/reset-password/ResetPasswordForm';
 import { useResetPassword } from '@/features/auth/reset-password/useResetPassword';
-import { Box, Typography } from '@mui/material';
+import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper';
+import { Typography } from '@mui/material';
 
 export default function ResetPasswordPage() {
   const { resetPassword, status, serverError } = useResetPassword();
 
   return (
-    <Box mx='auto' px={2} maxWidth='600px' width='100%' my={4}>
+    <AuthPagesWrapper>
       <Typography variant='h3' fontWeight={500} mb={1}>
         Reset password
       </Typography>
@@ -25,6 +26,6 @@ export default function ResetPasswordPage() {
         status={status}
         serverError={serverError}
       />
-    </Box>
+    </AuthPagesWrapper>
   );
 }

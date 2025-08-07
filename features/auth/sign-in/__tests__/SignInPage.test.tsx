@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import SignInPage from '../SignInPage';
 import '@testing-library/jest-dom';
-import * as nextAuthReact from 'next-auth/react';
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({

@@ -1,14 +1,15 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useForgotPassword } from './useForgotPassword';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
+import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper';
 
 export default function ForgotPasswordPage() {
   const { requestReset, status, serverError } = useForgotPassword();
 
   return (
-    <Box mx='auto' px={2} maxWidth='600px' width='100%' my={4}>
+    <AuthPagesWrapper>
       <Typography variant='h3' fontWeight={500} mb={1}>
         Forgot Password
       </Typography>
@@ -25,6 +26,6 @@ export default function ForgotPasswordPage() {
         status={status}
         serverError={serverError}
       />
-    </Box>
+    </AuthPagesWrapper>
   );
 }

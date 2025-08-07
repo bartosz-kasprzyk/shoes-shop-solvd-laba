@@ -15,7 +15,7 @@ describe('Forgot Password Page', () => {
   it('should show error on server failure', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: async () => ({ error: { message: 'User not found' } }),
+      json: () => ({ error: { message: 'User not found' } }),
     });
 
     render(<ForgotPasswordPage />);
@@ -28,9 +28,7 @@ describe('Forgot Password Page', () => {
   });
 
   it('should show confirmation message on success', async () => {
-    global.fetch = jest
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({}) });
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => ({}) });
 
     render(<ForgotPasswordPage />);
     fireEvent.change(screen.getByLabelText(/email/i), {

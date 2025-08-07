@@ -1,15 +1,16 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { TextUnderButton } from '@/shared/components/ui';
 import { useSignUp } from '@/features/auth/sign-up/useSignUp';
 import { SignUpForm } from '@/features/auth/sign-up/SignUpForm';
+import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper';
 
 export default function SignUpPage() {
   const { registerUser, serverError, success } = useSignUp();
 
   return (
-    <Box mx='auto' px={2} maxWidth='600px' width='100%' my={4}>
+    <AuthPagesWrapper>
       <Typography variant='h3' fontWeight={500} mb={1}>
         Create an account
       </Typography>
@@ -32,6 +33,6 @@ export default function SignUpPage() {
         linkText='Log in'
         href='/sign-in'
       />
-    </Box>
+    </AuthPagesWrapper>
   );
 }

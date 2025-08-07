@@ -30,7 +30,7 @@ describe('SignUp Page', () => {
   it('should handle duplicate email registration', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: async () => ({
+      json: () => ({
         error: { message: 'email or username are already taken' },
       }),
     });
@@ -60,7 +60,7 @@ describe('SignUp Page', () => {
   it('should redirect to login after success', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ user: {}, jwt: 'token' }),
+      json: () => ({ user: {}, jwt: 'token' }),
     });
 
     render(<SignUpPage />);

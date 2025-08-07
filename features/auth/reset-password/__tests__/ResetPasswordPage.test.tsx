@@ -32,7 +32,7 @@ describe('Reset Password Page', () => {
   it('should show error on invalid link', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
-      json: async () => ({ error: { message: 'Invalid code' } }),
+      json: () => ({ error: { message: 'Invalid code' } }),
     });
 
     render(<ResetPasswordPage />);
@@ -50,7 +50,7 @@ describe('Reset Password Page', () => {
   it('should show success message and redirect', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({}),
+      json: () => ({}),
     });
 
     render(<ResetPasswordPage />);
@@ -68,7 +68,7 @@ describe('Reset Password Page', () => {
   it('password too short', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({}),
+      json: () => ({}),
     });
 
     render(<ResetPasswordPage />);

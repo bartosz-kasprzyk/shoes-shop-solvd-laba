@@ -1,10 +1,8 @@
 'use client';
 
 import { Menu, MenuItem, IconButton } from '@mui/material';
-import moreIcon from '@/shared/icons/dropdown-button.svg';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import Image from 'next/image';
 import { DropdownDotsIcon } from '@/shared/icons';
 
 export default function DropDownMenu() {

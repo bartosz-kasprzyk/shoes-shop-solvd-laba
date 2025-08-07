@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import type { ForgotPasswordFormData } from './forgotPassword.schema';
 
-export const useForgotPassword = () => {
+export const useForgotPassword = (): {
+  requestReset: (data: ForgotPasswordFormData) => Promise<void>;
+  status: 'idle' | 'loading' | 'sent' | 'error';
+  serverError: string;
+} => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>(
     'idle',
   );
@@ -31,7 +35,7 @@ export const useForgotPassword = () => {
       }
 
       setStatus('sent');
-    } catch (e) {
+    } catch {
       setStatus('error');
       setServerError('Network error. Please try again.');
     }

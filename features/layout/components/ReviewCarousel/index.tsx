@@ -81,9 +81,10 @@ export default function ReviewCarousel({
           WebkitLineClamp: 7,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
+          fontSize: { lg: '1.125rem', xl: '1.5rem' },
         }}
       >
-        “{current.quote}”
+        &ldquo;{current.quote}&rdquo;
       </Typography>
 
       {/* Author Info */}
