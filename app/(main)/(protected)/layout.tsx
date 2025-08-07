@@ -15,8 +15,15 @@ export default function Layout({
         flexDirection: 'row',
       }}
     >
-      <UserSideBar />
-      <Box sx={{ paddingLeft: '320px', paddingTop: '120px', width: '100%' }}>
+
+      <Box
+        width={'40%'}
+        maxWidth={'320px'}
+        sx={{ display: { xs: 'none', md: 'block' } }}
+      >
+        <UserSideBar />
+      </Box>
+      <Box height={'100%'} width={'100%'} overflow={'hidden'}>
         {children}
       </Box>
     </Box>

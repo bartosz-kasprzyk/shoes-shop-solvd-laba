@@ -4,6 +4,8 @@ import { TextField, Box, Button } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
 import { makeHeaderTitle } from '@/shared/icons/utils';
+import MenuIcon from '@/shared/icons/MenuIcon';
+import Link from 'next/link';
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -17,7 +19,7 @@ export default function TopBar() {
         borderBottom: '1px solid #e5e7eb',
         backgroundColor: 'white',
         boxShadow: 'none',
-        height: { xs: 60, lg: 120 },
+        height: { xs: 60, md: 120 },
         display: 'flex',
         alignItems: 'center',
         zIndex: 1,
@@ -28,7 +30,7 @@ export default function TopBar() {
           flexBasis: '100%',
           maxWidth: '1920px',
           margin: '0 auto',
-          px: { xs: 2, sm: 3, lg: 4 },
+          px: { xs: 2, sm: 3, md: 4 },
         }}
       >
         <Box
@@ -51,6 +53,7 @@ export default function TopBar() {
             <Box
               sx={{
                 textTransform: 'capitalize',
+                display: { xs: 'none', md: 'block' },
               }}
             >
               {makeHeaderTitle(pathname)}
@@ -70,13 +73,14 @@ export default function TopBar() {
               slotProps={{
                 input: {
                   startAdornment: (
-                    <Box sx={{ mr: 1 }}>
+                    <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
                       <SearchIcon />
                     </Box>
                   ),
                 },
               }}
               sx={{
+                display: { xs: 'none', md: 'block' },
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '9999px',
                   borderColor: '#494949',
@@ -95,7 +99,7 @@ export default function TopBar() {
             <Box
               sx={{
                 display: 'flex',
-                gap: 2,
+                gap: { xs: 0, md: 2 },
               }}
             >
               <Button
@@ -114,6 +118,41 @@ export default function TopBar() {
               </Button>
               <Button
                 sx={{
+                  display: { xs: 'flex', md: 'none' },
+                  cursor: 'pointer',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  p: 1,
+                  minWidth: 'auto',
+                  transition: 'background-color 0.2s',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                }}
+              >
+                <SearchIcon />
+              </Button>
+              <Button
+                sx={{
+                  display: { xs: 'flex', md: 'none' },
+                  cursor: 'pointer',
+                  borderRadius: '50%',
+                  p: 1,
+                  minWidth: 'auto',
+                  transition: 'background-color 0.2s',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                }}
+              >
+                <MenuIcon />
+              </Button>
+              <Button
+                component={Link}
+                href='/profile'
+                sx={{
+                  display: { xs: 'none', md: 'block' },
                   cursor: 'pointer',
                   borderRadius: '50%',
                   p: 1,

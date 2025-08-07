@@ -14,12 +14,11 @@ export default function ProductsLayout({
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
+        overflow: 'hidden',
       }}
     >
-      <Box height={'100%'} borderRight={1}>
-        Sidebars with filters TBA{' '}
-      </Box>
-      {children}
+      <Box height={'100%'}>Sidebars with filters TBA </Box>
+      <Box width={'100%'}>{children}</Box>
     </Box>
   );
 }

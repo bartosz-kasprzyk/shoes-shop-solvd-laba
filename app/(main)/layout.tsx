@@ -8,12 +8,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box
       sx={{
+        height: '100vh',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
       }}
     >
       <TopBar />
-      {children}
+      <Box height={'100%'} overflow={'hidden'}>
+        {children}
+      </Box>
     </Box>
   );
 }

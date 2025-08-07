@@ -1,8 +1,16 @@
+import { useTheme, useMediaQuery } from '@mui/material';
+
 export default function CompanyLogoIcon() {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('lg'));
+
+  const width = isXs ? 35 : 40;
+  const height = isXs ? 26 : 30;
+
   return (
     <svg
-      width='40'
-      height='30'
+      width={width}
+      height={height}
       viewBox='0 0 40 30'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

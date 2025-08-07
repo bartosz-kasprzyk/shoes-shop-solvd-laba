@@ -8,9 +8,7 @@ function getLongArray(len: number) {
   return arr;
 }
 
-//example of my approach for scrollable component
-
-export default function HomePage() {
+export default function ExampleScrollablePage() {
   return (
     <Box //scrollable component example
       sx={{

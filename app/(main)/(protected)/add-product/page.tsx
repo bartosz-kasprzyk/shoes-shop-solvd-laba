@@ -4,16 +4,19 @@ import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddProductForm from '@/features/products/components/AddProductForm';
 import ImageUploadGrid from '@/features/products/components/UploadedImagesContainer';
-import type { ImageData } from '@/features/products/interfaces/UploadedImagesContainerProps';
+import type { ImageData } from '@/features/products/types';
 
 export default function AddProductsPage() {
   const [images, setImages] = useState<ImageData[]>([]);
   return (
     <Box
+      height='100%'
       width='100%'
-      m={{ xs: '20px', md: '50px' }}
       maxWidth='1400px'
+      p={{ xs: 3, lg: 9 }}
+      boxSizing={'border-box'}
       sx={{
+        overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'column',
         gap: '35px',

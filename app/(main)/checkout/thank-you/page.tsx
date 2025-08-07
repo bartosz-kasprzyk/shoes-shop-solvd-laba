@@ -11,6 +11,7 @@ export default function ThankYouPage({ orderNumber }: ThankYouPageProps) {
     <Box
       sx={{
         p: { xs: 2, sm: 4 },
+        boxSizing: 'border-box',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
