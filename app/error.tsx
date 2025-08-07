@@ -36,7 +36,7 @@ export default function LostPage() {
         <Image
           src='/error-lost.png'
           alt='background image'
-          style={{ objectFit: 'cover', objectPosition: 'right center' }}
+          style={{ objectFit: 'cover', objectPosition: '80% 50%' }}
           fill
           priority
           sizes='100vw'
