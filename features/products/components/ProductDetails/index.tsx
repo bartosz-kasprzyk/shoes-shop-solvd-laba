@@ -8,6 +8,7 @@ import ProductImages from './components/ProductImages';
 import SizeSelector from './components/SizeSelector';
 import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import NotFound from '@/app/not-found';
+import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 
 export default function ProductDetails({
   id,
@@ -34,102 +35,107 @@ export default function ProductDetails({
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        gap: 4,
-        margin: { xs: '100px auto', md: '220px auto' },
-        paddingX: { xs: 2, sm: 4 },
-        justifyContent: 'center',
-        width: '90%',
-        maxWidth: '1454px',
-      }}
-    >
-      <ProductImages images={product.images.data} />
-
+    <ScrollableContainer>
       <Box
         sx={{
-          maxWidth: { xs: '100%', sm: '567px', md: '522px' },
-          width: '100%',
-          margin: 'auto',
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 4,
+          margin: { xs: '50px auto', md: '100px auto' },
+          paddingX: { xs: 2, sm: 4 },
+          justifyContent: 'center',
+          width: '90%',
+          maxWidth: '1454px',
         }}
       >
+        <ProductImages images={product.images.data} />
+
         <Box
           sx={{
-            display: 'flex',
-            gap: { xs: '10px', lg: '105px' },
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
+            maxWidth: { xs: '100%', sm: '567px', md: '522px' },
+            width: '100%',
+            margin: 'auto',
           }}
         >
-          <Typography
+          <Box
             sx={{
-              lineHeight: 1,
-              fontSize: { xs: 22, sm: 30, md: 35, lg: 38, xl: 45 },
-              fontWeight: 500,
+              display: 'flex',
+              gap: { xs: '10px', lg: '105px' },
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
             }}
           >
-            {product.name}
-          </Typography>
+            <Typography
+              sx={{
+                lineHeight: 1,
+                fontSize: { xs: 22, sm: 30, md: 35, lg: 38, xl: 45 },
+                fontWeight: 500,
+              }}
+            >
+              {product.name}
+            </Typography>
+            <Typography
+              sx={{
+                lineHeight: 1,
+                fontSize: { xs: 19, xl: 22 },
+                fontWeight: 500,
+                display: 'block',
+              }}
+            >
+              {`$${product.price}`}
+            </Typography>
+          </Box>
           <Typography
             sx={{
-              lineHeight: 1,
-              fontSize: { xs: 19, xl: 22 },
+              fontSize: { xs: 15, lg: 18 },
               fontWeight: 500,
-              display: 'block',
+              color: '#A29F9F',
+              marginBottom: { xs: '20px', xl: '47px' },
+              marginLeft: '2px',
             }}
           >
-            {`$${product.price}`}
+            {product.color?.data ? product.color.data.attributes.name : ''}
           </Typography>
-        </Box>
-        <Typography
-          sx={{
-            fontSize: { xs: 15, lg: 18 },
-            fontWeight: 500,
-            color: '#A29F9F',
-            marginBottom: { xs: '20px', xl: '47px' },
-            marginLeft: '2px',
-          }}
-        >
-          {product.color?.data ? product.color.data.attributes.name : ''}
-        </Typography>
 
-        <SizeSelector
-          availableSizes={availableSizes}
-          selectedSize={selectedSize}
-          setSelectedSize={setSelectedSize}
-          showSizeWarning={showSizeWarning}
-          setShowSizeWarning={setShowSizeWarning}
-        />
+          <SizeSelector
+            availableSizes={availableSizes}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            showSizeWarning={showSizeWarning}
+            setShowSizeWarning={setShowSizeWarning}
+          />
 
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '26px',
-            marginBottom: '65px',
-            height: '61px',
-          }}
-        >
-          <Button variant='outline' onClick={() => alert('Added to wishlist!')}>
-            Add to Wishlist
-          </Button>
-          <Button onClick={handleAddToCart}>Add to Bag</Button>
-        </Box>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '26px',
+              marginBottom: '65px',
+              height: '61px',
+            }}
+          >
+            <Button
+              variant='outline'
+              onClick={() => alert('Added to wishlist!')}
+            >
+              Add to Wishlist
+            </Button>
+            <Button onClick={handleAddToCart}>Add to Bag</Button>
+          </Box>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px',
-            color: 'var(--color-text-primary)',
-          }}
-        >
-          <Typography fontWeight={500}>Description</Typography>
-          <Typography fontWeight={300}>{product.description}</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '15px',
+              color: 'var(--color-text-primary)',
+            }}
+          >
+            <Typography fontWeight={500}>Description</Typography>
+            <Typography fontWeight={300}>{product.description}</Typography>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </ScrollableContainer>
   );
 }

@@ -3,7 +3,6 @@
 import { TextField, Box, Button } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
-import { makeHeaderTitle } from '@/shared/icons/utils';
 import MenuIcon from '@/shared/icons/MenuIcon';
 import Link from 'next/link';
 
@@ -14,7 +13,7 @@ export default function TopBar() {
     <Box
       component='header'
       sx={{
-        position: 'fixed',
+        position: 'relative',
         width: '100%',
         borderBottom: '1px solid #e5e7eb',
         backgroundColor: 'white',
@@ -51,12 +50,16 @@ export default function TopBar() {
           >
             <CompanyLogoIcon />
             <Box
+              component={Link}
+              href='/products'
               sx={{
-                textTransform: 'capitalize',
                 display: { xs: 'none', md: 'block' },
+                textDecoration: 'none',
+                fontWeight: 500,
+                color: '#000',
               }}
             >
-              {makeHeaderTitle(pathname)}
+              Products
             </Box>
           </Box>
           <Box
