@@ -16,6 +16,7 @@ import SearchIcon from './SearchIcon';
 import SettingsIcon from './SettingsIcon';
 import TrashIcon from './TrashIcon';
 import DropdownDotsIcon from './DropdownDotsIcon';
+import FiltersIcon from './FiltersIcon';
 import DiscountIcon from './DiscountIcon';
 
 export {
@@ -38,4 +39,5 @@ export {
   SearchIcon,
   SettingsIcon,
   TrashIcon,
+  FiltersIcon,
 };

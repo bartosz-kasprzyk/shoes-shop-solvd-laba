@@ -36,18 +36,32 @@ export default function ProductCard({ card }: ProductCardProps) {
             image={img.src}
             alt={name}
             title={name}
-            sx={{ aspectRatio: '320 / 380', objectFit: 'cover', width: '100%' }}
+            sx={{
+              aspectRatio: '320 / 380',
+              objectFit: 'cover',
+              width: '100%',
+            }}
           />
         </ImageOverlay>
+
         <div>
           <Box
             sx={{
               display: 'flex',
               gap: '15px',
+              width: '100%',
               justifyContent: 'space-between',
+              overflow: 'hidden',
             }}
           >
-            <Typography fontSize={{ xs: 10, sm: 16, lg: 22 }} fontWeight={500}>
+            <Typography
+              width={'100%'}
+              overflow='hidden'
+              fontSize={{ xs: 10, sm: 16, lg: 22 }}
+              whiteSpace={'nowrap'}
+              textOverflow={'ellipsis'}
+              fontWeight={500}
+            >
               {name}
             </Typography>
             <Typography

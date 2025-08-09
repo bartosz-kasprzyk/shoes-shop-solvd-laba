@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import ReviewCarousel from '@/features/layout/components/ReviewCarousel';
 import type { Testimonial } from '@/features/layout/components/ReviewCarousel/interface';
+
 import { Box } from '@mui/material';
+
 import { CompanyLogoIcon } from '@/shared/icons';
 
 const testimonials: Testimonial[] = [

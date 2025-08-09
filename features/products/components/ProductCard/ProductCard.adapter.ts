@@ -1,0 +1,19 @@
+import type { Card } from './interface';
+import type { Product } from '../../../../shared/interfaces/Product';
+
+export function adaptProductToCard(product: Product): Card {
+  return {
+    id: product.id,
+    name: product.attributes.name,
+    img: {
+      src:
+        product.attributes?.images?.data?.[0].attributes.url ??
+        '/shoe-welcome.png',
+    },
+    price: product.attributes.price ?? 0,
+    gender:
+      product.attributes?.gender?.data?.attributes.name === 'Men'
+        ? 'Men'
+        : 'Women',
+  };
+}

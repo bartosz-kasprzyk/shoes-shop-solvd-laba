@@ -3,6 +3,7 @@
 import { TextField, Box, Button } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
+
 import MenuIcon from '@/shared/icons/MenuIcon';
 import Link from 'next/link';
 
@@ -18,7 +19,9 @@ export default function TopBar() {
         borderBottom: '1px solid #e5e7eb',
         backgroundColor: 'white',
         boxShadow: 'none',
+
         height: { xs: 60, md: 120 },
+
         display: 'flex',
         alignItems: 'center',
         zIndex: 1,

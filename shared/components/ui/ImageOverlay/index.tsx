@@ -10,6 +10,7 @@ export default function ImageOverlay({ children, variant }: ImageOverlayProps) {
   return (
     <Box
       sx={{
+        width: '100%',
         position: 'relative',
         display: 'inline-block',
         ...(variant === 'delete' && {

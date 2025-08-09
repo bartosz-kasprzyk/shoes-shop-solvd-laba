@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+
 import ProfilePage from '@/app/(main)/(protected)/profile/page';
 
 describe('ProfilePage', () => {

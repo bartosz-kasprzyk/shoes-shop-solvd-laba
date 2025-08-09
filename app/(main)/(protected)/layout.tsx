@@ -15,7 +15,6 @@ export default function Layout({
         flexDirection: 'row',
       }}
     >
-
       <Box
         width={'40%'}
         maxWidth={'320px'}

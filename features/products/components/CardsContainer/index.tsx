@@ -1,10 +1,14 @@
 'use client';
 
-import cards from '@/shared/mocks/mockCards';
 import { Box, Grid } from '@mui/material';
-import ProductCard from '../ProductCard';
 
-export default function CardsContainer() {
+import ProductCard from '../ProductCard';
+import type { Card } from '../ProductCard/interface';
+
+export default function CardsContainer({ cards }: { cards: Card[] }) {
+  if (!Array.isArray(cards)) {
+    return <p>No cards available</p>;
+  }
   return (
     <Box
       sx={{

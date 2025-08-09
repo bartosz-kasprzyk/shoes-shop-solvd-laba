@@ -1,8 +1,12 @@
+'use client';
 import { useSession } from 'next-auth/react';
 import { Box } from '@mui/material';
 import TopBar from '@/features/layout/components/TopBar';
+import { getQueryClient } from '@/shared/lib/getQueryClient';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const queryClient = getQueryClient();
   return (
     <Box
       sx={{
@@ -13,10 +17,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         overflow: 'hidden',
       }}
     >
-      <TopBar />
-      <Box height={'100%'} overflow={'hidden'}>
-        {children}
-      </Box>
+      <QueryClientProvider client={queryClient}>
+        <TopBar />
+        <Box height={'100%'} overflow={'hidden'}>
+          {children}
+        </Box>
+      </QueryClientProvider>
     </Box>
   );
 }
