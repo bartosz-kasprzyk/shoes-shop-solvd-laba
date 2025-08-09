@@ -25,7 +25,6 @@ export const useSignIn = (): {
       return false;
     } else {
       router.push(res?.url || '/products');
-      alert(res?.url);
       return true;
     }
   };

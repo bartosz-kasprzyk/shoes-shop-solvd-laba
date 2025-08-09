@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ForgotPasswordPage from '../ForgotPasswordPage';
 
 describe('Forgot Password Page', () => {
-  it('should validate email format', async () => {
+  it('validates email format', async () => {
     render(<ForgotPasswordPage />);
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'invalid-email' },
@@ -12,7 +12,7 @@ describe('Forgot Password Page', () => {
     expect(await screen.findByText(/invalid email/i)).toBeInTheDocument();
   });
 
-  it('should show error on server failure', async () => {
+  it('shows error on server failure', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: () => ({ error: { message: 'User not found' } }),
@@ -37,5 +37,38 @@ describe('Forgot Password Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
 
     expect(await screen.findByText(/email sent/i)).toBeInTheDocument();
+  });
+
+  it('shows an error message on network failure', async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error('Mock error'));
+
+    render(<ForgotPasswordPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
+
+    expect(
+      await screen.findByText(/network error. please try again./i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows a generic error if the server error format is unexpected', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: () => ({}),
+    });
+
+    render(<ForgotPasswordPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
+
+    expect(
+      await screen.findByText(/something went wrong/i),
+    ).toBeInTheDocument();
   });
 });

@@ -23,7 +23,9 @@ export default function ProductDetails({
   const product = data.data.attributes;
 
   const availableSizes = new Set(
-    product.sizes?.data.map(({ attributes }) => attributes.value) || [],
+    Array.isArray(product.sizes?.data)
+      ? product.sizes?.data.map(({ attributes }) => attributes.value)
+      : [],
   );
 
   const handleAddToCart = () => {

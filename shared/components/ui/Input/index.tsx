@@ -5,10 +5,6 @@ import type { InputProps } from './interface';
 import { Box, TextField } from '@mui/material';
 import Label from '../Label';
 
-export const InputsRow = ({ children }: { children: React.ReactNode }) => {
-  return <Box sx={{ mb: 3, display: 'flex', gap: 3 }}>{children}</Box>;
-};
-
 export default function Input({
   title,
   id,

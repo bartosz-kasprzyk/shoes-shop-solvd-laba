@@ -14,7 +14,7 @@ describe('<SizeSelector />', () => {
     setShowSizeWarning: mockSetShowSizeWarning,
   };
 
-  test('renders 13 size buttons', () => {
+  it('renders 13 size buttons', () => {
     render(<SizeSelector {...defaultProps} />);
 
     const allSizeButtons = screen.getAllByRole('button', { name: /EU-/i });
@@ -22,7 +22,7 @@ describe('<SizeSelector />', () => {
     expect(allSizeButtons).toHaveLength(13);
   });
 
-  test('only available sizes are enabled', () => {
+  it('only available sizes are enabled', () => {
     render(<SizeSelector {...defaultProps} />);
 
     const allSizeButtons = screen.getAllByRole('button', { name: /EU-/i });
@@ -40,7 +40,7 @@ describe('<SizeSelector />', () => {
     });
   });
 
-  test('calls setSelectedSize and hides warning on click', () => {
+  it('calls setSelectedSize and hides warning on click', () => {
     render(<SizeSelector {...defaultProps} />);
 
     const size40 = screen.getByRole('button', { name: 'EU-40' });
@@ -50,7 +50,7 @@ describe('<SizeSelector />', () => {
     expect(mockSetShowSizeWarning).toHaveBeenCalledWith(false);
   });
 
-  test('displays warning message when showSizeWarning is true', () => {
+  it('displays warning message when showSizeWarning is true', () => {
     render(<SizeSelector {...defaultProps} showSizeWarning={true} />);
 
     const warning = screen.getByRole('alert');
@@ -59,7 +59,7 @@ describe('<SizeSelector />', () => {
     expect(warning).toHaveTextContent('Please choose your size.');
   });
 
-  test('hides warning message when showSizeWarning is false', () => {
+  it('hides warning message when showSizeWarning is false', () => {
     render(<SizeSelector {...defaultProps} showSizeWarning={false} />);
 
     const warning = screen.getByRole('alert');

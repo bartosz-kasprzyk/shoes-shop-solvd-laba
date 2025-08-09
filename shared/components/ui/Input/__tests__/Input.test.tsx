@@ -27,4 +27,13 @@ describe('Input component', () => {
     expect(screen.getByText('This is an error')).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
   });
+
+  it('applies auto height when multiline is true', () => {
+    const { container } = render(
+      <Input id='test-input' title='Test Input' multiline />,
+    );
+
+    const inputWrapper = container.querySelector('.MuiOutlinedInput-root');
+    expect(inputWrapper).toHaveStyle('height: auto');
+  });
 });

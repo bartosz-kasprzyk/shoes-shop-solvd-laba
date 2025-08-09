@@ -42,4 +42,20 @@ describe('DropDownMenu', () => {
 
     expect(console.log).toHaveBeenCalledWith('View clicked');
   });
+
+  it('logs action when a menu item is clicked', () => {
+    render(<DropDownMenu />);
+
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+
+    const actions = ['View', 'Edit', 'Duplicate', 'Delete'];
+
+    actions.forEach((action) => {
+      const item = screen.getByText(action);
+      fireEvent.click(item);
+      expect(console.log).toHaveBeenCalledWith(`${action} clicked`);
+
+      fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    });
+  });
 });

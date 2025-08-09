@@ -56,7 +56,7 @@ export default function ThankYouPage({ orderNumber }: ThankYouPageProps) {
                 fontStyle: 'initial',
               }}
             >
-              {orderNumber ? orderNumber : '#9082372'}
+              {orderNumber || 'Missing order number'}
             </Typography>
           </Typography>
 

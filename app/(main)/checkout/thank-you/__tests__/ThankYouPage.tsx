@@ -32,4 +32,10 @@ describe('Thank you page', () => {
   it('renders the image with correct alt text', () => {
     expect(screen.getByAltText(/thank you image/i)).toBeInTheDocument();
   });
+
+  it('displays the fallback value when the orderNumber prop is missing or empty', () => {
+    render(<ThankYouPage orderNumber='' />);
+
+    expect(screen.getByText(/missing order number/i)).toBeInTheDocument();
+  });
 });
