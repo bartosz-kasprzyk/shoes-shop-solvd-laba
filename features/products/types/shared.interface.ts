@@ -13,7 +13,7 @@ interface SizeData {
 }
 
 interface Sizes {
-  data: SizeData[];
+  data: SizeData[] | null;
 }
 
 interface ProductData {
@@ -22,7 +22,7 @@ interface ProductData {
     name: string;
     images: Images;
     price: number;
-    color: { data: { attributes: { name: string } } };
+    color: { data: { attributes: { name: string } } | null };
     sizes: Sizes;
     description: string;
   };
