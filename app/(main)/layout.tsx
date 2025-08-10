@@ -1,5 +1,4 @@
 'use client';
-import { useSession } from 'next-auth/react';
 import { Box } from '@mui/material';
 import TopBar from '@/features/layout/components/TopBar';
 import { getQueryClient } from '@/shared/lib/getQueryClient';

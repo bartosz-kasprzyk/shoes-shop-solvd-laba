@@ -1,14 +1,11 @@
+'use client';
+
+import { Button } from '@/shared/components/ui';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { Box } from '@mui/material';
 
-function getLongArray(len: number) {
-  const arr = [];
-  for (let i = 0; i < len; i++) {
-    arr.push(i);
-  }
-  return arr;
-}
-
 export default function ExampleScrollablePage() {
+  const { showSnackbar } = useSnackbar();
   return (
     <Box //scrollable component example
       sx={{
@@ -21,9 +18,18 @@ export default function ExampleScrollablePage() {
         overflowX: 'hidden', // not that important but prevents horizontall scrollbar
       }}
     >
-      {getLongArray(100).map((elem) => (
-        <Box key={elem}>{elem}</Box>
-      ))}
+      <Button
+        onClick={() => showSnackbar('button is working!', 'success', 5000)}
+      >
+        Check
+      </Button>
+
+      <Button
+        variant='outline'
+        onClick={() => showSnackbar('button is not working!', 'error', 1000)}
+      >
+        Check
+      </Button>
     </Box>
   );
 }

@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import SessionProvider from './SessionProvider';
 import { authOptions } from '@/features/auth/nextauth/authOptions';
 import QueryProvider from './QueryProvider';
+import { SnackbarProvider } from './SnackbarProvider';
 
 export const workSans = Work_Sans({
   variable: '--font-work-sans',
@@ -31,11 +32,13 @@ export default async function RootLayout({
     <html lang='en' className={workSans.className}>
       <AppRouterCacheProvider options={{ enableCssLayer: true }}>
         <body className='font-default text-black antialiased'>
-          <QueryProvider>
+          <ThemeProvider theme={theme}>
             <SessionProvider session={session}>
-              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+              <QueryProvider>
+                <SnackbarProvider>{children}</SnackbarProvider>
+              </QueryProvider>
             </SessionProvider>
-          </QueryProvider>
+          </ThemeProvider>
         </body>
       </AppRouterCacheProvider>
     </html>
