@@ -1,4 +1,4 @@
-import type { Card } from './interface';
+import type { Card } from '../../types/index';
 import type { Product } from '../../../../shared/interfaces/Product';
 
 export function adaptProductToCard(product: Product): Card {
