@@ -32,7 +32,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 .
 ├── app/                    # Routing and page structure (Next.js App Router)
 │   ├── (main)/             # Public and protected sub-sections
-│   ├── auth/               # Authentication-related routes
+│   ├── (auth)/               # Authentication-related routes
 │   ├── layout.tsx          # Global application layout
 │   └── page.tsx            # Landing page
 │
@@ -47,7 +47,6 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 │
 ├── styles/                 # Global styles (Tailwind / CSS)
 ├── public/                 # Static assets
-├── tests/ (optional)       # e2e/integration tests (TBD)
 └── ...
 ```
 
