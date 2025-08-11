@@ -27,7 +27,7 @@ export default function ProductCard({ card }: ProductCardProps) {
     >
       <DropDownMenu />
       <Link
-        href={`/products/${card.id}`}
+        href={`/product/${card.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <ImageOverlay variant='addToCart'>

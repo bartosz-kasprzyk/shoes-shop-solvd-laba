@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import type { ProductCardProps } from '../../../interfaces/ProductCardProps';
+import type { ProductCardProps } from '../../../types/index';
 import ProductCard from '..';
 
 jest.mock('../../../../../shared/components/ui/DropDownMenu', () => {
@@ -29,7 +29,7 @@ describe('ProductCard', () => {
     expect(screen.getByText("Women's Shoes")).toBeInTheDocument();
 
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/products/1');
+    expect(link).toHaveAttribute('href', '/product/1');
 
     expect(screen.getByTestId('dropdown-menu')).toBeInTheDocument();
   });
