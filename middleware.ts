@@ -12,8 +12,6 @@ const protectedRoutes = [
   '/recently-viewed',
   '/settings',
   '/checkout',
-  '/product',
-  '/products',
 ];
 
 const authRoutes = [
