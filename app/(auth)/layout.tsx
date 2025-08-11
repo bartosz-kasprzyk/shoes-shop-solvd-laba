@@ -91,7 +91,7 @@ export default function Layout({
               src='/shoe-welcome.png'
               alt='overlay image'
               fill
-              sizes='(max-width: 1536px) 0vw, 50vw'
+              sizes='(max-width: 1200px) 0vw, 50vw'
               style={{ objectFit: 'cover' }}
               priority
             />
