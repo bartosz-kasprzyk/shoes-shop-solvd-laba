@@ -1,37 +1,83 @@
 'use client';
 
+import type { ChangeEvent, DragEvent } from 'react';
 import React from 'react';
-import { Box, Avatar } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import type { UploadedImagesContainerProps } from '../../types';
 import { Label } from '@/shared/components/ui';
 import UploadeImageInput from '../UploadImageInput';
-import UploadedImageCard from '../UploadedImageCard/indes';
+import UploadedImageCard from '../UploadedImageCard';
+import imageCompression from 'browser-image-compression';
 
 const UploadedImagesContainer = ({
   images,
   setImages,
+  setImagesError,
+  imagesError,
 }: UploadedImagesContainerProps) => {
-  const addImage = (file: File) => {
-    const objectUrl = URL.createObjectURL(file);
-    setImages((prev) => [...prev, { file, preview: objectUrl }]);
-  };
+  const MAX_IMAGES = 7;
 
-  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) addImage(file);
-    event.target.value = '';
-  };
+  const compressAndAddImages = async (files: File[]) => {
+    setImagesError('');
+    const MAX_IMAGES = 7;
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file.type.startsWith('image/')) {
-      addImage(file);
+    if (images.length >= MAX_IMAGES) {
+      setImagesError(`You can only upload up to ${MAX_IMAGES} images.`);
+      return;
+    }
+
+    const remainingSlots = MAX_IMAGES - images.length;
+    const validFiles = files.slice(0, remainingSlots);
+
+    try {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      };
+      const compressedFiles = await Promise.all(
+        validFiles.map((file) => imageCompression(file, options)),
+      );
+
+      const newImages = compressedFiles.map((file) => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
+
+      setImages((prev) => [...prev, ...newImages]);
+    } catch (error) {
+      console.error('Image compression failed:', error);
+      setImagesError('Failed to compress image.');
     }
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleAddImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const filesArray = Array.from(files);
+      compressAndAddImages(filesArray);
+    }
+    event.target.value = '';
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+
+    const files = Array.from(event.dataTransfer.files).filter((file) =>
+      file.type.startsWith('image/'),
+    );
+
+    if (files.length > 0) {
+      compressAndAddImages(files);
+    }
+  };
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const deleteImage = (idx: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== idx));
   };
 
   return (
@@ -44,11 +90,25 @@ const UploadedImagesContainer = ({
           gap={{ xs: 3, xl: 6 }}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
+          position='relative'
+          paddingBottom='30px'
         >
           {images.map(({ preview }, idx) => (
-            <UploadedImageCard key={preview} idx={idx} preview={preview} />
+            <UploadedImageCard
+              key={preview}
+              idx={idx}
+              preview={preview}
+              deleteImage={deleteImage}
+            />
           ))}
-          <UploadeImageInput handleAddImage={handleAddImage} />
+          {images.length < MAX_IMAGES && (
+            <UploadeImageInput handleAddImage={handleAddImage} />
+          )}
+          <Typography
+            style={{ position: 'absolute', color: 'red', bottom: 0, margin: 0 }}
+          >
+            {imagesError}
+          </Typography>
         </Box>
       </Box>
     </>

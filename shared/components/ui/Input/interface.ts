@@ -6,4 +6,5 @@ export type InputProps = TextFieldProps & {
   required?: boolean;
   error?: boolean;
   helperText?: string;
+  maxLength?: number;
 };

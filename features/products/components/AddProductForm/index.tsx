@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Dropdown, Input, Button, Label } from '@/shared/components/ui';
 import SizeDisplayCheckbox from '../SizeDisplayCheckbox';
@@ -8,128 +10,176 @@ import { Box } from '@mui/material';
 import { createProduct } from '@/app/api/products';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import type { AddProductFormProps } from '../../types';
+import { productSchema } from '../../schemas/product.schema';
+import type { Product } from '../../types';
 
-const AddProductForm = ({ images }: AddProductFormProps) => {
-  const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedGender, setSelectedGender] = useState('');
-  const [selectedBrand, setSelectedBrand] = useState('');
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
-
+const AddProductForm = ({
+  images,
+  setImagesError,
+  setImages,
+}: AddProductFormProps) => {
   const { data } = useAllOptions();
-
   const { colors, genders, brands, categories, sizes } = data || {};
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<Product>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: '',
+      price: undefined,
+      description: '',
+      color: '',
+      gender: '',
+      brand: '',
+      categories: '',
+      sizes: [],
+    },
+  });
+
   useEffect(() => {
-    if (colors?.length) setSelectedColor(colors[0].value);
-    if (genders?.length) setSelectedGender(genders[0].value);
-    if (brands?.length) setSelectedBrand(brands[0].value);
-    if (categories?.length) setSelectedCategory(categories[0].value);
-  }, [colors, genders, brands, categories]);
+    if (colors && genders && brands && categories) {
+      reset({
+        name: '',
+        price: undefined,
+        description: '',
+        color: colors[0]?.value || '',
+        gender: genders[0]?.value || '',
+        brand: brands[0]?.value || '',
+        categories: categories[0]?.value || '',
+        sizes: [],
+      });
+    }
+  }, [colors, genders, brands, categories, reset]);
 
   const mutation = useMutation({
     mutationFn: createProduct,
     onSuccess: (data) => {
       console.log('Product created: ', data);
+      reset();
+      setImages([]);
     },
     onError: (error) => {
       console.error('Product creation failed:', error);
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (data: Product) => {
+    if (images.length === 0) {
+      setImagesError('Please upload at least one image');
+      return;
+    }
     mutation.mutate({
-      name: productName,
-      images,
-      description: productDescription,
-      brand: selectedBrand,
-      color: selectedColor,
-      gender: selectedGender,
-      sizes: selectedSizes,
-      price: productPrice,
-      categories: selectedCategory,
+      ...data,
+      images: images,
       userID: '1382',
       teamName: 'team-5',
     });
   };
 
+  const selectedSizes = watch('sizes');
+
+  const toggleSize = (sizeValue: string) => {
+    const updatedSizes = selectedSizes.includes(sizeValue)
+      ? selectedSizes.filter((s) => s !== sizeValue)
+      : [...selectedSizes, sizeValue];
+    setValue('sizes', updatedSizes);
+  };
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       style={{
         width: '100%',
         maxWidth: '436px',
       }}
     >
-      <Box
-        gap={1}
-        display='flex'
-        flexDirection='column'
-        mb={4}
-        sx={{ gap: '24px' }}
-      >
+      <Box display='flex' flexDirection='column' mb={4} gap={4}>
         <Input
           title='Product name'
           id='product-name'
           placeholder='Nike Air Max 90'
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-          required
+          {...register('name')}
+          error={!!errors.name}
+          helperText={errors.name?.message}
         />
         <Input
           title='Price'
           id='price'
-          placeholder='$160'
           type='number'
-          value={productPrice}
-          onChange={(e) => setProductPrice(e.target.value)}
-          required
+          onKeyDown={(e) => {
+            if (['-', 'e', '+'].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <span style={{ color: '#5C5C5C', fontSize: '15px' }}>$</span>
+              ),
+            },
+            htmlInput: { step: '0.001' },
+          }}
+          {...register('price', { valueAsNumber: true })}
+          error={!!errors.price}
+          helperText={errors.price?.message}
         />
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Dropdown
             id='color'
             title='Color'
-            value={selectedColor}
-            onChange={(e) => setSelectedColor(e.target.value)}
+            value={watch('color')}
+            onChange={(e) => setValue('color', e.target.value)}
             options={colors || []}
+            error={!!errors.color}
+            helperText={errors.color?.message}
           />
           <Dropdown
-            id='categorie'
-            title='Categorie'
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            id='category'
+            title='Category'
+            value={watch('categories')}
+            onChange={(e) => setValue('categories', e.target.value)}
             options={categories || []}
+            error={!!errors.categories}
+            helperText={errors.categories?.message}
           />
         </Box>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Dropdown
             id='gender'
             title='Gender'
-            value={selectedGender}
-            onChange={(e) => setSelectedGender(e.target.value)}
+            value={watch('gender')}
+            onChange={(e) => setValue('gender', e.target.value)}
             options={genders || []}
+            error={!!errors.gender}
+            helperText={errors.gender?.message}
           />
           <Dropdown
             id='brand'
             title='Brand'
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
+            value={watch('brand')}
+            onChange={(e) => setValue('brand', e.target.value)}
             options={brands || []}
+            error={!!errors.brand}
+            helperText={errors.brand?.message}
           />
         </Box>
         <Input
           title='Description'
           id='product-description'
-          placeholder='You description of the prpoduct...'
+          placeholder='Your description of the product...'
           multiline
           rows={10}
-          value={productDescription}
-          onChange={(e) => setProductDescription(e.target.value)}
-          required
+          maxLength={300}
+          {...register('description')}
+          value={watch('description')}
+          error={!!errors.description}
+          helperText={errors.description?.message}
         />
         <Box>
           <Label id='sizes'>Add size</Label>
@@ -141,11 +191,14 @@ const AddProductForm = ({ images }: AddProductFormProps) => {
                   key={size.value}
                   size={size}
                   isChecked={isChecked}
-                  setSelectedSizes={setSelectedSizes}
+                  setSelectedSizes={() => toggleSize(size.value)}
                 />
               );
             })}
           </Box>
+          {errors.sizes && (
+            <p style={{ color: 'red' }}>{errors.sizes.message}</p>
+          )}
         </Box>
         <Button type='submit' size='medium' disabled={mutation.isPending}>
           {mutation.isPending ? 'Saving...' : 'Save'}

@@ -6,7 +6,11 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { DeleteIcon, CartLogoIcon } from '@/shared/icons';
 import type { ImageOverlayProps } from './interface';
 
-export default function ImageOverlay({ children, variant }: ImageOverlayProps) {
+export default function ImageOverlay({
+  children,
+  variant,
+  onDelete,
+}: ImageOverlayProps) {
   return (
     <Box
       sx={{
@@ -39,7 +43,7 @@ export default function ImageOverlay({ children, variant }: ImageOverlayProps) {
         onClick={(event) => {
           event.preventDefault();
           if (variant === 'delete') {
-            alert('Deleted!');
+            onDelete?.();
           } else {
             alert('Added to cart!');
           }

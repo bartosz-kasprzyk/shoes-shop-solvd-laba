@@ -3,9 +3,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ImageOverlay from '..';
 
-const renderOverlay = (variant: 'addToCart' | 'delete') =>
+const renderOverlay = (
+  variant: 'addToCart' | 'delete',
+  onDelete?: () => void,
+) =>
   render(
-    <ImageOverlay variant={variant}>
+    <ImageOverlay variant={variant} onDelete={onDelete}>
       <img src='/test.jpg' alt='test' />
     </ImageOverlay>,
   );
@@ -29,7 +32,9 @@ describe('ImageOverlay', () => {
   it('renders the Delete button when variant is delete', () => {
     renderOverlay('delete');
 
-    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /delete item/i }),
+    ).toBeInTheDocument();
   });
 
   it('triggers alert on button click (Added to cart!)', async () => {
@@ -41,12 +46,12 @@ describe('ImageOverlay', () => {
     expect(window.alert).toHaveBeenCalledWith('Added to cart!');
   });
 
-  it('triggers alert on button click (Deleted!)', async () => {
-    window.alert = jest.fn();
-    renderOverlay('delete');
+  it('renders the Delete button when variant is delete', async () => {
+    const onDeleteMock = jest.fn();
+    renderOverlay('delete', onDeleteMock);
 
-    await userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button', { name: /delete item/i }));
 
-    expect(window.alert).toHaveBeenCalledWith('Deleted!');
+    expect(onDeleteMock).toHaveBeenCalledTimes(1);
   });
 });

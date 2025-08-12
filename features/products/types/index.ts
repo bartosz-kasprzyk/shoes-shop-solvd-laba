@@ -1,3 +1,8 @@
+import type z from 'zod';
+import type { productSchema } from '../schemas/product.schema';
+
+export type Product = z.infer<typeof productSchema>;
+
 import type { Dispatch, SetStateAction, ChangeEvent } from 'react';
 
 export interface ImageData {
@@ -7,6 +12,8 @@ export interface ImageData {
 
 export interface AddProductFormProps {
   images: ImageData[];
+  setImagesError: Dispatch<SetStateAction<string>>;
+  setImages: Dispatch<SetStateAction<ImageData[]>>;
 }
 
 export interface DeleteModalProps {
@@ -38,8 +45,16 @@ export interface SizeDisplayCheckboxProps {
 export interface UploadedImagesContainerProps {
   images: ImageData[];
   setImages: Dispatch<SetStateAction<ImageData[]>>;
+  setImagesError: Dispatch<SetStateAction<string>>;
+  imagesError: string;
 }
 
 export interface UploadeImageInputProps {
   handleAddImage: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface UploadedImageCardProps {
+  idx: number;
+  preview: string;
+  deleteImage: (idx: number) => void;
 }

@@ -23,7 +23,6 @@ const UploadeImageInput = ({ handleAddImage }: UploadeImageInputProps) => {
         padding: 2,
         border: '1px dashed #5C5C5C',
         aspectRatio: 320 / 380,
-        maxWidth: '320px',
         boxSizing: 'border-box',
       }}
       onClick={() => fileInputRef.current?.click()}
@@ -55,6 +54,7 @@ const UploadeImageInput = ({ handleAddImage }: UploadeImageInputProps) => {
         hidden
         ref={fileInputRef}
         onChange={handleAddImage}
+        multiple
       />
     </Box>
   );
