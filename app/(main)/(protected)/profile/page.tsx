@@ -1,7 +1,17 @@
+// 'use client';
+
+import ProfileForm from '@/features/profile/components/ProfileForm';
+import { Box } from '@mui/material';
+
 export default function ProfilePage() {
   return (
-    <div>
-      <h1>Profile page is working</h1>
-    </div>
+    <Box sx={{ px: '60px', py: '50px' }}>
+      <h1>My Profile</h1>
+      <ProfileForm />
+    </Box>
+    // <div>
+    //   <h1>My Profile</h1>
+    //   <ProfileForm />
+    // </div>
   );
 }

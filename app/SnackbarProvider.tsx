@@ -4,11 +4,8 @@ import {
   SnackbarProvider as NotistackProvider,
   enqueueSnackbar,
 } from 'notistack';
-import type {
-  SnackbarContextType} from '@/shared/contexts/SnackbarContext';
-import {
-  SnackbarContext
-} from '@/shared/contexts/SnackbarContext';
+import type { SnackbarContextType } from '@/shared/contexts/SnackbarContext';
+import { SnackbarContext } from '@/shared/contexts/SnackbarContext';
 import type { ReactNode } from 'react';
 
 export function SnackbarProvider({ children }: { children: ReactNode }) {
