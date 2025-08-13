@@ -118,7 +118,7 @@ export default function MyProductsPage() {
               Post can contain video, images and text
             </Typography>
 
-            <Link href='/add-product' passHref>
+            <Link href='/my-products/add-product' passHref>
               <Button variant='primary'>Add product</Button>
             </Link>
           </Box>

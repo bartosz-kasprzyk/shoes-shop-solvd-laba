@@ -12,6 +12,8 @@ import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import type { AddProductFormProps } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
 import type { Product } from '../../types';
+import useUser from '@/shared/hooks/useUser';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 const AddProductForm = ({
   images,
@@ -20,6 +22,12 @@ const AddProductForm = ({
 }: AddProductFormProps) => {
   const { data } = useAllOptions();
   const { colors, genders, brands, categories, sizes } = data || {};
+  const { showSnackbar } = useSnackbar();
+
+  const { session } = useUser();
+
+  const id = session?.user.id as number;
+  const token = session?.user.accessToken as string;
 
   const {
     register,
@@ -60,12 +68,12 @@ const AddProductForm = ({
   const mutation = useMutation({
     mutationFn: createProduct,
     onSuccess: (data) => {
-      console.log('Product created: ', data);
+      showSnackbar('Product created!', 'success', 5000);
       reset();
       setImages([]);
     },
     onError: (error) => {
-      console.error('Product creation failed:', error);
+      showSnackbar('Server error, please try later', 'error', 1000);
     },
   });
 
@@ -77,8 +85,9 @@ const AddProductForm = ({
     mutation.mutate({
       ...data,
       images: images,
-      userID: '1382',
+      userID: id,
       teamName: 'team-5',
+      token,
     });
   };
 

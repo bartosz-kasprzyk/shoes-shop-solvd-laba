@@ -1,7 +1,8 @@
-import type { AllOptionsProps } from '@/shared/types';
-
-const TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTM4MiwiaWF0IjoxNzUzNjIzNDMxLCJleHAiOjE3NTYyMTU0MzF9.2cT4xiVma_uumTaCZZVYRlrVjU7Y1DmSSCemXQ92e9U';
+import type {
+  CreateProductDataProps,
+  ProductResponseProps,
+} from '@/features/products/types';
+import type { AllOptionsProps, OptionItem } from '@/shared/types';
 
 export async function fetchAllOptions(): Promise<AllOptionsProps> {
   const keys = ['colors', 'genders', 'brands', 'categories', 'sizes'];
@@ -17,7 +18,9 @@ export async function fetchAllOptions(): Promise<AllOptionsProps> {
   };
 }
 
-export async function fetchOptions(optionEndpoint: string) {
+export async function fetchOptions(
+  optionEndpoint: string,
+): Promise<OptionItem[]> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/${optionEndpoint}`,
     {
@@ -37,16 +40,19 @@ export async function fetchOptions(optionEndpoint: string) {
   });
 }
 
-export async function createProduct(data: any) {
+export async function createProduct(
+  data: CreateProductDataProps,
+): Promise<ProductResponseProps> {
+  const { token, ...productDats } = data;
   const imageIDs: number[] = [];
 
   for (const img of data.images) {
-    const id = await uploadImageToServer(img.file);
+    const id = await uploadImageToServer(img.file, token);
     imageIDs.push(id);
   }
 
   const productPayload = {
-    ...data,
+    ...productDats,
     images: imageIDs,
   };
 
@@ -57,7 +63,7 @@ export async function createProduct(data: any) {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ data: productPayload }),
     },
@@ -74,14 +80,17 @@ export async function createProduct(data: any) {
   };
 }
 
-export async function uploadImageToServer(file: File): Promise<number> {
+export async function uploadImageToServer(
+  file: File,
+  token: string,
+): Promise<number> {
   const formData = new FormData();
   formData.append('files', file);
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/upload`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${token}`,
     },
     body: formData,
   });

@@ -58,3 +58,37 @@ export interface UploadedImageCardProps {
   preview: string;
   deleteImage: (idx: number) => void;
 }
+
+type ImageFile = {
+  file: File;
+};
+
+export interface CreateProductDataProps {
+  token: string;
+  name: string;
+  price: number;
+  description: string;
+  color: string;
+  gender: string;
+  brand: string;
+  categories: string;
+  sizes: string[];
+  images: ImageFile[];
+  userID: number;
+  teamName: string;
+}
+
+export interface ProductAttributesProps {
+  name: string;
+  price: number;
+  description: string;
+  teamName: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface ProductResponseProps {
+  id: number;
+  attributes: ProductAttributesProps;
+}
