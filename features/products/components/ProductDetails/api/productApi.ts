@@ -5,9 +5,12 @@ export const fetchProductById = async (
 ): Promise<ProductApiResponse> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products/${id}?populate=*`,
+    { next: { revalidate: 5 * 60 } },
   );
+
   if (!res.ok) {
     throw new Error('Failed to fetch product');
   }
+
   return res.json();
 };

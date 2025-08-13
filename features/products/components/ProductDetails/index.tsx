@@ -1,26 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, styled, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Button from '@/shared/components/ui/Button';
-import { useProduct } from './hooks/useProduct';
 import ProductImages from './components/ProductImages';
 import SizeSelector from './components/SizeSelector';
 import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import NotFound from '@/app/not-found';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 
-export default function ProductDetails({
-  id,
-  initialData,
-}: ProductDetailsProps) {
-  const { data } = useProduct(id, initialData);
+export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
 
-  if (!data?.data) return <NotFound />;
+  if (!initialData?.data) return <NotFound />;
 
-  const product = data.data.attributes;
+  const product = initialData.data.attributes;
 
   const availableSizes = new Set(
     Array.isArray(product.sizes?.data)

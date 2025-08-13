@@ -13,6 +13,5 @@ export interface SizeSelectorProps {
 }
 
 export interface ProductDetailsProps {
-  id: string;
   initialData?: ProductApiResponse | null;
 }
