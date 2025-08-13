@@ -1,14 +1,19 @@
 'use client';
 
-import { TextField, Box, Button } from '@mui/material';
+import { TextField, Box, Button, IconButton, Avatar } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
 
 import MenuIcon from '@/shared/icons/MenuIcon';
 import Link from 'next/link';
+import useUser from '@/shared/hooks/useUser';
 
 export default function TopBar() {
   const pathname = usePathname();
+  const { session } = useUser();
+
+  const name = session?.user.name;
+  const avatar = session?.user.image;
 
   return (
     <Box
@@ -154,7 +159,8 @@ export default function TopBar() {
               >
                 <MenuIcon />
               </Button>
-              <Button
+
+              <IconButton
                 component={Link}
                 href='/profile'
                 sx={{
@@ -169,15 +175,19 @@ export default function TopBar() {
                   },
                 }}
               >
-                <Box
+                <Avatar
+                  src={avatar || undefined}
+                  alt={name || 'User'}
                   sx={{
-                    height: '24px',
-                    width: '24px',
-                    borderRadius: '50%',
-                    backgroundColor: '#9ca3af',
+                    width: 24,
+                    height: 24,
+                    bgcolor: '#9ca3af',
+                    fontSize: '0.875rem',
                   }}
-                />
-              </Button>
+                >
+                  {name ? name.charAt(0).toUpperCase() : '?'}
+                </Avatar>
+              </IconButton>
             </Box>
           </Box>
         </Box>

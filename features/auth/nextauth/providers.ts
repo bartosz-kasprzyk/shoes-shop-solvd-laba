@@ -13,24 +13,42 @@ export const credentialsProvider = CredentialsProvider({
     remember: { label: 'Remember me', type: 'checkbox' },
   },
   async authorize(credentials): Promise<User | null> {
-    const url = `${process.env.SHOES_SHOP_BASE_API}/auth/local`;
-    const res = await fetch(url, {
+    const loginUrl = `${process.env.SHOES_SHOP_BASE_API}/auth/local`;
+    const loginResponse = await fetch(loginUrl, {
       method: 'POST',
       body: JSON.stringify(credentials),
       headers: { 'Content-Type': 'application/json' },
     });
 
-    const data = await res.json();
-    if (res.ok && data.user) {
-      return {
-        id: data.user.id,
-        name: data.user.username,
-        email: data.user.email,
-        remember: credentials?.remember,
-        accessToken: data.jwt,
-      } as User;
+    if (!loginResponse) {
+      return null;
     }
 
-    return null;
+    const loginData = await loginResponse.json();
+
+    const profileUrl = `${process.env.SHOES_SHOP_BASE_API}/users/me?populate=avatar`;
+    const profileResponse = await fetch(profileUrl, {
+      headers: {
+        Authorization: `Bearer ${loginData.jwt}`,
+      },
+    });
+
+    if (!profileResponse) {
+      return null;
+    }
+
+    const profileData = await profileResponse.json();
+    const user = profileData;
+
+    const avatarUrl = user.avatar?.url ? user.avatar.url : null;
+
+    return {
+      id: user.id,
+      name: user.username,
+      email: user.email,
+      remember: credentials?.remember,
+      accessToken: loginData.jwt,
+      image: avatarUrl,
+    } as User;
   },
 });

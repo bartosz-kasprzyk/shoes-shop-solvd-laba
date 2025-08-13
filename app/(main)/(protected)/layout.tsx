@@ -13,7 +13,6 @@ export default function Layout({
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        marginTop: '120px',
       }}
     >
       <Box
