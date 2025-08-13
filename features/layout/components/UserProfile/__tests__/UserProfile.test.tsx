@@ -63,10 +63,10 @@ describe('UserProfile', () => {
 
     render(<UserProfile />);
 
-    const avatarInitial = screen.getByText('U');
+    const avatarInitial = screen.getByText('?');
     expect(avatarInitial).toBeInTheDocument();
 
-    expect(screen.getByText('Jane Meldrum')).toBeInTheDocument();
+    expect(screen.getByText('Guest')).toBeInTheDocument();
   });
 
   it('renders first letter of name if no avatar image', () => {
@@ -288,9 +288,10 @@ describe('UserProfile', () => {
     const mainBox = container.firstChild;
 
     expect(mainBox).toHaveStyle({
-      display: 'flex',
+      padding: '24px',
+      display: 'block',
       alignItems: 'center',
-      padding: '24px', // MUI converts p: 3 to 24px
+      gap: '24px',
     });
   });
 
@@ -322,9 +323,9 @@ describe('UserProfile', () => {
     render(<UserProfile />);
 
     // When no session, it should show default fallback
-    const avatar = screen.getByText('U');
+    const avatar = screen.getByText('?');
     expect(avatar).toBeInTheDocument();
-    expect(screen.getByText('Jane Meldrum')).toBeInTheDocument();
+    expect(screen.getByText('Guest')).toBeInTheDocument();
   });
 
   it('handles loading session state', () => {
@@ -333,8 +334,8 @@ describe('UserProfile', () => {
     render(<UserProfile />);
 
     // Should show default values while loading
-    expect(screen.getByText('U')).toBeInTheDocument();
-    expect(screen.getByText('Jane Meldrum')).toBeInTheDocument();
+    expect(screen.getByText('?')).toBeInTheDocument();
+    expect(screen.getByText('Guest')).toBeInTheDocument();
   });
 
   it('handles empty string name by showing Anonymous', () => {
@@ -355,8 +356,8 @@ describe('UserProfile', () => {
 
     render(<UserProfile />);
 
-    // When name is empty string, component shows 'Jane Meldrum' as fallback
-    expect(screen.getByText('Jane Meldrum')).toBeInTheDocument();
+    // When name is empty string, component shows 'Guest' as fallback
+    expect(screen.getByText('Guest')).toBeInTheDocument();
     // When there's an image, avatar shows the image
     const avatarImg = screen.getByRole('img');
     expect(avatarImg).toHaveAttribute('src', 'https://example.com/avatar.jpg');

@@ -1,19 +1,22 @@
 'use client';
 
-import { TextField, Box, Button, IconButton, Avatar } from '@mui/material';
-import { usePathname } from 'next/navigation';
-import { CartLogoIcon, CompanyLogoIcon, SearchIcon } from '@/shared/icons/';
-
-import MenuIcon from '@/shared/icons/MenuIcon';
+import { Box, IconButton } from '@mui/material';
+import { CompanyLogoIcon } from '@/shared/icons/';
 import Link from 'next/link';
 import useUser from '@/shared/hooks/useUser';
+import SearchBar from './TopBarSearch';
+import TopBarCart from './TopBarCart';
+import TopBarMenu from '../TopBarMenu';
 
 export default function TopBar() {
-  const pathname = usePathname();
   const { session } = useUser();
 
-  const name = session?.user.name;
-  const avatar = session?.user.image;
+  const user = session?.user
+    ? {
+        name: session.user.name ?? 'Anonymous',
+        avatar: session.user.image || undefined,
+      }
+    : null;
 
   return (
     <Box
@@ -56,7 +59,9 @@ export default function TopBar() {
               flexShrink: 0,
             }}
           >
-            <CompanyLogoIcon />
+            <IconButton href='/'>
+              <CompanyLogoIcon />
+            </IconButton>
             <Box
               component={Link}
               href='/products'
@@ -77,117 +82,15 @@ export default function TopBar() {
               gap: '40px',
             }}
           >
-            <TextField
-              fullWidth
-              placeholder='Search'
-              size='small'
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
-                      <SearchIcon />
-                    </Box>
-                  ),
-                },
-              }}
-              sx={{
-                display: { xs: 'none', md: 'block' },
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '9999px',
-                  borderColor: '#494949',
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'black',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'black',
-                  },
-                },
-                '& .MuiInputBase-input::placeholder': {
-                  color: '#5C5C5C',
-                },
-              }}
-            />
             <Box
               sx={{
                 display: 'flex',
-                gap: { xs: 0, md: 2 },
+                gap: { xs: 0, md: 1 },
               }}
             >
-              <Button
-                sx={{
-                  cursor: 'pointer',
-                  borderRadius: '50%',
-                  p: 1,
-                  minWidth: 'auto',
-                  transition: 'background-color 0.2s',
-                  '&:hover': {
-                    backgroundColor: '#f3f4f6',
-                  },
-                }}
-              >
-                <CartLogoIcon />
-              </Button>
-              <Button
-                sx={{
-                  display: { xs: 'flex', md: 'none' },
-                  cursor: 'pointer',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  p: 1,
-                  minWidth: 'auto',
-                  transition: 'background-color 0.2s',
-                  '&:hover': {
-                    backgroundColor: '#f3f4f6',
-                  },
-                }}
-              >
-                <SearchIcon />
-              </Button>
-              <Button
-                sx={{
-                  display: { xs: 'flex', md: 'none' },
-                  cursor: 'pointer',
-                  borderRadius: '50%',
-                  p: 1,
-                  minWidth: 'auto',
-                  transition: 'background-color 0.2s',
-                  '&:hover': {
-                    backgroundColor: '#f3f4f6',
-                  },
-                }}
-              >
-                <MenuIcon />
-              </Button>
-
-              <IconButton
-                component={Link}
-                href='/settings'
-                sx={{
-                  display: { xs: 'none', md: 'block' },
-                  cursor: 'pointer',
-                  borderRadius: '50%',
-                  p: 1,
-                  minWidth: 'auto',
-                  transition: 'background-color 0.2s',
-                  '&:hover': {
-                    backgroundColor: '#f3f4f6',
-                  },
-                }}
-              >
-                <Avatar
-                  src={avatar || undefined}
-                  alt={name || 'User'}
-                  sx={{
-                    width: 24,
-                    height: 24,
-                    bgcolor: '#9ca3af',
-                    fontSize: '0.875rem',
-                  }}
-                >
-                  {name ? name.charAt(0).toUpperCase() : '?'}
-                </Avatar>
-              </IconButton>
+              <SearchBar />
+              <TopBarCart />
+              <TopBarMenu user={user} />
             </Box>
           </Box>
         </Box>

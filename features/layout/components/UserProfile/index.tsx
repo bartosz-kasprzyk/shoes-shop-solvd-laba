@@ -1,4 +1,6 @@
-import { Avatar, Box, Typography } from '@mui/material';
+'use client';
+
+import { Avatar, Box, IconButton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
 export default function UserProfile() {
@@ -10,22 +12,28 @@ export default function UserProfile() {
         avatar: session.user.image || undefined,
       }
     : undefined;
+
   return (
     <Box
       sx={{
         p: 3,
-        display: 'flex',
+        display: { xs: 'none', md: 'flex' },
         alignItems: 'center',
         gap: 3,
       }}
     >
-      <Avatar
-        src={user?.avatar}
-        alt={user?.name || 'User'}
-        sx={{ width: 48, height: 48 }}
-      >
-        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-      </Avatar>
+      <IconButton href='/profile'>
+        <Avatar
+          src={user?.avatar}
+          alt={user?.name || 'User'}
+          sx={{
+            width: '48px',
+            height: '48px',
+          }}
+        >
+          {user?.name ? user.name.charAt(0).toUpperCase() : '?'}
+        </Avatar>
+      </IconButton>
       <Box>
         <Typography
           sx={{
@@ -40,7 +48,7 @@ export default function UserProfile() {
             fontWeight: 500,
           }}
         >
-          {user?.name || 'Jane Meldrum'}
+          {user?.name || 'Guest'}
         </Typography>
       </Box>
     </Box>

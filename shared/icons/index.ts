@@ -18,6 +18,7 @@ import TrashIcon from './TrashIcon';
 import DropdownDotsIcon from './DropdownDotsIcon';
 import FiltersIcon from './FiltersIcon';
 import DiscountIcon from './DiscountIcon';
+import MenuIcon from './MenuIcon';
 
 export {
   HorizontalArrowIcon,
@@ -40,4 +41,5 @@ export {
   SettingsIcon,
   TrashIcon,
   FiltersIcon,
+  MenuIcon,
 };

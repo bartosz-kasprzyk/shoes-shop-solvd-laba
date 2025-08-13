@@ -1,15 +1,16 @@
 'use client';
 
-import { Box, List } from '@mui/material';
+import { List } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import MenuItem from '../MenuItem';
 import { menuItems, signOutItem } from './consts';
+import { ScrollableContainer } from '../ScrollableContainer';
 
 export default function MenuList() {
   const pathname = usePathname();
 
   return (
-    <Box>
+    <ScrollableContainer>
       <List disablePadding sx={{ paddingLeft: '16px' }}>
         {menuItems.map((item) => {
           return (
@@ -27,6 +28,6 @@ export default function MenuList() {
           }
         />
       </List>
-    </Box>
+    </ScrollableContainer>
   );
 }
