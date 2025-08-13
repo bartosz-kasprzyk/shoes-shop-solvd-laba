@@ -1,6 +1,6 @@
 'use client';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import type { SignInFormData } from './signIn.schema';
 
@@ -9,22 +9,29 @@ export const useSignIn = (): {
   serverError: string;
 } => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [serverError, setServerError] = useState('');
 
   const signInUser = async (data: SignInFormData) => {
     setServerError('');
+
+    // Get the callback URL from search params or default to '/products'
+    const callbackUrl = searchParams.get('callbackUrl') || '/products';
+
     const res = await signIn('credentials', {
       redirect: false,
       identifier: data.email,
       password: data.password,
       remember: data.remember,
-      callbackUrl: '/',
+      callbackUrl,
     });
     if (res?.error) {
       setServerError('Invalid email or password.');
       return false;
     } else {
-      router.push(res?.url || '/products');
+      // Use the NextAuth response URL or fall back to the callback URL or products page
+      const redirectUrl = res?.url || callbackUrl || '/products';
+      router.push(redirectUrl);
       return true;
     }
   };

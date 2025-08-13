@@ -42,7 +42,12 @@ export default withAuth(
     }
 
     if (!token && isProtectedPage) {
-      return NextResponse.redirect(new URL('/sign-in', req.url));
+      const signInUrl = new URL('/sign-in', req.url);
+      signInUrl.searchParams.set(
+        'callbackUrl',
+        req.nextUrl.pathname + req.nextUrl.search,
+      );
+      return NextResponse.redirect(signInUrl);
     }
 
     return NextResponse.next();

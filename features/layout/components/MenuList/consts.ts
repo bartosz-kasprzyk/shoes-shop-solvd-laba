@@ -7,6 +7,7 @@ import {
   SettingsIcon,
 } from '@/shared/icons';
 import type { MenuItem } from './interface';
+import { signOut } from 'next-auth/react';
 
 export const menuItems: MenuItem[] = [
   {
@@ -39,9 +40,10 @@ export const menuItems: MenuItem[] = [
     icon: SettingsIcon,
     href: '/sign-in',
   },
-  {
-    label: 'Sign out',
-    icon: LogoutIcon,
-    href: '/sign-out',
-  },
 ];
+
+export const signOutItem: MenuItem = {
+  label: 'Sign out',
+  icon: LogoutIcon,
+  onClick: () => signOut({ callbackUrl: '/' }),
+};

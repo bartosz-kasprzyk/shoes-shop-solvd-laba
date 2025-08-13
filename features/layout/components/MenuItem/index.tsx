@@ -14,11 +14,42 @@ export default function MenuItem({ item, isActive }: MenuItemProps) {
     ? theme.palette.primary.main
     : theme.palette.primaryGrey.main;
 
+  if (item.onClick) {
+    return (
+      <ListItem disablePadding>
+        <ListItemButton
+          onClick={item.onClick}
+          sx={{
+            py: 1.5,
+            px: 2,
+            mb: 0.5,
+            borderRadius: 2,
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 40 }}>
+            <item.icon color={iconColor} />
+          </ListItemIcon>
+          <ListItemText
+            primary={item.label}
+            sx={{
+              '& .MuiListItemText-primary': {
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                color: isActive ? theme.palette.primary.main : '#000',
+                textDecoration: 'none',
+              },
+            }}
+          />
+        </ListItemButton>
+      </ListItem>
+    );
+  }
+
   return (
     <ListItem disablePadding>
       <ListItemButton
         component={Link}
-        href={item.href}
+        href={item.href || '#'}
         sx={{
           py: 1.5,
           px: 2,

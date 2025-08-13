@@ -23,6 +23,11 @@ jest.mock('../../MenuList/consts', () => ({
     { href: '/about', label: 'About', icon: () => <div>Icon</div> },
     { href: '/contact', label: 'Contact', icon: () => <div>Icon</div> },
   ],
+  signOutItem: {
+    label: 'Sign out',
+    icon: () => <div>Icon</div>,
+    onClick: jest.fn(),
+  },
 }));
 
 import { usePathname } from 'next/navigation';
@@ -36,10 +41,11 @@ describe('MenuList', () => {
 
     const items = screen.getAllByTestId('menu-item');
 
-    expect(items).toHaveLength(3);
+    expect(items).toHaveLength(4); // 3 menu items + 1 sign out item
 
     expect(items[0]).toHaveAttribute('data-active', 'false');
     expect(items[1]).toHaveAttribute('data-active', 'true');
     expect(items[2]).toHaveAttribute('data-active', 'false');
+    expect(items[3]).toHaveAttribute('data-active', 'false'); // signOutItem
   });
 });

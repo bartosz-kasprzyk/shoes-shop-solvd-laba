@@ -9,13 +9,7 @@ import SignInPage from '../SignInPage';
 import '@testing-library/jest-dom';
 import { signIn } from 'next-auth/react';
 import { useSignIn } from '../useSignIn';
-import { useRouter } from 'next/navigation';
-
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-  }),
-}));
+import { useRouter, useSearchParams } from 'next/navigation';
 
 jest.mock('next-auth/react', () => ({
   signIn: jest.fn(),
@@ -23,9 +17,28 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }));
 
 describe('SignIn Page', () => {
+  const mockPush = jest.fn();
+  const mockSearchParams = {
+    get: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    });
+    (useSearchParams as jest.Mock).mockReturnValue(mockSearchParams);
+    mockSearchParams.get.mockReturnValue(null);
+  });
   it('shows server error on incorrect credentials', async () => {
     (signIn as jest.Mock).mockResolvedValueOnce({
       error: 'Invalid credentials',
@@ -90,12 +103,21 @@ describe('SignIn Page', () => {
     const mockedSignIn = signIn as jest.MockedFunction<typeof signIn>;
     const mockedUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
 
-    mockedUseRouter.mockReturnValue({ push: pushMock } as any);
+    mockedUseRouter.mockReturnValue({
+      push: pushMock,
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    });
 
     mockedSignIn.mockResolvedValue({
-      error: undefined,
+      error: null,
       url: '/custom-url',
-    } as any);
+      status: 200,
+      ok: true,
+    });
 
     const { result } = renderHook(() => useSignIn());
 
@@ -115,12 +137,21 @@ describe('SignIn Page', () => {
     const mockedSignIn = signIn as jest.MockedFunction<typeof signIn>;
     const mockedUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
 
-    mockedUseRouter.mockReturnValue({ push: pushMock } as any);
+    mockedUseRouter.mockReturnValue({
+      push: pushMock,
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    });
 
     mockedSignIn.mockResolvedValue({
-      error: undefined,
-      url: undefined,
-    } as any);
+      error: null,
+      url: null,
+      status: 200,
+      ok: true,
+    });
 
     const { result } = renderHook(() => useSignIn());
 

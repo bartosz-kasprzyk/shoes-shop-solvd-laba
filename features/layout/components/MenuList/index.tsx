@@ -3,7 +3,7 @@
 import { Box, List } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import MenuItem from '../MenuItem';
-import { menuItems } from './consts';
+import { menuItems, signOutItem } from './consts';
 
 export default function MenuList() {
   const pathname = usePathname();
@@ -14,12 +14,18 @@ export default function MenuList() {
         {menuItems.map((item) => {
           return (
             <MenuItem
-              key={item.href}
+              key={item.href || item.label}
               item={item}
-              isActive={pathname.includes(item.href)}
+              isActive={item.href ? pathname.includes(item.href) : false}
             />
           );
         })}
+        <MenuItem
+          item={signOutItem}
+          isActive={
+            signOutItem.href ? pathname.includes(signOutItem.href) : false
+          }
+        />
       </List>
     </Box>
   );
