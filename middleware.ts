@@ -3,14 +3,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequestWithAuth } from 'next-auth/middleware';
 
 const protectedRoutes = [
+  // profile
+  '/my-products',
   '/add-product',
   '/edit-product',
-  '/my-products',
-  '/my-wishlist',
   '/order-history',
-  '/profile',
+  '/my-wishlist',
   '/recently-viewed',
   '/settings',
+  // other
+  '/cart',
   '/checkout',
 ];
 

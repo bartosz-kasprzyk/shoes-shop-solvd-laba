@@ -162,7 +162,7 @@ export default function TopBar() {
 
               <IconButton
                 component={Link}
-                href='/profile'
+                href='/settings'
                 sx={{
                   display: { xs: 'none', md: 'block' },
                   cursor: 'pointer',
