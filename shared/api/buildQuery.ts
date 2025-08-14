@@ -18,6 +18,9 @@ export const buildQuery = (params: FetchProductsParams): string => {
   if (params.gender?.length) {
     filters.gender = { name: { $in: params.gender } };
   }
+  if (params.search?.length) {
+    filters.name = { $containsi: params.search };
+  }
 
   if (params.priceMin != null && params.priceMax != null) {
     filters.price = {

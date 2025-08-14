@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useInitialFilters } from '@/features/filter/utils/useInitialFilters';
 import { adaptFiltersToFetchParams } from '@/features/filter/utils/adaptFiltersToFetchParams';
 import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
+import { relative } from 'path';
 
 export default function ProductsLayout({
   children,
@@ -26,7 +27,7 @@ export default function ProductsLayout({
     adaptFiltersToFetchParams(useInitialFilters());
   const searchTerm: string = 'Air Force 1';
   const filters = rawFilters;
-  const { page, priceMax, priceMin, ...displayedFilters } = filters;
+  const { page, priceMax, priceMin, search, ...displayedFilters } = filters;
   if (priceMin) displayedFilters.price = `$${priceMin} - $${priceMax}`;
   return (
     <Box
@@ -36,6 +37,7 @@ export default function ProductsLayout({
         display: 'flex',
         flexDirection: 'row',
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <Slide direction='left' in={isSideBarOpen}>
@@ -156,7 +158,7 @@ export default function ProductsLayout({
             justifyContent={'space-between'}
           >
             <Typography variant='h6' fontWeight={500}>
-              {searchTerm}
+              {filters.search}
             </Typography>
             <Box
               display={'flex'}

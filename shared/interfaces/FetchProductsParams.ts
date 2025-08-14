@@ -9,6 +9,7 @@ export interface FetchProductsParams {
   priceMin?: number;
   priceMax?: number;
   gender?: string[];
+  search?: string;
 }
 export interface FetchProductsParamsInfiniteQuary {
   pageParam?: number;

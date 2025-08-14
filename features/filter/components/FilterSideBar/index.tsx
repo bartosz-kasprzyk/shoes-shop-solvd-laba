@@ -21,7 +21,6 @@ export default function FilterSideBar() {
   const additionalPriceText = state.Price.set
     ? `$${state.Price.range[0]} - $${state.Price.range[1]}`
     : '';
-
   const applyFilters = () => {
     const segments: string[] = [];
 
@@ -40,8 +39,10 @@ export default function FilterSideBar() {
       segments.push(`Price:${min}-${max}`);
     }
 
-    if (state?.searchTerm?.trim()) {
-      segments.push(`q:${state.searchTerm.trim().replaceAll(' ', '_')}`);
+    if (initialFilters.search.trim()) {
+      segments.push(
+        `search:${initialFilters.search.trim().replaceAll(' ', '_')}`,
+      );
     }
 
     const path = `/products/${segments.join('/')}`;
@@ -79,14 +80,17 @@ export default function FilterSideBar() {
             overflowX: 'hidden',
           }}
         >
-          {state.searchTerm && (
-            <Box display={{ xs: 'none', md: 'block' }}>
-              <Typography p={2} variant='h5'>
-                {state.searchTerm}
-              </Typography>
-              <Divider />
-            </Box>
-          )}
+          <Box p={2} pt={6} display={{ xs: 'none', md: 'block' }}>
+            <Typography
+              fontWeight='light'
+              color='color-mix(in srgb, transparent, #000000ff 50%)'
+              variant='body1'
+            >
+              {['Shoes', initialFilters.search].join('/')}
+            </Typography>
+            <Typography variant='h4'>{initialFilters.search}</Typography>
+          </Box>
+          <Divider />
 
           {filtersConfig.map(({ category, isPrice }) => (
             <Box key={category}>

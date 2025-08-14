@@ -4,7 +4,7 @@ import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParam
 export function adaptFiltersToFetchParams(
   filters: FiltersState,
 ): FetchProductsParams {
-  const { Gender, Brand, Color, Size, Price, searchTerm, category } = filters;
+  const { Gender, Brand, Color, Size, Price, search, category } = filters;
 
   const params: FetchProductsParams = {};
 
@@ -28,6 +28,10 @@ export function adaptFiltersToFetchParams(
     const [min, max] = Price.range;
     params.priceMin = min;
     params.priceMax = max;
+  }
+
+  if (search.length > 0) {
+    params.search = search;
   }
 
   return params;

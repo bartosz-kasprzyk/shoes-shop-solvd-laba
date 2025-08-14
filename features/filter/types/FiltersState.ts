@@ -5,5 +5,5 @@ export type FiltersState = {
   Size: string[];
   Price: { range: [number, number]; set: boolean };
   category: string;
-  searchTerm: string;
+  search: string;
 };

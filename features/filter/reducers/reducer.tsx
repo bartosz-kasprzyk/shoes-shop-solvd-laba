@@ -7,7 +7,7 @@ const initialState: FiltersState = {
   Color: [],
   Size: [],
   Price: { range: [0, 1], set: false },
-  searchTerm: '',
+  search: '',
   category: '',
 };
 

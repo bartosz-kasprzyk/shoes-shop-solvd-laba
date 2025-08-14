@@ -9,7 +9,7 @@ export async function parseFiltersFromSlug(
     Color: [],
     Size: [],
     Price: { range: [0, 1], set: false },
-    searchTerm: '',
+    search: '',
     category: '',
   };
 
@@ -47,7 +47,7 @@ export async function parseFiltersFromSlug(
         filters.category = value;
         break;
       case 'search':
-        filters.searchTerm = value;
+        filters.search = value;
         break;
       default:
         break;

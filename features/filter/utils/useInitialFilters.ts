@@ -11,7 +11,7 @@ export function useInitialFilters(): FiltersState {
     Color: [],
     Size: [],
     Price: { range: [0, 1], set: false },
-    searchTerm: '',
+    search: '',
     category: '',
   };
 
@@ -51,7 +51,7 @@ export function useInitialFilters(): FiltersState {
         state.category = value;
         break;
       case 'search':
-        state.searchTerm = value;
+        state.search = value;
         break;
       default:
         break;

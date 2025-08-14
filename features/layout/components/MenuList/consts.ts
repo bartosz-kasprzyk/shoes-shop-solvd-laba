@@ -37,6 +37,14 @@ export const menuItems: MenuItem[] = [
   },
 ];
 
+export const unauthorizedMenuItems: MenuItem[] = [
+  {
+    label: 'Sign in',
+    icon: LogoutIcon,
+    href: '/sign-in',
+  },
+];
+
 export const signOutItem: MenuItem = {
   label: 'Sign out',
   icon: LogoutIcon,
