@@ -3,16 +3,20 @@ import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 
 interface ThankYouPageProps {
-  orderNumber: string;
+  params: Promise<{ orderNumber: string }>;
 }
 
-export default function ThankYouPage({ orderNumber }: ThankYouPageProps) {
+export default async function ThankYouPage({ params }: ThankYouPageProps) {
+  const resolvedParams = await params;
+  const orderNumber = resolvedParams.orderNumber;
+
   return (
     <Box
       sx={{
         p: { xs: 2, sm: 4 },
         boxSizing: 'border-box',
         width: '100%',
+        height: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
