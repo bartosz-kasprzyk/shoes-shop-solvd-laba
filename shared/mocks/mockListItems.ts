@@ -1,4 +1,4 @@
-import type { CartListItem } from '../components/CartListItem/interface';
+import type { CartListItem } from '@/features/checkout/components/CartListItem/interface';
 import img1 from './assets/img-1.png';
 import img2 from './assets/img-2.png';
 import img3 from './assets/img-3.png';

@@ -1,4 +1,4 @@
-import type { promocode } from '../components/CartSummary/interface';
+import type { promocode } from '@/features/checkout/components/CartSummary/interface';
 
 export const mockPromocodes: promocode[] = [
   { code: 'savingMoney', text: 'Free shipping', discoutInCash: 20 },

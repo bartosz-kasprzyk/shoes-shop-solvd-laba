@@ -1,11 +1,11 @@
+export const revalidate = 86400;
+
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import { getQueryClient } from '@/shared/lib/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import ProductsPageClient from '../../../../features/products/components/ProductsPage';
 import { parseFiltersFromSlug } from '@/features/filter/utils/parseFiltersFromSlug';
 import { adaptFiltersToFetchParams } from '@/features/filter/utils/adaptFiltersToFetchParams';
-
-export const revalidate = 60 * 60 * 24;
 
 export async function generateStaticParams() {
   const popularCombinations = [{}];

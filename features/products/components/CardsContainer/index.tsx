@@ -3,7 +3,7 @@
 import { Box, Grid } from '@mui/material';
 
 import ProductCard from '../ProductCard';
-import type { Card } from '../ProductCard/interface';
+import type { Card } from '../../types';
 
 export default function CardsContainer({ cards }: { cards: Card[] }) {
   if (!Array.isArray(cards)) {

@@ -3,7 +3,7 @@ import ProductDetails from '@/features/products/components/ProductDetails';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
