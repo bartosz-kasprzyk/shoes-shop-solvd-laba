@@ -39,6 +39,18 @@ export default withAuth(
     const isAuthPage = isAuthRoute(pathname);
     const isProtectedPage = isProtectedRoute(pathname);
 
+    const now = Math.floor(Date.now() / 1000);
+    const isExpired =
+      token?.loginAt &&
+      token?.maxAge &&
+      now > Number(token.loginAt) + token.maxAge;
+
+    if (isExpired && isProtectedPage) {
+      const res = NextResponse.redirect(new URL('/sign-in', req.url));
+      res.cookies.delete('next-auth.session-token');
+      return res;
+    }
+
     if (token && isAuthPage) {
       return NextResponse.redirect(new URL('/', req.url));
     }

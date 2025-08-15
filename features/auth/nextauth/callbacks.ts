@@ -8,12 +8,14 @@ export async function jwtCallback({
   token: JWT;
   user?: any;
 }): Promise<JWT> {
+  const now = Math.floor(Date.now() / 1000);
   if (user) {
     token.id = user.id;
     token.name = user.name;
     token.email = user.email;
-    token.remember = user.remember;
     token.accessToken = user.accessToken;
+    token.maxAge = user.maxAge;
+    token.loginAt = now;
   }
   return token;
 }
@@ -29,7 +31,6 @@ export async function sessionCallback({
     session.user.id =
       typeof token.id === 'string' ? parseInt(token.id) : token.id;
     session.user.accessToken = token.accessToken as string;
-    session.remember = token.remember;
   }
 
   return session;

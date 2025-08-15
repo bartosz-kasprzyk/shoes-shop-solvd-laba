@@ -6,14 +6,13 @@ declare module 'next-auth' {
       id: number;
       accessToken: string;
     } & DefaultSession['user'];
-    remember?: boolean;
-    expires: string;
   }
 
   interface User extends DefaultUser {
     id: number;
     remember?: boolean;
     accessToken: string;
+    maxAge: number;
   }
 }
 
@@ -23,5 +22,6 @@ declare module 'next-auth/jwt' {
     accessToken: string;
     remember?: boolean;
     exp: number;
+    maxAge: number;
   }
 }

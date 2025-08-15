@@ -41,12 +41,13 @@ export const credentialsProvider = CredentialsProvider({
     const user = profileData;
 
     const avatarUrl = user.avatar?.url ? user.avatar.url : null;
-
+    const maxAge =
+      credentials?.remember == 'true' ? 30 * 24 * 60 * 60 : 4 * 60 * 60; //30 days or 4 hours
     return {
       id: user.id,
       name: user.username,
       email: user.email,
-      remember: credentials?.remember,
+      maxAge,
       accessToken: loginData.jwt,
       image: avatarUrl,
     } as User;
