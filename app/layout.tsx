@@ -1,14 +1,9 @@
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Work_Sans } from 'next/font/google';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
 import { getServerSession } from 'next-auth';
-import SessionProvider from './SessionProvider';
 import { authOptions } from '@/features/auth/nextauth/authOptions';
-import QueryProvider from './QueryProvider';
-import { SnackbarProvider } from './SnackbarProvider';
+import { Providers } from './providers';
 
 export const workSans = Work_Sans({
   variable: '--font-work-sans',
@@ -30,17 +25,9 @@ export default async function RootLayout({
 
   return (
     <html lang='en' className={workSans.className}>
-      <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-        <body className='font-default text-black antialiased'>
-          <ThemeProvider theme={theme}>
-            <SessionProvider session={session}>
-              <QueryProvider>
-                <SnackbarProvider>{children}</SnackbarProvider>
-              </QueryProvider>
-            </SessionProvider>
-          </ThemeProvider>
-        </body>
-      </AppRouterCacheProvider>
+      <body>
+        <Providers session={session}>{children}</Providers>
+      </body>
     </html>
   );
 }
