@@ -150,30 +150,32 @@ export default function ProductImages({ images }: ProductImagesProps) {
           </AnimatePresence>
         ) : null}
         {/* Desktop arrows bottom-right */}
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            position: 'absolute',
-            bottom: 24,
-            right: 32,
-            gap: 1,
-          }}
-        >
-          <RoundButton
-            size='small'
-            onClick={handlePrev}
-            disabled={selectedIndex === 0}
+        {images.length > 1 ? (
+          <Box
+            sx={{
+              display: { xs: 'none', sm: 'flex' },
+              position: 'absolute',
+              bottom: 24,
+              right: 32,
+              gap: 1,
+            }}
           >
-            <ArrowIcon flip />
-          </RoundButton>
-          <RoundButton
-            size='small'
-            onClick={handleNext}
-            disabled={selectedIndex === images?.length - 1}
-          >
-            <ArrowIcon />
-          </RoundButton>
-        </Box>
+            <RoundButton
+              size='small'
+              onClick={handlePrev}
+              disabled={selectedIndex === 0}
+            >
+              <ArrowIcon flip />
+            </RoundButton>
+            <RoundButton
+              size='small'
+              onClick={handleNext}
+              disabled={selectedIndex === images?.length - 1}
+            >
+              <ArrowIcon />
+            </RoundButton>
+          </Box>
+        ) : null}
       </Box>
       {/* Mobile dot indicators below image */}
       <Box
