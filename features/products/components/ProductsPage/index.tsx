@@ -7,9 +7,12 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
+import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
 
 type ProductsPageClient = {
-  filters: Record<string, string | string[]>;
+  // filters: Record<string, string | string[]>; build error
+  // filters: Record<string, any>; works
+  filters: FetchProductsParams;
 };
 
 export default function ProductsPageClient({ filters }: ProductsPageClient) {
