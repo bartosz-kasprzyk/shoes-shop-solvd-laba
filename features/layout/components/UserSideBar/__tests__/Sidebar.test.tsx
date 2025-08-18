@@ -23,11 +23,16 @@ jest.mock('../../MenuList/consts', () => ({
     { href: '/about', label: 'About', icon: () => <div>Icon</div> },
     { href: '/contact', label: 'Contact', icon: () => <div>Icon</div> },
   ],
-  signOutItem: {
-    label: 'Sign out',
-    icon: () => <div>Icon</div>,
-    onClick: jest.fn(),
-  },
+}));
+
+jest.mock('../../MenuList/useSignOut', () => ({
+  useSignOut: () => ({
+    handleSignOut: jest.fn(),
+  }),
+}));
+
+jest.mock('@/shared/icons', () => ({
+  LogoutIcon: () => <div>Icon</div>,
 }));
 
 import { usePathname } from 'next/navigation';

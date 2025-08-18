@@ -1,4 +1,9 @@
+'use client';
+
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 function getLongArray(len: number) {
   const arr = [];
@@ -8,9 +13,20 @@ function getLongArray(len: number) {
   return arr;
 }
 
-//example of my approach for scrollable component
-
 export default function HomePage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { showSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    const signedOut = searchParams.get('signedOut');
+    if (signedOut === 'true') {
+      showSnackbar('You have been signed out successfully', 'success');
+      // Clean up the URL parameter
+      router.replace('/');
+    }
+  }, [searchParams, router, showSnackbar]);
+
   return (
     <Box //scrollable component example
       sx={{

@@ -3,11 +3,20 @@
 import { List } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import MenuItem from '../MenuItem';
-import { menuItems, signOutItem } from './consts';
+import { menuItems } from './consts';
 import { ScrollableContainer } from '../ScrollableContainer';
+import { useSignOut } from './useSignOut';
+import { LogoutIcon } from '@/shared/icons';
 
 export default function MenuList() {
   const pathname = usePathname();
+  const { handleSignOut } = useSignOut();
+
+  const signOutItem = {
+    label: 'Sign out',
+    icon: LogoutIcon,
+    onClick: handleSignOut,
+  };
 
   return (
     <ScrollableContainer>
@@ -21,12 +30,7 @@ export default function MenuList() {
             />
           );
         })}
-        <MenuItem
-          item={signOutItem}
-          isActive={
-            signOutItem.href ? pathname.includes(signOutItem.href) : false
-          }
-        />
+        <MenuItem item={signOutItem} isActive={false} />
       </List>
     </ScrollableContainer>
   );
