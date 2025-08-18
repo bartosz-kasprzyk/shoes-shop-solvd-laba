@@ -22,6 +22,8 @@ const productData = {
       },
       color: { data: { attributes: { name: 'White' } } },
       description: 'Some product description',
+      brand: 'Nike',
+      gender: { data: { id: 1, attributes: { name: 'Men' as const } } },
     },
   },
 };

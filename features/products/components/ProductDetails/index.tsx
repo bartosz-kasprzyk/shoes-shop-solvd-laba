@@ -8,10 +8,13 @@ import SizeSelector from './components/SizeSelector';
 import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
+import { addToWishlist } from '../WishlistPage/wishlist';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
+  const { showSnackbar } = useSnackbar();
 
   const product = initialData.data.attributes;
 
@@ -115,7 +118,20 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
           >
             <Button
               variant='outline'
-              onClick={() => alert('Added to wishlist!')}
+              onClick={() => {
+                const result = addToWishlist({
+                  id: initialData.data.id,
+                  name: product.name,
+                  price: product.price,
+                  images: product.images,
+                  gender: product.gender,
+                });
+                showSnackbar(
+                  result.message,
+                  result.success ? 'success' : 'info',
+                  5000,
+                );
+              }}
             >
               Add to Wishlist
             </Button>

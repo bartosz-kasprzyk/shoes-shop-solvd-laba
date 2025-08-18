@@ -1,13 +1,32 @@
 'use client';
 
 import { Card, CardMedia, Typography, Box } from '@mui/material';
-import { DropDownMenu, ImageOverlay } from '@/shared/components/ui';
+import { DropDownMenu } from '@/shared/components/ui';
 import Link from 'next/link';
-
 import type { ProductCardProps } from '../../types';
+import WishlistButton from '@/shared/components/ui/WishlistButton';
 
-export default function ProductCard({ card }: ProductCardProps) {
+export default function ProductCard({
+  card,
+  variant,
+  onRemove,
+  onAdd,
+}: ProductCardProps) {
   const { img, name, price, gender } = card;
+
+  function renderButton() {
+    switch (variant) {
+      case 'dropdown':
+        return <DropDownMenu />;
+      case 'removeFromWishlist':
+        return <WishlistButton onRemove={onRemove} />;
+      case 'addToWishlist':
+        return <WishlistButton onAdd={onAdd} />;
+      default:
+        return null;
+    }
+  }
+
   return (
     <Card
       sx={{
@@ -25,25 +44,22 @@ export default function ProductCard({ card }: ProductCardProps) {
         },
       }}
     >
-      <DropDownMenu />
+      {variant && renderButton()}
       <Link
         href={`/product/${card.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <ImageOverlay variant='addToCart'>
-          <CardMedia
-            component='img'
-            image={img.src}
-            alt={name}
-            title={name}
-            sx={{
-              aspectRatio: '320 / 380',
-              objectFit: 'cover',
-              width: '100%',
-            }}
-          />
-        </ImageOverlay>
-
+        <CardMedia
+          component='img'
+          image={img.src}
+          alt={name}
+          title={name}
+          sx={{
+            aspectRatio: '320 / 380',
+            objectFit: 'cover',
+            width: '100%',
+          }}
+        />
         <div>
           <Box
             sx={{

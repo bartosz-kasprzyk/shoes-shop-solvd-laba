@@ -34,6 +34,9 @@ export interface Card {
 
 export interface ProductCardProps {
   card: Card;
+  variant?: 'dropdown' | 'addToWishlist' | 'removeFromWishlist';
+  onRemove?: () => void;
+  onAdd?: () => void;
 }
 
 export interface SizeDisplayCheckboxProps {

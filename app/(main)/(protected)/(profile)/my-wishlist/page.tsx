@@ -1,7 +1,7 @@
+'use client';
+
+import WishlistPage from '@/features/products/components/WishlistPage';
+
 export default function MyWishlistPage() {
-  return (
-    <div>
-      <h1>My Wishlist works</h1>
-    </div>
-  );
+  return <WishlistPage />;
 }

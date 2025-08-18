@@ -8,6 +8,8 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
+import { addToWishlist } from '../WishlistPage/wishlist';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 type ProductsPageClient = {
   // filters: Record<string, string | string[]>; build error
@@ -38,6 +40,7 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView, hasNextPage]);
+  const { showSnackbar } = useSnackbar();
 
   if (status === 'pending')
     return (
@@ -63,7 +66,25 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
         {data.pages.map((page) => {
           return page.data.map((product) => (
             <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
-              <ProductCard card={adaptProductToCard(product)} />
+              <ProductCard
+                card={adaptProductToCard(product)}
+                variant='addToWishlist'
+                onAdd={() => {
+                  const result = addToWishlist({
+                    id: product.id,
+                    name: product.attributes.name,
+                    price: product.attributes.price,
+                    images: product.attributes.images,
+                    gender: product.attributes.gender,
+                  });
+
+                  showSnackbar(
+                    result.message,
+                    result.success ? 'success' : 'info',
+                    5000,
+                  );
+                }}
+              />
             </Grid>
           ));
         })}

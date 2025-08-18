@@ -25,9 +25,38 @@ export interface ProductData {
     color: { data: { attributes: { name: string } } | null };
     sizes: Sizes;
     description: string;
+    gender: {
+      data: {
+        id: number;
+        attributes: {
+          name: 'Men' | 'Women';
+        };
+      };
+    };
   };
 }
 
 export interface ProductApiResponse {
   data: ProductData;
+}
+
+export interface WishlistItem {
+  id: number;
+  name: string;
+  price: number | null;
+  images: {
+    data: {
+      attributes: {
+        url: string;
+      };
+    }[];
+  };
+  gender: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+      };
+    };
+  };
 }
