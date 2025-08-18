@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 
 type ProductsPageClient = {
-  filters: Record<string, any>;
+  filters: Record<string, string | string[]>;
 };
 
 export default function ProductsPageClient({ filters }: ProductsPageClient) {
@@ -18,7 +18,6 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
     error,
     status,
     fetchNextPage,
-    isFetching,
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
@@ -30,14 +29,12 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
   const { ref, inView } = useInView({
     rootMargin: '1000px',
   });
-  useEffect(() => {
-    console.log('inView:', inView);
-  }, [inView]);
+
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
-  }, [fetchNextPage, inView]);
+  }, [fetchNextPage, inView, hasNextPage]);
 
   if (status === 'pending')
     return (
@@ -56,6 +53,9 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
     );
   return (
     <Box px={2}>
+      <Typography px={2} pb={4} variant='h4'>
+        All Products ({data.pages[0]?.total || 0})
+      </Typography>
       <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
         {data.pages.map((page) => {
           return page.data.map((product) => (

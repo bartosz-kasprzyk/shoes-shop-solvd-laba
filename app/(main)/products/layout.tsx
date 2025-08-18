@@ -15,7 +15,6 @@ import { useState } from 'react';
 import { useInitialFilters } from '@/features/filter/utils/useInitialFilters';
 import { adaptFiltersToFetchParams } from '@/features/filter/utils/adaptFiltersToFetchParams';
 import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
-import { relative } from 'path';
 
 export default function ProductsLayout({
   children,
@@ -25,9 +24,8 @@ export default function ProductsLayout({
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const rawFilters: FetchProductsParams & { price?: string } =
     adaptFiltersToFetchParams(useInitialFilters());
-  const searchTerm: string = 'Air Force 1';
   const filters = rawFilters;
-  const { page, priceMax, priceMin, search, ...displayedFilters } = filters;
+  const { priceMax, priceMin, ...displayedFilters } = filters;
   if (priceMin) displayedFilters.price = `$${priceMin} - $${priceMax}`;
   return (
     <Box
@@ -73,7 +71,6 @@ export default function ProductsLayout({
               justifyContent={'end'}
             >
               <IconButton onClick={() => setIsSideBarOpen((prev) => !prev)}>
-                {' '}
                 <CloseIcon />
               </IconButton>
             </Box>
@@ -135,9 +132,6 @@ export default function ProductsLayout({
           width: '100%',
         }}
       >
-        <Typography px={2} pt={4} pb={1} variant='h4'>
-          Search results
-        </Typography>
         <Divider sx={{ display: { xs: 'block', md: 'none' } }} />
 
         <Box
@@ -155,11 +149,8 @@ export default function ProductsLayout({
             px={2}
             display={{ xs: 'flex', md: 'none' }}
             alignItems={'baseline'}
-            justifyContent={'space-between'}
+            justifyContent={'flex-end'}
           >
-            <Typography variant='h6' fontWeight={500}>
-              {filters.search}
-            </Typography>
             <Box
               display={'flex'}
               alignItems={'start'}

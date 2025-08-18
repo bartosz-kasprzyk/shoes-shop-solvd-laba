@@ -4,4 +4,5 @@ export interface ProductsResponse {
   data: Product[];
   currentPage: number;
   nextPage: number | null;
+  total: number;
 }

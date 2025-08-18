@@ -17,9 +17,11 @@ export const fetchProducts = async ({
   if (!res.ok) throw new Error('Failed to fetch products');
   const json = await res.json();
   const PageCount = parseInt(json.meta.pagination.total ?? '0');
+  const totalProducts = parseInt(json.meta.pagination.total ?? '0');
   return {
     data: json.data,
     currentPage: pageParam,
     nextPage: pageParam + 1 < PageCount ? pageParam + 1 : null,
+    total: totalProducts,
   };
 };
