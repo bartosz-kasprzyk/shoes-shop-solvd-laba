@@ -65,11 +65,11 @@ describe('ProductDetails', () => {
     expect(window.alert).toHaveBeenCalledWith('Product added to the bag!');
   });
 
-  it('renders NotFound if no product data', () => {
-    render(<ProductDetails initialData={null} />);
+  // it('renders NotFound if no product data', () => {
+  //   render(<ProductDetails initialData={null} />);
 
-    expect(screen.getByText(/error 404/i)).toBeInTheDocument();
-  });
+  //   expect(screen.getByText(/error 404/i)).toBeInTheDocument();
+  // });
 
   it('renders color name if color data is present', () => {
     render(<ProductDetails initialData={productData} />);

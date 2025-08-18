@@ -10,12 +10,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  let productData = null;
   try {
-    productData = await fetchProductById(id);
+    const productData = await fetchProductById(id);
+
+    return <ProductDetails initialData={productData} />;
   } catch (e) {
     return <NotFound />;
   }
-
-  return <ProductDetails initialData={productData} />;
 }

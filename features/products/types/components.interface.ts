@@ -13,5 +13,5 @@ export interface SizeSelectorProps {
 }
 
 export interface ProductDetailsProps {
-  initialData?: ProductApiResponse | null;
+  initialData: ProductApiResponse;
 }

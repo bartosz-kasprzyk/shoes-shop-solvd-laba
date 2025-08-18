@@ -16,7 +16,7 @@ interface Sizes {
   data: SizeData[] | null;
 }
 
-interface ProductData {
+export interface ProductData {
   id: number;
   attributes: {
     name: string;
