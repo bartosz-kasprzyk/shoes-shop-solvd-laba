@@ -1,10 +1,21 @@
+'use client';
+
 import { Box, Avatar, Typography } from '@mui/material';
 import Link from 'next/link';
 import CartIcon from './cart';
 import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import useUser from '@/shared/hooks/useUser';
 
 export default function MyProductsPage() {
+  const { session } = useUser();
+
+  const user = session?.user
+    ? {
+        name: session.user.name ?? 'Anonymous',
+        avatar: session.user.image || undefined,
+      }
+    : null;
   return (
     <ScrollableContainer>
       <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
@@ -30,6 +41,8 @@ export default function MyProductsPage() {
             }}
           >
             <Avatar
+              src={user?.avatar || undefined}
+              alt={user?.name || 'User'}
               sx={{
                 width: { xs: 60, lg: 120 },
                 height: { xs: 60, lg: 120 },
@@ -48,7 +61,7 @@ export default function MyProductsPage() {
                   fontSize: { xs: 16, lg: 22 },
                 }}
               >
-                Jane Meldrum
+                {user?.name}
               </Typography>
               <Typography
                 variant='body2'
