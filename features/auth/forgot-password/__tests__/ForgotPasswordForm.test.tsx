@@ -1,11 +1,20 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ForgotPasswordForm } from '../ForgotPasswordForm';
+import { useForgotPassword } from '../useForgotPassword';
 
-describe('Forgot password form', () => {
-  it('shows "Reset password" when status is not loading', () => {
-    render(
-      <ForgotPasswordForm onSubmit={jest.fn()} status='idle' serverError='' />,
-    );
+jest.mock('../useForgotPassword');
+
+describe('ForgotPasswordForm', () => {
+  const mockRequestReset = jest.fn();
+
+  it('shows "Reset password" when status is idle', () => {
+    (useForgotPassword as jest.Mock).mockReturnValue({
+      requestReset: mockRequestReset,
+      status: 'idle',
+      serverError: '',
+    });
+
+    render(<ForgotPasswordForm />);
 
     expect(
       screen.getByRole('button', { name: /reset password/i }),
@@ -13,16 +22,42 @@ describe('Forgot password form', () => {
   });
 
   it('shows "Sending..." when status is loading', () => {
-    render(
-      <ForgotPasswordForm
-        onSubmit={jest.fn()}
-        status='loading'
-        serverError=''
-      />,
-    );
+    (useForgotPassword as jest.Mock).mockReturnValue({
+      requestReset: mockRequestReset,
+      status: 'loading',
+      serverError: '',
+    });
+
+    render(<ForgotPasswordForm />);
 
     expect(
-      screen.getByRole('button', { name: /sending/i }),
+      screen.getByRole('button', { name: /sending.../i }),
     ).toBeInTheDocument();
+  });
+
+  it('shows success message when status is sent', () => {
+    (useForgotPassword as jest.Mock).mockReturnValue({
+      requestReset: mockRequestReset,
+      status: 'sent',
+      serverError: '',
+    });
+
+    render(<ForgotPasswordForm />);
+
+    expect(
+      screen.getByText(/email sent. check your inbox!/i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows server error when present', () => {
+    (useForgotPassword as jest.Mock).mockReturnValue({
+      requestReset: mockRequestReset,
+      status: 'idle',
+      serverError: 'Something went wrong',
+    });
+
+    render(<ForgotPasswordForm />);
+
+    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
   });
 });

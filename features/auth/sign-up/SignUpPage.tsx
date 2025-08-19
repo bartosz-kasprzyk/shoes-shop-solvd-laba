@@ -1,14 +1,9 @@
-'use client';
-
 import { Typography } from '@mui/material';
 import { TextUnderButton } from '@/shared/components/ui';
-import { useSignUp } from '@/features/auth/sign-up/useSignUp';
 import { SignUpForm } from '@/features/auth/sign-up/SignUpForm';
 import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper';
 
 export default function SignUpPage() {
-  const { registerUser, serverError, success } = useSignUp();
-
   return (
     <AuthPagesWrapper>
       <Typography variant='h3' fontWeight={500} mb={1}>
@@ -22,11 +17,7 @@ export default function SignUpPage() {
         Create an account to get easy access to your dream shopping
       </Typography>
 
-      <SignUpForm
-        onSubmit={registerUser}
-        serverError={serverError}
-        success={success}
-      />
+      <SignUpForm />
 
       <TextUnderButton
         text='Already have an account?'

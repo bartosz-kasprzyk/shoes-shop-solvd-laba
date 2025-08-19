@@ -6,14 +6,9 @@ import { Box, Typography, Collapse } from '@mui/material';
 import { Button, Input } from '@/shared/components/ui';
 import type { SignUpFormData } from './signUp.schema';
 import { signUpSchema } from './signUp.schema';
+import { useSignUp } from './useSignUp';
 
-type Props = {
-  onSubmit: (data: SignUpFormData) => void;
-  serverError: string | null;
-  success: boolean;
-};
-
-export const SignUpForm = ({ onSubmit, serverError, success }: Props) => {
+export const SignUpForm = () => {
   const {
     register,
     handleSubmit,
@@ -22,8 +17,10 @@ export const SignUpForm = ({ onSubmit, serverError, success }: Props) => {
     resolver: zodResolver(signUpSchema),
   });
 
+  const { registerUser, serverError, success } = useSignUp();
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(registerUser)}>
       <Box gap={1} display='flex' flexDirection='column' mb={7}>
         <Input
           required
