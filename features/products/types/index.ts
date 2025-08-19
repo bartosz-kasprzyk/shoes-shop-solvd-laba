@@ -1,7 +1,8 @@
 import type z from 'zod';
 import type { productSchema } from '../schemas/product.schema';
+import type { Product } from '@/shared/interfaces/Product';
 
-export type Product = z.infer<typeof productSchema>;
+export type ProductSchemaType = z.infer<typeof productSchema>;
 
 import type { Dispatch, SetStateAction, ChangeEvent } from 'react';
 
@@ -34,6 +35,7 @@ export interface Card {
 
 export interface ProductCardProps {
   card: Card;
+  withOverlay?: boolean;
 }
 
 export interface SizeDisplayCheckboxProps {
@@ -92,3 +94,12 @@ export interface ProductResponseProps {
   id: number;
   attributes: ProductAttributesProps;
 }
+
+export type FetchProductsResponse = {
+  data: Product[];
+  meta: any;
+};
+
+export type DeleteProductResponse = {
+  data: Product;
+};

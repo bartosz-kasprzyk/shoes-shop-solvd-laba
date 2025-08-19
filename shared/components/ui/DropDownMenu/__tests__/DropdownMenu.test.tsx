@@ -1,13 +1,34 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import DropDownMenu from '..';
+import { useRouter } from 'next/navigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-jest.mock('next/image', () => {
-  const NextImage = (props: any) => <img {...props} />;
-  NextImage.displayName = 'NextImage';
-  return NextImage;
-});
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock('@/shared/hooks/useUser', () => ({
+  __esModule: true,
+  default: () => ({ session: { user: { id: 1, accessToken: 'token' } } }),
+}));
+
+jest.mock('@/features/products/components/DeleteConfirmationModal', () => ({
+  __esModule: true,
+  default: ({ isOpen, onClose, onDelete }: any) =>
+    isOpen ? (
+      <div data-testid='delete-modal'>
+        <button onClick={onDelete}>Delete</button>
+        <button onClick={onClose}>Close</button>
+      </div>
+    ) : null,
+}));
 
 describe('DropDownMenu', () => {
+  const push = jest.fn();
+  (useRouter as jest.Mock).mockReturnValue({ push });
+
+  const queryClient = new QueryClient();
+
   beforeEach(() => {
     jest.spyOn(console, 'log').mockImplementation(jest.fn());
   });
@@ -16,14 +37,22 @@ describe('DropDownMenu', () => {
     jest.restoreAllMocks();
   });
 
+  const renderComponent = () =>
+    render(
+      <QueryClientProvider client={queryClient}>
+        <DropDownMenu id={1} />
+      </QueryClientProvider>,
+    );
+
   it('renders icon button', () => {
-    render(<DropDownMenu />);
-    const iconButton = screen.getByRole('button', { name: /more icon/i });
-    expect(iconButton).toBeInTheDocument();
+    renderComponent();
+    expect(
+      screen.getByRole('button', { name: /more icon/i }),
+    ).toBeInTheDocument();
   });
 
   it('opens menu on icon button click', () => {
-    render(<DropDownMenu />);
+    renderComponent();
     const iconButton = screen.getByRole('button', { name: /more icon/i });
     fireEvent.click(iconButton);
 
@@ -33,29 +62,30 @@ describe('DropDownMenu', () => {
     expect(screen.getByText('Delete')).toBeInTheDocument();
   });
 
-  it('logs action when a menu item is clicked', () => {
-    render(<DropDownMenu />);
+  it('navigates when View is clicked', () => {
+    renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-
-    const viewItem = screen.getByText('View');
-    fireEvent.click(viewItem);
-
-    expect(console.log).toHaveBeenCalledWith('View clicked');
+    fireEvent.click(screen.getByText('View'));
+    expect(push).toHaveBeenCalledWith('/product/1');
   });
 
-  it('logs action when a menu item is clicked', () => {
-    render(<DropDownMenu />);
-
+  it('logs action for Edit and Duplicate', () => {
+    renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
 
-    const actions = ['View', 'Edit', 'Duplicate', 'Delete'];
+    fireEvent.click(screen.getByText('Edit'));
+    expect(console.log).toHaveBeenCalledWith('Edit clicked');
 
-    actions.forEach((action) => {
-      const item = screen.getByText(action);
-      fireEvent.click(item);
-      expect(console.log).toHaveBeenCalledWith(`${action} clicked`);
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Duplicate'));
+    expect(console.log).toHaveBeenCalledWith('Duplicate clicked');
+  });
 
-      fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-    });
+  it('opens DeleteConfirmationModal when Delete is clicked', () => {
+    renderComponent();
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Delete'));
+
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
   });
 });

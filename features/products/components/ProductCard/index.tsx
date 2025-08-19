@@ -6,8 +6,25 @@ import Link from 'next/link';
 
 import type { ProductCardProps } from '../../types';
 
-export default function ProductCard({ card }: ProductCardProps) {
-  const { img, name, price, gender } = card;
+export default function ProductCard({
+  card,
+  withOverlay = false,
+}: ProductCardProps) {
+  const { img, name, price, gender, id } = card;
+
+  const media = (
+    <CardMedia
+      component='img'
+      image={img.src}
+      alt={name}
+      title={name}
+      sx={{
+        aspectRatio: '320 / 380',
+        objectFit: 'cover',
+        width: '100%',
+      }}
+    />
+  );
   return (
     <Card
       sx={{
@@ -25,25 +42,16 @@ export default function ProductCard({ card }: ProductCardProps) {
         },
       }}
     >
-      <DropDownMenu />
+      <DropDownMenu id={id} />
       <Link
-        href={`/product/${card.id}`}
+        href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <ImageOverlay variant='addToCart'>
-          <CardMedia
-            component='img'
-            image={img.src}
-            alt={name}
-            title={name}
-            sx={{
-              aspectRatio: '320 / 380',
-              objectFit: 'cover',
-              width: '100%',
-            }}
-          />
-        </ImageOverlay>
-
+        {withOverlay ? (
+          <ImageOverlay variant='addToCart'>{media}</ImageOverlay>
+        ) : (
+          media
+        )}
         <div>
           <Box
             sx={{

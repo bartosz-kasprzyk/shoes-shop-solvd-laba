@@ -1,13 +1,25 @@
 'use client';
 
-import { Box, Avatar, Typography } from '@mui/material';
-import { EmptyState } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import EmptyStateForMuProducts from '@/features/products/components/EmptyStateForMuProducts';
 import useUser from '@/shared/hooks/useUser';
-import CartIcon from './cart';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProducts } from '@/app/api/products';
+import { Typography, Box, Avatar } from '@mui/material';
+import { useEffect, useState } from 'react';
+import ProductsContainer from '@/features/products/components/ProductsContainer';
+import { Button } from '@/shared/components/ui';
+import Link from 'next/link';
 
 export default function MyProductsPage() {
-  const { session } = useUser();
+  const [userName, setUserName] = useState<string | null | undefined>('');
+  const { session, isLoading } = useUser();
+
+  useEffect(() => {
+    if (session?.user) {
+      setUserName(session.user.name);
+    }
+  }, [session?.user]);
 
   const user = session?.user
     ? {
@@ -15,6 +27,19 @@ export default function MyProductsPage() {
         avatar: session.user.image || undefined,
       }
     : null;
+
+  const id = session?.user.id as number;
+  const token = session?.user.accessToken as string;
+
+  const { data, isLoading: isProductsLoading } = useQuery({
+    queryKey: ['myProducts', id],
+    queryFn: () => fetchProducts(token, id),
+    enabled: !!token && !!id,
+  });
+
+  if (isLoading || isProductsLoading) return <div>Loading...</div>;
+  const products = data?.data ?? [];
+
   return (
     <ScrollableContainer>
       <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
@@ -40,8 +65,6 @@ export default function MyProductsPage() {
             }}
           >
             <Avatar
-              src={user?.avatar || undefined}
-              alt={user?.name || 'User'}
               sx={{
                 width: { xs: 60, lg: 120 },
                 height: { xs: 60, lg: 120 },
@@ -60,7 +83,7 @@ export default function MyProductsPage() {
                   fontSize: { xs: 16, lg: 22 },
                 }}
               >
-                {user?.name}
+                {userName}
               </Typography>
               <Typography
                 variant='body2'
@@ -72,24 +95,36 @@ export default function MyProductsPage() {
           </Box>
         </Box>
         <Box sx={{ flex: 1, padding: '32px' }}>
-          <Typography
-            variant='h4'
-            component='h2'
-            sx={{
-              fontWeight: 600,
-              color: '#1f2937',
-              fontSize: { xs: 35, lg: 42 },
-            }}
+          <Box
+            display='flex'
+            justifyContent='space-between'
+            alignItems='center'
+            gap='20px'
+            mb={6}
           >
-            My products
-          </Typography>
-          <EmptyState
-            title="You don't have any products yet"
-            description='Post can contain video, images and text'
-            buttonText='Add product'
-            buttonHref='/add-product'
-            icon={<CartIcon />}
-          />
+            <Typography
+              variant='h4'
+              component='h2'
+              sx={{
+                fontWeight: 600,
+                color: '#1f2937',
+                fontSize: { xs: 35, lg: 42 },
+              }}
+            >
+              My products
+            </Typography>
+            {products.length > 0 && (
+              <Link href='/my-products/add-product' passHref>
+                <Button variant='primary'>Add product</Button>
+              </Link>
+            )}
+          </Box>
+
+          {products.length > 0 ? (
+            <ProductsContainer products={products} />
+          ) : (
+            <EmptyStateForMuProducts />
+          )}
         </Box>
       </Box>
     </ScrollableContainer>
