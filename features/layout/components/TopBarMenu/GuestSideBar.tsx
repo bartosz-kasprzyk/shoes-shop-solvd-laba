@@ -11,6 +11,7 @@ export default function GuestSideBar() {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+        paddingTop: 1,
       }}
     >
       <Typography
