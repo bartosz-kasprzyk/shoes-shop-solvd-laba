@@ -3,19 +3,21 @@ import * as profileClient from '../client/profile.api';
 import type { OnSubmitPayload } from '../types';
 import { handleProfileUpdate } from '../services/profile.service';
 import useUser from '@/shared/hooks/useUser';
+import { useServerSession } from '@/shared/hooks/useServerSession';
 
 export default function useProfile() {
-  const { session, status } = useUser();
+  // const { session, status } = useUser();
+  const session = useServerSession();
   const queryClient = useQueryClient();
 
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
-  const isSessionReady = status === 'authenticated' && !!id && !!token;
+  // const isSessionReady = status === 'authenticated' && !!id && !!token;
 
   const profile = useQuery({
     queryKey: ['profile', id],
     queryFn: () => profileClient.getProfile(token),
-    enabled: isSessionReady,
+    // enabled: isSessionReady,
   });
 
   const mutation = useMutation({
@@ -33,9 +35,9 @@ export default function useProfile() {
   });
 
   const onSubmit = (data: OnSubmitPayload) => {
-    if (!isSessionReady) {
-      return;
-    }
+    // if (!isSessionReady) {
+    //   return;
+    // }
     mutation.mutate(data);
   };
 
@@ -43,7 +45,7 @@ export default function useProfile() {
     profile,
     onSubmit,
     isSubmitting: mutation.isPending,
-    isLoadingSession: status === 'loading',
-    isAuthenticated: status === 'authenticated',
+    // isLoadingSession: status === 'loading',
+    // isAuthenticated: status === 'authenticated',
   };
 }

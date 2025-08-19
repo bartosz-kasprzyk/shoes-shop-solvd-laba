@@ -7,10 +7,10 @@ import ProductsPageClient from '../../../../features/products/components/Product
 import { parseFiltersFromSlug } from '@/features/filter/utils/parseFiltersFromSlug';
 import { adaptFiltersToFetchParams } from '@/features/filter/utils/adaptFiltersToFetchParams';
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const popularCombinations = [{}];
 
-  return popularCombinations.map((combo) => {
+  return popularCombinations.map(() => {
     const searchpath: string[] = [];
     return { searchpath };
   });

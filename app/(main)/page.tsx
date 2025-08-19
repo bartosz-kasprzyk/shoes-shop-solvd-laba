@@ -1,7 +1,7 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
@@ -13,7 +13,7 @@ function getLongArray(len: number) {
   return arr;
 }
 
-export default function HomePage() {
+function HomePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
@@ -43,5 +43,13 @@ export default function HomePage() {
         <Box key={elem}>{elem}</Box>
       ))}
     </Box>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
   );
 }
