@@ -1,16 +1,12 @@
 'use client';
-import { Box, CircularProgress, Grid, Slide, Typography } from '@mui/material';
-import ProductCard from '@/features/products/components/ProductCard';
-import { adaptProductToCard } from '@/features/products/components/ProductCard/ProductCard.adapter';
+import { Box, CircularProgress, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
-import { addToWishlist } from '@/features/wishlist/utils/wishlist';
-import { useSnackbar } from '@/shared/hooks/useSnackbar';
-import type { Product } from '@/shared/interfaces/Product';
+import ProductsContainer from '../ProductsContainer';
 
 type ProductsPageClient = {
   // filters: Record<string, string | string[]>; build error
@@ -41,13 +37,6 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView, hasNextPage]);
-  const { showSnackbar } = useSnackbar();
-
-  const handleAddToWishlist = (product: Product) => {
-    const result = addToWishlist(adaptProductToCard(product));
-
-    showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
-  };
 
   if (status === 'pending')
     return (
@@ -66,22 +55,7 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
     );
   return (
     <Box px={2}>
-      <Typography px={2} pb={4} variant='h4'>
-        All Products ({data.pages[0]?.total || 0})
-      </Typography>
-      <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
-        {data.pages.map((page) => {
-          return page.data.map((product) => (
-            <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
-              <ProductCard
-                card={adaptProductToCard(product)}
-                variant='addToWishlist'
-                onClick={() => handleAddToWishlist(product)}
-              />
-            </Grid>
-          ));
-        })}
-      </Grid>
+      <ProductsContainer pages={data.pages} withOverlay={true} />
       <div ref={ref}></div>
       <Slide direction='up' in={isFetchingNextPage}>
         <Box display={'flex'} p={10} justifyContent={'center'}>

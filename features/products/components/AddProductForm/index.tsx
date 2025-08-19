@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dropdown, Input, Button, Label } from '@/shared/components/ui';
 import SizeDisplayCheckbox from '../SizeDisplayCheckbox';
 import { Box } from '@mui/material';
@@ -11,7 +11,7 @@ import { createProduct } from '@/app/api/products';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import type { AddProductFormProps } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
-import type { Product } from '../../types';
+import type { ProductSchemaType } from '../../types';
 import useUser from '@/shared/hooks/useUser';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
@@ -23,9 +23,8 @@ const AddProductForm = ({
   const { data } = useAllOptions();
   const { colors, genders, brands, categories, sizes } = data || {};
   const { showSnackbar } = useSnackbar();
-
+  const queryClient = useQueryClient();
   const { session } = useUser();
-
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
 
@@ -36,7 +35,7 @@ const AddProductForm = ({
     watch,
     reset,
     formState: { errors },
-  } = useForm<Product>({
+  } = useForm<ProductSchemaType>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: '',
@@ -71,13 +70,18 @@ const AddProductForm = ({
       showSnackbar('Product created!', 'success', 5000);
       reset();
       setImages([]);
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[0] === 'myProducts' &&
+          query.queryKey[1] === session?.user.id,
+      });
     },
     onError: (error) => {
       showSnackbar('Server error, please try later', 'error', 1000);
     },
   });
 
-  const onSubmit = (data: Product) => {
+  const onSubmit = (data: ProductSchemaType) => {
     if (images.length === 0) {
       setImagesError('Please upload at least one image');
       return;
@@ -95,7 +99,7 @@ const AddProductForm = ({
 
   const toggleSize = (sizeValue: string) => {
     const updatedSizes = selectedSizes.includes(sizeValue)
-      ? selectedSizes.filter((s) => s !== sizeValue)
+      ? selectedSizes.filter((s: string) => s !== sizeValue)
       : [...selectedSizes, sizeValue];
     setValue('sizes', updatedSizes);
   };

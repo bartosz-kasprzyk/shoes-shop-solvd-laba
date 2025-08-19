@@ -20,7 +20,7 @@ export default function MenuList() {
 
   return (
     <ScrollableContainer>
-      <List disablePadding sx={{ paddingLeft: '16px' }}>
+      <List sx={{ px: '8px', pt: '4px' }}>
         {menuItems.map((item) => {
           return (
             <MenuItem

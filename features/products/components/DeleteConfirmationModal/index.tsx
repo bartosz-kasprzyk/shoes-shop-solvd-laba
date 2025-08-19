@@ -2,31 +2,8 @@
 
 import { Modal, Button, Box, Typography, Divider } from '@mui/material';
 import type { DeleteModalProps } from '../../types';
-import { useState } from 'react';
 import CloseIcon from '../../../../shared/icons/CloseIcon';
 import CustomButton from '../../../../shared/components/ui/Button';
-
-export function DeleteModalUsageExample() {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleToggleModal = () => setIsOpen((prev) => !prev);
-  const handleDelete = () => {
-    console.log('Delete item');
-    handleToggleModal();
-  };
-
-  return (
-    <>
-      <Button onClick={handleToggleModal}>Delete smth</Button>
-      <DeleteConfirmationModal
-        isOpen={isOpen}
-        onClose={handleToggleModal}
-        onDelete={handleDelete}
-        header='Are you sure to delete selected item'
-        text='Lorem ipsum dolor sit amet consectetur. Sed imperdiet tempor facilisi massa aliquet sit habitant. Lorem ipsum dolor sit amet consectetur. '
-      />
-    </>
-  );
-}
 
 export default function DeleteConfirmationModal({
   isOpen,

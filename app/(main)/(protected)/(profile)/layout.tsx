@@ -1,11 +1,16 @@
+import { authOptions } from '@/features/auth/nextauth/authOptions';
 import UserSideBar from '@/features/layout/components/UserSideBar';
+import ServerSessionProvider from '@/shared/providers/ServerSessionProvider';
 import { Box } from '@mui/material';
+import { getServerSession } from 'next-auth';
 
-export default function Layout({
+export default async function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
   return (
     <Box
       sx={{
@@ -23,7 +28,9 @@ export default function Layout({
         <UserSideBar />
       </Box>
       <Box height={'100%'} width={'100%'} overflow={'hidden'}>
-        {children}
+        <ServerSessionProvider session={session}>
+          {children}
+        </ServerSessionProvider>
       </Box>
     </Box>
   );

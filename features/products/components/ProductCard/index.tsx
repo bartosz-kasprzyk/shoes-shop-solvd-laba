@@ -11,12 +11,12 @@ export default function ProductCard({
   variant,
   onClick,
 }: ProductCardProps) {
-  const { img, name, price, gender } = card;
+  const { img, name, price, gender, id } = card;
 
   function renderButton() {
     switch (variant) {
       case 'dropdown':
-        return <DropDownMenu />;
+        return <DropDownMenu id={id} />;
       case 'removeFromWishlist':
         return <WishlistButton operation='remove' onClick={onClick} />;
       case 'addToWishlist':
@@ -45,7 +45,7 @@ export default function ProductCard({
     >
       {variant && renderButton()}
       <Link
-        href={`/product/${card.id}`}
+        href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <CardMedia

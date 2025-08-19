@@ -1,6 +1,8 @@
 import type {
   CreateProductDataProps,
+  FetchProductsResponse,
   ProductResponseProps,
+  DeleteProductResponse,
 } from '@/features/products/types';
 import type { AllOptionsProps, OptionItem } from '@/shared/types';
 
@@ -99,4 +101,48 @@ export async function uploadImageToServer(
 
   const data = await res.json();
   return data[0].id;
+}
+
+export async function fetchProducts(
+  token: string,
+  id: number,
+): Promise<FetchProductsResponse> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=userID&populate=images&filters%5BuserID%5D[id]=${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  if (!res.ok) {
+    throw new Error('Failed to add product');
+  }
+
+  return res.json();
+}
+
+export async function deleteProduct(
+  id: number,
+  token: string,
+): Promise<DeleteProductResponse> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products/${id}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  if (!res.ok) {
+    throw new Error('Failed to delete product');
+  }
+
+  return res.json();
 }

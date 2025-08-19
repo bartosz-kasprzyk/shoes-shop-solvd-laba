@@ -6,14 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from '@/shared/components/ui';
 import type { ResetPasswordFormData } from './resetPassword.schema';
 import { resetPasswordSchema } from './resetPassword.schema';
+import { useResetPassword } from './useResetPassword';
 
-type Props = {
-  onSubmit: (data: ResetPasswordFormData) => void;
-  status: 'idle' | 'loading' | 'success' | 'error';
-  serverError: string;
-};
-
-export const ResetPasswordForm = ({ onSubmit, status, serverError }: Props) => {
+export const ResetPasswordForm = () => {
   const {
     register,
     handleSubmit,
@@ -22,8 +17,10 @@ export const ResetPasswordForm = ({ onSubmit, status, serverError }: Props) => {
     resolver: zodResolver(resetPasswordSchema),
   });
 
+  const { resetPassword, status, serverError } = useResetPassword();
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(resetPassword)}>
       <Box mb={1} display='flex' flexDirection='column' gap={2}>
         <Input
           title='Password'

@@ -1,6 +1,26 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '@/shared/tests/test-utils';
 import type { Product } from '@/shared/interfaces/Product';
 import RecentlyViewedPage from '../RecentlyViewedPage';
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+    back: jest.fn(),
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+jest.mock('next-auth/react', () => ({
+  ...jest.requireActual('next-auth/react'),
+  useSession: () => ({
+    data: { user: { name: 'Test User', accessToken: 'fake-token' } },
+    status: 'authenticated',
+  }),
+}));
 
 describe('RecentlyViewedPageClient', () => {
   it('renders products from localStorage', () => {
@@ -9,14 +29,16 @@ describe('RecentlyViewedPageClient', () => {
     ];
     localStorage.setItem('recentlyViewed', JSON.stringify(products));
 
-    render(<RecentlyViewedPage />);
+    renderWithProviders(<RecentlyViewedPage />);
 
     expect(screen.getByText('Test product')).toBeInTheDocument();
   });
 
   it('shows empty state when no products', () => {
     localStorage.clear();
-    render(<RecentlyViewedPage />);
+
+    renderWithProviders(<RecentlyViewedPage />);
+
     expect(
       screen.getByText(/You haven't viewed any products yet/i),
     ).toBeInTheDocument();

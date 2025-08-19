@@ -2,10 +2,15 @@ import z from 'zod';
 
 export const profileSchema = z
   .object({
-    firstName: z.string().nullable(),
-    lastName: z.string().nullable(),
+    firstName: z.string('Invalid name').nullable(),
+    lastName: z.string('Invalid surname').nullable(),
     email: z.email('Invalid email'),
-    phoneNumber: z.string().nullable(),
+    phoneNumber: z
+      .string()
+      .nullable()
+      .refine((val) => !val || /^\+?\d{7,15}$/.test(val), {
+        message: 'Invalid phone number',
+      }),
     avatar: z
       .object({
         id: z.number(),

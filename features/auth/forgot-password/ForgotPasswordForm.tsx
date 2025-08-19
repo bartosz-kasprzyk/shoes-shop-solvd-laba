@@ -4,20 +4,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Typography, Collapse, Link } from '@mui/material';
 import { Input, Button } from '@/shared/components/ui';
+
 import type { ForgotPasswordFormData } from './forgotPassword.schema';
 import { forgotPasswordSchema } from './forgotPassword.schema';
+import { useForgotPassword } from './useForgotPassword';
 
-type Props = {
-  onSubmit: (data: ForgotPasswordFormData) => void;
-  status: 'idle' | 'loading' | 'sent' | 'error';
-  serverError: string;
-};
-
-export const ForgotPasswordForm = ({
-  onSubmit,
-  status,
-  serverError,
-}: Props) => {
+export const ForgotPasswordForm = () => {
   const {
     register,
     handleSubmit,
@@ -26,8 +18,10 @@ export const ForgotPasswordForm = ({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
+  const { requestReset, status, serverError } = useForgotPassword();
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(requestReset)}>
       <Box mb={1}>
         <Input
           title='Email'
