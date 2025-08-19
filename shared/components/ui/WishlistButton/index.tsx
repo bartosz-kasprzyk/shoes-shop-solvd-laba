@@ -6,12 +6,12 @@ import AddToWishlistIcon from '@/shared/icons/AddToWishlistIcon';
 import type { WishlistButtonProps } from './interface';
 
 export default function WishlistButton({
-  onRemove,
-  onAdd,
+  onClick,
+  operation,
 }: WishlistButtonProps) {
   return (
     <IconButton
-      onClick={onRemove ? onRemove : onAdd}
+      onClick={onClick}
       sx={{
         position: 'absolute',
         top: '10px',
@@ -34,7 +34,11 @@ export default function WishlistButton({
         },
       }}
     >
-      {onRemove ? <RemoveFromWishlistIcon /> : <AddToWishlistIcon />}
+      {operation === 'remove' ? (
+        <RemoveFromWishlistIcon />
+      ) : (
+        <AddToWishlistIcon />
+      )}
     </IconButton>
   );
 }

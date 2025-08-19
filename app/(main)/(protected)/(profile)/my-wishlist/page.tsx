@@ -1,6 +1,6 @@
 'use client';
 
-import WishlistPage from '@/features/products/components/WishlistPage';
+import WishlistPage from '@/features/wishlist/components/WishlistPage';
 
 export default function MyWishlistPage() {
   return <WishlistPage />;

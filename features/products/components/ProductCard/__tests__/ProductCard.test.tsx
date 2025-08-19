@@ -61,7 +61,11 @@ describe('ProductCard', () => {
 
   it('calls addToWishlist when addToWishlist button is pressed', () => {
     render(
-      <ProductCard card={mockCard} variant='addToWishlist' onAdd={mockOnAdd} />,
+      <ProductCard
+        card={mockCard}
+        variant='addToWishlist'
+        onClick={mockOnAdd}
+      />,
     );
     fireEvent.click(screen.getByTestId('wishlist-button'));
     expect(mockOnAdd).toHaveBeenCalled();
@@ -77,7 +81,7 @@ describe('ProductCard', () => {
       <ProductCard
         card={mockCard}
         variant='removeFromWishlist'
-        onRemove={mockOnRemove}
+        onClick={mockOnRemove}
       />,
     );
     fireEvent.click(screen.getByTestId('wishlist-button'));

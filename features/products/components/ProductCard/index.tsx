@@ -9,8 +9,7 @@ import WishlistButton from '@/shared/components/ui/WishlistButton';
 export default function ProductCard({
   card,
   variant,
-  onRemove,
-  onAdd,
+  onClick,
 }: ProductCardProps) {
   const { img, name, price, gender } = card;
 
@@ -19,9 +18,9 @@ export default function ProductCard({
       case 'dropdown':
         return <DropDownMenu />;
       case 'removeFromWishlist':
-        return <WishlistButton onRemove={onRemove} />;
+        return <WishlistButton operation='remove' onClick={onClick} />;
       case 'addToWishlist':
-        return <WishlistButton onAdd={onAdd} />;
+        return <WishlistButton operation='add' onClick={onClick} />;
       default:
         return null;
     }

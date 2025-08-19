@@ -39,24 +39,3 @@ export interface ProductData {
 export interface ProductApiResponse {
   data: ProductData;
 }
-
-export interface WishlistItem {
-  id: number;
-  name: string;
-  price: number | null;
-  images: {
-    data: {
-      attributes: {
-        url: string;
-      };
-    }[];
-  };
-  gender: {
-    data: {
-      id: number;
-      attributes: {
-        name: string;
-      };
-    };
-  };
-}

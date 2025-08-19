@@ -1,18 +1,18 @@
-import type { WishlistItem } from '@/features/products/types/shared.interface';
+import type { Card } from '@/features/products/types';
 
-export function getWishlist(): WishlistItem[] {
+function getWishlist(): Card[] {
   return JSON.parse(localStorage.getItem('wishlist') || '[]');
 }
 
-export function addToWishlist(item: WishlistItem) {
+export function addToWishlist(product: Card) {
   const wishlist = getWishlist();
-  const exists = wishlist.some((p) => p.id === item.id);
+  const exists = wishlist.some((p) => p.id === product.id);
 
   if (exists) {
     return { success: false, message: 'Product already in wishlist' };
   }
 
-  wishlist.push(item);
+  wishlist.push(product);
   localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
   return { success: true, message: 'Product added to wishlist' };

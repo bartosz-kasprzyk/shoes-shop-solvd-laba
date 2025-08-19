@@ -1,30 +1,22 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import WishlistPage from '..';
-import type { WishlistItem } from '@/features/products/types/shared.interface';
+import type { Card } from '@/features/products/types';
 
-const mockWishlist: WishlistItem[] = [
+const mockWishlist: Card[] = [
   {
     id: 1,
     name: 'Product 1',
+    img: { src: '/image1.jpg' },
     price: 100,
-    images: {
-      data: [{ attributes: { url: '/image1.jpg' } }],
-    },
-    gender: {
-      data: { id: 1, attributes: { name: 'Male' } },
-    },
+    gender: 'Men',
   },
   {
     id: 2,
     name: 'Product 2',
     price: 200,
-    images: {
-      data: [{ attributes: { url: '/image2.jpg' } }],
-    },
-    gender: {
-      data: { id: 2, attributes: { name: 'Female' } },
-    },
+    img: { src: '/image2.jpg' },
+    gender: 'Women',
   },
 ];
 

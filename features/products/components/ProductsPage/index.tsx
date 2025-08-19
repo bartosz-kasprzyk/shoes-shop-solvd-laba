@@ -8,8 +8,9 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
-import { addToWishlist } from '../WishlistPage/wishlist';
+import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
+import type { Product } from '@/shared/interfaces/Product';
 
 type ProductsPageClient = {
   // filters: Record<string, string | string[]>; build error
@@ -42,6 +43,12 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
   }, [fetchNextPage, inView, hasNextPage]);
   const { showSnackbar } = useSnackbar();
 
+  const handleAddToWishlist = (product: Product) => {
+    const result = addToWishlist(adaptProductToCard(product));
+
+    showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
+  };
+
   if (status === 'pending')
     return (
       <>
@@ -69,21 +76,7 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
               <ProductCard
                 card={adaptProductToCard(product)}
                 variant='addToWishlist'
-                onAdd={() => {
-                  const result = addToWishlist({
-                    id: product.id,
-                    name: product.attributes.name,
-                    price: product.attributes.price,
-                    images: product.attributes.images,
-                    gender: product.attributes.gender,
-                  });
-
-                  showSnackbar(
-                    result.message,
-                    result.success ? 'success' : 'info',
-                    5000,
-                  );
-                }}
+                onClick={() => handleAddToWishlist(product)}
               />
             </Grid>
           ));

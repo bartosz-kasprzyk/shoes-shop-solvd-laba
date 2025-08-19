@@ -3,26 +3,35 @@
 import { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import ProductCard from '@/features/products/components/ProductCard';
-import { getWishlist, removeFromWishlist } from './wishlist';
-import { adaptWishlistItemToCard } from '../ProductCard/ProductCard.adapter';
-import type { WishlistItem } from '@/features/products/types/shared.interface';
+import { removeFromWishlist } from '../../utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { MyWishlistIcon } from '@/shared/icons';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import type { Card } from '@/features/products/types';
 
 export default function WishlistPage() {
-  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [wishlist, setWishlist] = useState<Card[]>([]);
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setWishlist(getWishlist());
+    const saved = localStorage.getItem('wishlist');
+    if (saved) {
+      setWishlist(JSON.parse(saved));
+    }
   }, []);
 
   const handleRemove = (id: number) => {
     removeFromWishlist(id);
-    setWishlist(getWishlist());
+
+    const saved = localStorage.getItem('wishlist');
+    if (saved) {
+      setWishlist(JSON.parse(saved));
+    } else {
+      setWishlist([]);
+    }
+
     showSnackbar('Product removed from wishlist!', 'warning', 5000);
   };
 
@@ -106,9 +115,9 @@ export default function WishlistPage() {
           {wishlist.map((product) => (
             <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
               <ProductCard
-                card={adaptWishlistItemToCard(product)}
+                card={product}
                 variant='removeFromWishlist'
-                onRemove={() => handleRemove(product.id)}
+                onClick={() => handleRemove(product.id)}
               />
             </Grid>
           ))}
