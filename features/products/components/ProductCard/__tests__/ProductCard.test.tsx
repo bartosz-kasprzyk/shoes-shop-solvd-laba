@@ -12,8 +12,8 @@ const mockOnAdd = jest.fn();
 const mockOnRemove = jest.fn();
 
 jest.mock('@/shared/components/ui/WishlistButton', () => {
-  const MockWishlistButton = ({ onAdd, onRemove }: any) => (
-    <button data-testid='wishlist-button' onClick={onAdd || onRemove}>
+  const MockWishlistButton = ({ onClick }: any) => (
+    <button data-testid='wishlist-button' onClick={onClick}>
       Wishlist button
     </button>
   );

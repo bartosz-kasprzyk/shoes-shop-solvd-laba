@@ -23,7 +23,25 @@ const mockWishlist: Card[] = [
 const getWishlistMock = jest.fn();
 const removeFromWishlistMock = jest.fn();
 
-jest.mock('../wishlist', () => ({
+jest.mock('@/features/products/components/ProductCard', () => {
+  const MockProductCard = ({
+    card,
+    onClick,
+  }: {
+    card: Card;
+    onClick: () => void;
+  }) => (
+    <div>
+      <span>{card.name}</span>
+      <button onClick={onClick}>remove-{card.id}</button>
+    </div>
+  );
+
+  MockProductCard.displayName = 'MockProductCard';
+  return MockProductCard;
+});
+
+jest.mock('../../../utils/wishlist', () => ({
   getWishlist: () => getWishlistMock(),
   removeFromWishlist: (id: number) => removeFromWishlistMock(id),
 }));
@@ -34,38 +52,39 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
   useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
 }));
 
-describe('WishlistPage', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+beforeEach(() => {
+  jest.clearAllMocks();
+  window.localStorage.setItem('wishlist', JSON.stringify(mockWishlist));
+});
 
-  test('renders empty wishlist message with Browse products button when no items', () => {
-    getWishlistMock.mockReturnValue([]);
+describe('WishlistPage', () => {
+  test('renders empty wishlist message with Browse products button when no items', async () => {
+    window.localStorage.removeItem('wishlist');
     render(<WishlistPage />);
 
     expect(
-      screen.getByText(/You don't have any products in your wishlist yet/i),
+      await screen.findByText(
+        /You don't have any products in your wishlist yet/i,
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /Browse products/i }),
     ).toBeInTheDocument();
   });
 
-  test('renders wishlist items', () => {
-    getWishlistMock.mockReturnValue(mockWishlist);
+  test('renders wishlist items', async () => {
     render(<WishlistPage />);
 
-    mockWishlist.forEach((item) => {
-      expect(screen.getByText(item.name)).toBeInTheDocument();
-    });
+    for (const item of mockWishlist) {
+      expect(await screen.findByText(item.name)).toBeInTheDocument();
+    }
   });
 
-  test('removes item from wishlist and shows snackbar alert', () => {
-    getWishlistMock.mockReturnValue(mockWishlist);
+  test('removes item from wishlist and shows snackbar alert', async () => {
     render(<WishlistPage />);
 
-    const removeButton = screen.getAllByTestId('RemoveFromWishlistIcon')[0];
-    fireEvent.click(removeButton);
+    const removeBtn = await screen.findByRole('button', { name: 'remove-1' });
+    fireEvent.click(removeBtn);
 
     expect(removeFromWishlistMock).toHaveBeenCalledWith(1);
     expect(showSnackbarMock).toHaveBeenCalledWith(
