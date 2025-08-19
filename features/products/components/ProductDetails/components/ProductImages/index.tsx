@@ -150,7 +150,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           </AnimatePresence>
         ) : null}
         {/* Desktop arrows bottom-right */}
-        {images.length > 1 ? (
+        {images?.length > 1 ? (
           <Box
             sx={{
               display: { xs: 'none', sm: 'flex' },
