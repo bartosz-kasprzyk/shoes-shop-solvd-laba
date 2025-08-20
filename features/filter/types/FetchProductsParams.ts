@@ -5,6 +5,7 @@ export interface FetchProductsParams {
   brand?: string[];
   color?: string;
   populate?: string;
+  categories?: string;
   sizes?: string[];
   priceMin?: number;
   priceMax?: number;

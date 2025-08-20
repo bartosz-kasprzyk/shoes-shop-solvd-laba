@@ -1,67 +1,57 @@
 import qs from 'qs';
-import type { FetchProductsParams } from '../interfaces/FetchProductsParams';
+import type { Filter } from '@/features/filter/types';
 
-export const buildQuery = (params: FetchProductsParams): string => {
+export const buildQuery = (params: Filter, page: string): string => {
   const filters: any = {};
-  console.log(params);
   if (params.brand?.length) {
-    filters.brand = { name: { $in: params.brand } };
+    filters.brand = { id: { $in: params.brand.map((p) => p.id) } };
   }
-
   if (params.color?.length) {
-    filters.color = { name: { $in: params.color } };
+    filters.color = { id: { $in: params.color.map((p) => p.id) } };
   }
-
-  if (params.sizes?.length) {
-    filters.sizes = { value: { $in: params.sizes } };
+  if (params.size?.length) {
+    filters.sizes = { id: { $in: params.size.map((p) => p.id) } };
+  }
+  if (params.category?.length) {
+    filters.categories = { id: { $in: params.category.map((p) => p.id) } };
   }
   if (params.gender?.length) {
-    filters.gender = { name: { $in: params.gender } };
+    filters.gender = { id: { $in: params.gender.map((p) => p.id) } };
   }
   if (params.search?.length) {
-    filters.name = { $containsi: params.search };
+    filters['$or'] = [
+      { description: { $containsi: params.search[0].slug } },
+      { name: { $containsi: params.search[0].slug } },
+    ];
   }
 
-  if (params.priceMin != null && params.priceMax != null) {
-    filters.price = {
-      $gte: params.priceMin,
-      $lte: params.priceMax,
-    };
-  } else if (params.priceMin != null) {
-    filters.price = {
-      $gte: params.priceMin,
-    };
-  } else if (params.priceMax != null) {
-    filters.price = {
-      $lte: params.priceMax,
-    };
+  filters.teamName = { $eqi: 'team-5' };
+
+  if (params.price?.length) {
+    const [min, max] = params.price.map((p) => p.slug);
+    filters['$and'] = [{ price: { $gte: min } }, { price: { $lte: max } }];
   }
-  filters.teamName = { $eq: 'team-5' };
+
   const pagination = {
-    page: Number(params.page || '0'),
-    pageSize: Number(params.pageSize || '12'),
+    page: Number(page || '1'),
+    pageSize: Number('12'),
   };
 
-  const basePopulate = ['images', 'gender'];
-  if (params.populate) {
-    basePopulate.push(params.populate);
-  }
-
+  const basePopulate = [
+    'images',
+    'description',
+    'gender',
+    'categories',
+    'color',
+  ];
   const queryObject: any = {
     filters,
+    pagination,
     populate: basePopulate,
   };
 
-  if (params.sort) {
-    queryObject.sort = params.sort;
-  }
-
-  if (pagination) {
-    queryObject.pagination = pagination;
-  }
-
   return qs.stringify(queryObject, {
-    encode: false,
-    arrayFormat: 'brackets',
+    encodeValuesOnly: true,
+    arrayFormat: 'indices',
   });
 };

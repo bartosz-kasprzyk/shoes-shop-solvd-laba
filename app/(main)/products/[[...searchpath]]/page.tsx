@@ -2,10 +2,15 @@ export const revalidate = 86400;
 
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import { getQueryClient } from '@/shared/lib/getQueryClient';
+import { fetchFilterValuesByFilterType } from '@/features/filter/api/fetchFilterValuesByFilterType';
+import { filterTypeToUrlSegmentMap } from '@/features/filter/mappings';
+import { filtersSections } from '@/features/filter/consts/filtersSections';
+import type { Filter, FilterType } from '@/features/filter/types';
+import { filtersSlugsFromSlug } from '@/features/filter/utils/filtersSlugsFromSlug';
+import { apiItemToFilterValue } from '@/features/filter/utils/apiItemToFilterValue';
+import mergeFilterValues from '@/features/filter/utils/mergeFilterValues';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import ProductsPageClient from '../../../../features/products/components/ProductsPage';
-import { parseFiltersFromSlug } from '@/features/filter/utils/parseFiltersFromSlug';
-import { adaptFiltersToFetchParams } from '@/features/filter/utils/adaptFiltersToFetchParams';
+import ProductsPageClient from '@/features/products/components/ProductsPage';
 
 export function generateStaticParams() {
   const popularCombinations = [{}];
@@ -22,21 +27,50 @@ export default async function ProductsPage({
   params: Promise<{ searchpath: string[] }>;
 }) {
   const { searchpath: searchParams } = await params;
-  const filters = adaptFiltersToFetchParams(
-    await parseFiltersFromSlug(searchParams),
-  );
+  const urlFilters: Filter = filtersSlugsFromSlug(searchParams);
 
   const queryClient = getQueryClient();
+
+  const apiFilters: Filter = (
+    await Promise.all(
+      filtersSections.map((filterType) =>
+        queryClient.fetchQuery({
+          queryKey: [filterType],
+          queryFn: () =>
+            fetchFilterValuesByFilterType(
+              filterTypeToUrlSegmentMap[filterType],
+            ),
+        }),
+      ),
+    )
+  ).reduce((acc, apiItems, i) => {
+    const type = filtersSections[i];
+    acc[type] = apiItems.map(apiItemToFilterValue);
+    return acc;
+  }, {} as Filter);
+
+  Object.entries(urlFilters).forEach(([filterTypeString, FilterValues]) => {
+    const filterType = filterTypeString as FilterType;
+    if (apiFilters && apiFilters[filterType]) {
+      const filtersfromUrl = mergeFilterValues(
+        FilterValues,
+        apiFilters[filterType],
+      );
+      urlFilters[filterType] = filtersfromUrl;
+    }
+  });
+
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ['products', filters],
-    queryFn: ({ pageParam }) => fetchProducts({ pageParam, filters }),
+    queryKey: ['products', urlFilters],
+    queryFn: ({ pageParam }) =>
+      fetchProducts({ pageParam, filters: urlFilters }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     pages: 2,
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductsPageClient filters={filters} />
+      <ProductsPageClient filters={urlFilters} />
     </HydrationBoundary>
   );
 }

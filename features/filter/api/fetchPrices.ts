@@ -1,34 +1,41 @@
-import type { Product } from '@/shared/interfaces/Product';
-import type { FetchProductsParams } from '../types/FetchProductsParams';
 import qs from 'qs';
 
 export const fetchPrices = async (): Promise<number[]> => {
-  const filters: any = {};
+  const filters: any = { teamName: { $eq: 'team-5' } };
 
-  filters.teamName = { $eq: 'team-5' };
-  const queryObject: any = {
-    filters,
-    pagination: {
-      withCount: false,
-      pageSize: 1000,
+  const queryMax = qs.stringify(
+    {
+      filters,
+      sort: { price: 'desc' },
+      pagination: { withCount: false, pageSize: 1 },
+      fields: ['price'],
     },
-    fields: ['price'],
-  };
-
-  const query = qs.stringify(queryObject, {
-    encode: false,
-    arrayFormat: 'brackets',
-  });
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?${query}`,
+    { encode: false, arrayFormat: 'brackets' },
   );
-  if (!res.ok) throw new Error('Failed to fetch prices');
-  const json = await res.json();
 
-  const prices = (json.data as Product[])
-    .map((item: Product) => item.attributes?.price)
-    .filter((price): price is number => typeof price === 'number');
+  const resMax = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?${queryMax}`,
+  );
+  if (!resMax.ok) throw new Error('Failed to fetch max price');
+  const jsonMax = await resMax.json();
+  const maxPrice = jsonMax.data[0]?.attributes?.price ?? null;
 
-  return prices;
+  const queryMin = qs.stringify(
+    {
+      filters,
+      sort: { price: 'asc' },
+      pagination: { withCount: false, pageSize: 1 },
+      fields: ['price'],
+    },
+    { encode: false, arrayFormat: 'brackets' },
+  );
+
+  const resMin = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?${queryMin}`,
+  );
+  if (!resMin.ok) throw new Error('Failed to fetch min price');
+  const jsonMin = await resMin.json();
+  const minPrice = jsonMin.data[0]?.attributes?.price ?? null;
+
+  return [maxPrice, minPrice];
 };

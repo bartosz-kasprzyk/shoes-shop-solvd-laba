@@ -1,62 +1,32 @@
 'use client';
 
 import { Box, Divider, Typography } from '@mui/material';
-import { useReducer, useState } from 'react';
 import { Button } from '@/shared/components/ui';
 import { useRouter } from 'next/navigation';
-import CategoryWrapper from '../CategoryWrapper';
-import PriceCategory from '../PriceCategory';
-import Category from '../Category';
-import type { FilterCategoryWithoutPrices } from '../../types/FilterCategory';
-import filtersReducer from '../../reducers/reducer';
-import { useInitialFilters } from '../../utils/useInitialFilters';
-import { adaptFiltersToFetchParams } from '../../utils/adaptFiltersToFetchParams';
+import PriceFilterSection from '../PriceFilterSection';
+import FilterSection from '../FilterSection';
+import CheckboxContainer from '../FilterValuesContainers/CheckboxContainer';
+import TilesContainer from '../FilterValuesContainers/TilesContainer';
+import { withSearch } from '../SearchWrapper/SearchWrapper';
+import useFilterStore from '../../stores/filterStore';
+import { useFiltersSlugsFromPath } from '../../hooks/useFiltersSlugsFromPath';
+import useProductsCountStore from '../../stores/productCount';
 
 export default function FilterSideBar() {
   const router = useRouter();
-  const initialFilters = useInitialFilters();
-  const [state, dispatch] = useReducer(filtersReducer, initialFilters);
-  const filters = adaptFiltersToFetchParams(initialFilters);
-  const [isPriceControlled, setIsPriceControlled] = useState(false);
-  const additionalPriceText = state.Price.set
-    ? `$${state.Price.range[0]} - $${state.Price.range[1]}`
-    : '';
-  const applyFilters = () => {
-    const segments: string[] = [];
+  const { filters, resetFilters, setFilterValues, applyFilters } =
+    useFilterStore();
 
-    (
-      ['Gender', 'Brand', 'Color', 'Size'] as FilterCategoryWithoutPrices[]
-    ).forEach((cat) => {
-      const values = state[cat];
-      if (values.length > 0) {
-        const segment = `${cat}:${values.map((v) => ('' + v).replaceAll(' ', '_')).join('-')}`;
-        segments.push(segment);
-      }
-    });
-
-    if (state.Price.set) {
-      const [min, max] = state.Price.range;
-      segments.push(`Price:${min}-${max}`);
-    }
-
-    if (initialFilters.search.trim()) {
-      segments.push(
-        `search:${initialFilters.search.trim().replaceAll(' ', '_')}`,
-      );
-    }
-
-    const path = `/products/${segments.join('/')}`;
-
-    router.push(path);
+  const slugs = useFiltersSlugsFromPath();
+  const { value: productsCount } = useProductsCountStore();
+  const clearFilters = () => {
+    resetFilters();
+    router.push('/products/');
   };
 
-  const filtersConfig = [
-    { category: 'Gender' as const },
-    { category: 'Brand' as const },
-    { category: 'Price' as const, isPrice: true },
-    { category: 'Color' as const },
-    { category: 'Size' as const },
-  ];
+  const handleApplyFilters = () => {
+    router.push(applyFilters());
+  };
 
   return (
     <Box
@@ -86,70 +56,45 @@ export default function FilterSideBar() {
               color='color-mix(in srgb, transparent, #000000ff 50%)'
               variant='body1'
             >
-              {['Shoes', initialFilters.search].join('/')}
+              {filters.category?.[0]?.name ?? 'Shoes'}
+              {slugs?.search?.[0].slug && '/' + slugs?.search?.[0].slug}
             </Typography>
-            <Typography variant='h4'>{initialFilters.search}</Typography>
+            <Typography noWrap variant='h5'>
+              {slugs?.search?.[0].slug ?? 'Products'}
+              {productsCount ? ` (${productsCount})` : ''}
+            </Typography>
           </Box>
           <Divider />
 
-          {filtersConfig.map(({ category, isPrice }) => (
-            <Box key={category}>
-              <CategoryWrapper
-                filtersCount={
-                  isPrice
-                    ? undefined
-                    : (
-                        state[
-                          category as FilterCategoryWithoutPrices
-                        ] as string[]
-                      ).length
-                }
-                categoryName={category}
-                additionalText={isPrice ? additionalPriceText : undefined}
-              >
-                {isPrice ? (
-                  <PriceCategory
-                    priceSet={state.Price.set}
-                    isControlled={isPriceControlled}
-                    setIsControlled={setIsPriceControlled}
-                    handleChange={(range, set) =>
-                      dispatch({
-                        type: 'SET_PRICE',
-                        range: range as [number, number],
-                        set,
-                      })
-                    }
-                    filters={filters}
-                  />
-                ) : (
-                  <Category
-                    filters={filters}
-                    categoryName={category}
-                    selected={state[category as FilterCategoryWithoutPrices]}
-                    onToggle={(val) =>
-                      dispatch({ type: 'TOGGLE', category, value: val })
-                    }
-                  />
-                )}
-              </CategoryWrapper>
-              <Divider />
-            </Box>
-          ))}
+          <FilterSection
+            maxSelections={1}
+            filterType='gender'
+            Container={CheckboxContainer}
+          />
+          <FilterSection
+            filterType='brand'
+            Container={withSearch(CheckboxContainer)}
+          />
+          <FilterSection filterType='color' Container={CheckboxContainer} />
+          <PriceFilterSection />
+          <FilterSection filterType='size' Container={TilesContainer} />
+          <FilterSection
+            maxSelections={1}
+            filterType='category'
+            Container={CheckboxContainer}
+          />
         </Box>
 
         <Box display='flex' p={2} boxSizing={'border-box'} gap={1} width='100%'>
           <Button
             variant='outline'
             color='secondary'
-            onClick={() => {
-              dispatch({ type: 'CLEAR' });
-              setIsPriceControlled(false);
-            }}
+            onClick={clearFilters}
             sx={{ width: '100%' }}
           >
             Clear
           </Button>
-          <Button onClick={applyFilters} sx={{ width: '100%' }}>
+          <Button onClick={handleApplyFilters} sx={{ width: '100%' }}>
             Apply
           </Button>
         </Box>

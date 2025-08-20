@@ -1,3 +1,5 @@
+import type { Filter } from '@/features/filter/types';
+
 export interface FetchProductsParams {
   sort?: string;
   page?: string;
@@ -13,5 +15,5 @@ export interface FetchProductsParams {
 }
 export interface FetchProductsParamsInfiniteQuary {
   pageParam?: number;
-  filters?: FetchProductsParams;
+  filters?: Filter;
 }

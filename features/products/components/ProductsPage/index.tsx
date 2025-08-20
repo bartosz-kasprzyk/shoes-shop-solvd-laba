@@ -1,20 +1,18 @@
 'use client';
-import { Box, CircularProgress, Slide, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
-import type { FetchProductsParams } from '@/shared/interfaces/FetchProductsParams';
+import useFilterStore from '@/features/filter/stores/filterStore';
+import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
+import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
+import ProductCard from '../ProductCard';
+import useProductsCountStore from '@/features/filter/stores/productCount';
 
-type ProductsPageClient = {
-  // filters: Record<string, string | string[]>; build error
-  // filters: Record<string, any>; works
-  filters: FetchProductsParams;
-};
-
-export default function ProductsPageClient({ filters }: ProductsPageClient) {
+export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
     data,
     error,
@@ -32,11 +30,18 @@ export default function ProductsPageClient({ filters }: ProductsPageClient) {
     rootMargin: '1000px',
   });
 
+  const { setAllFilterValues } = useFilterStore();
+  const { setValue } = useProductsCountStore();
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView, hasNextPage]);
+
+  useEffect(() => {
+    setAllFilterValues(filters);
+    setValue(data?.pages[0]?.total);
+  }, []);
 
   if (status === 'pending')
     return (

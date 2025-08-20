@@ -1,10 +1,6 @@
 import qs from 'qs';
-import type { FetchProductsParams } from '../types/FetchProductsParams';
 
-export const buildQueryForCategory = (
-  params: FetchProductsParams,
-  nestedFilterKey?: string,
-): string => {
+export const buildQueryForCategory = (nestedFilterKey?: string): string => {
   const filters: Record<string, any> = {};
 
   const target = nestedFilterKey ? (filters[nestedFilterKey] = {}) : filters;
@@ -20,7 +16,6 @@ export const buildQueryForCategory = (
     filters,
   };
 
-  if (params.sort) queryObject.sort = params.sort;
   if (pagination) queryObject.pagination = pagination;
 
   return qs.stringify(queryObject, {

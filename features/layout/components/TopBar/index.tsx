@@ -11,12 +11,13 @@ import TopBarSearch from './TopBarSearch';
 import { XIcon } from '@/shared/icons/XIcon';
 import useUser from '@/shared/hooks/useUser';
 import TopBarMenu from '../TopBarMenu';
+import useFilterStore from '@/features/filter/stores/filterStore';
 
 export default function TopBar() {
   const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
-
+  const { setFilterValues } = useFilterStore();
   // Ref for direct access to input element
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,6 +35,7 @@ export default function TopBar() {
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchValue.trim() !== '') {
       router.push(`/products/search:${encodeURIComponent(searchValue.trim())}`);
+      setFilterValues('search', [{ slug: searchValue.trim() }]);
       if (inputRef.current) {
         inputRef.current.blur();
       }
