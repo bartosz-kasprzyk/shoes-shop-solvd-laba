@@ -79,7 +79,6 @@ export default function ProfileForm() {
         display: 'flex',
         flexDirection: 'column',
         gap: '24px',
-        padding: '12px',
         pointerEvents: isSubmitting ? 'none' : 'auto',
         opacity: isSubmitting ? 0.7 : 1,
       }}
