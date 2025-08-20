@@ -110,26 +110,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
       >
         {images ? (
           <AnimatePresence initial={false} custom={direction}>
-            <motion.div
-              key={images[selectedIndex].attributes.url}
-              custom={direction}
-              variants={variants}
-              initial='enter'
-              animate='center'
-              exit='exit'
-              transition={{ duration: 0.3 }}
-              {...(isMobile && {
-                drag: 'x',
-                dragConstraints: { left: 0, right: 0 },
-                onDragEnd: (_, info) => {
-                  if (info.offset.x < -50) {
-                    handleNext();
-                  } else if (info.offset.x > 50) {
-                    handlePrev();
-                  }
-                },
-                whileTap: { cursor: 'grabbing' },
-              })}
+            <div
               style={{
                 position: 'absolute',
                 top: 0,
@@ -138,19 +119,38 @@ export default function ProductImages({ images }: ProductImagesProps) {
                 height: '100%',
               }}
             >
-              <Image
-                src={images[selectedIndex].attributes.url}
-                alt='Main product image'
-                fill
-                sizes='(max-width: 600px) 100vw, 588px'
-                style={{ objectFit: 'cover', pointerEvents: 'none' }}
-                priority
-              />
-            </motion.div>
+              <motion.div
+                key={images[selectedIndex].attributes.url}
+                custom={direction}
+                variants={variants}
+                initial='enter'
+                animate='center'
+                exit='exit'
+                transition={{ duration: 0.3 }}
+                {...(isMobile && {
+                  drag: 'x',
+                  dragConstraints: { left: 0, right: 0 },
+                  onDragEnd: (_, info) => {
+                    if (info.offset.x < -50) handleNext();
+                    else if (info.offset.x > 50) handlePrev();
+                  },
+                  whileTap: { cursor: 'grabbing' },
+                })}
+              >
+                <Image
+                  src={images[selectedIndex].attributes.url}
+                  alt='Main product image'
+                  fill
+                  sizes='(max-width: 600px) 100vw, 588px'
+                  style={{ objectFit: 'cover', pointerEvents: 'none' }}
+                  priority
+                />
+              </motion.div>
+            </div>
           </AnimatePresence>
         ) : null}
         {/* Desktop arrows bottom-right */}
-        {images.length > 1 ? (
+        {images?.length > 1 ? (
           <Box
             sx={{
               display: { xs: 'none', sm: 'flex' },

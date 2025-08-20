@@ -1,7 +1,8 @@
 import type { Card } from '../../types/index';
+import type { ProductData } from '@/features/products/types/shared.interface';
 import type { Product } from '@/shared/interfaces/Product';
 
-export function adaptProductToCard(product: Product): Card {
+export function adaptProductToCard(product: Product | ProductData): Card {
   return {
     id: product.id,
     name: product.attributes.name,

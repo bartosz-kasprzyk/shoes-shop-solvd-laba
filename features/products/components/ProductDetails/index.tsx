@@ -8,10 +8,14 @@ import SizeSelector from './components/SizeSelector';
 import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
+import { addToWishlist } from '@/features/wishlist/utils/wishlist';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
+import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
+  const { showSnackbar } = useSnackbar();
 
   const product = initialData.data.attributes;
 
@@ -24,6 +28,12 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
       ? product.sizes?.data.map(({ attributes }) => attributes.value)
       : [],
   );
+
+  const handleAddToWishlist = () => {
+    const result = addToWishlist(adaptProductToCard(initialData.data));
+
+    showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
+  };
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -113,10 +123,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
               height: '61px',
             }}
           >
-            <Button
-              variant='outline'
-              onClick={() => alert('Added to wishlist!')}
-            >
+            <Button variant='outline' onClick={handleAddToWishlist}>
               Add to Wishlist
             </Button>
             <Button onClick={handleAddToCart}>Add to Bag</Button>

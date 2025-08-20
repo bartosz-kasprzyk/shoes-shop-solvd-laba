@@ -1,11 +1,24 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { ProductCardProps } from '../../../types/index';
 import ProductCard from '..';
 
-jest.mock('../../../../../shared/components/ui/DropDownMenu', () => {
+jest.mock('@/shared/components/ui/DropDownMenu', () => {
   const MockDropDownMenu = () => <div data-testid='dropdown-menu' />;
   MockDropDownMenu.displayName = 'MockDropDownMenu';
   return MockDropDownMenu;
+});
+
+const mockOnAdd = jest.fn();
+const mockOnRemove = jest.fn();
+
+jest.mock('@/shared/components/ui/WishlistButton', () => {
+  const MockWishlistButton = ({ onClick }: any) => (
+    <button data-testid='wishlist-button' onClick={onClick}>
+      Wishlist button
+    </button>
+  );
+  MockWishlistButton.displayName = 'MockWishlistButton';
+  return MockWishlistButton;
 });
 
 const mockCard: ProductCardProps['card'] = {
@@ -17,6 +30,10 @@ const mockCard: ProductCardProps['card'] = {
 };
 
 describe('ProductCard', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders image, name, price, gender, and link', () => {
     render(<ProductCard card={mockCard} />);
 
@@ -30,7 +47,44 @@ describe('ProductCard', () => {
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/product/1');
+  });
 
+  it('renders dropdown menu if variant is dropdown', () => {
+    render(<ProductCard card={mockCard} variant='dropdown' />);
     expect(screen.getByTestId('dropdown-menu')).toBeInTheDocument();
+  });
+
+  it('renders wishlist button if variant is addToWishlist', () => {
+    render(<ProductCard card={mockCard} variant='addToWishlist' />);
+    expect(screen.getByTestId('wishlist-button')).toBeInTheDocument();
+  });
+
+  it('calls addToWishlist when addToWishlist button is pressed', () => {
+    render(
+      <ProductCard
+        card={mockCard}
+        variant='addToWishlist'
+        onClick={mockOnAdd}
+      />,
+    );
+    fireEvent.click(screen.getByTestId('wishlist-button'));
+    expect(mockOnAdd).toHaveBeenCalled();
+  });
+
+  it('renders wishlist button if variant is removeFromWishlist', () => {
+    render(<ProductCard card={mockCard} variant='removeFromWishlist' />);
+    expect(screen.getByTestId('wishlist-button')).toBeInTheDocument();
+  });
+
+  it('calls removeFromWishlist when removeFromWishlist button is pressed', () => {
+    render(
+      <ProductCard
+        card={mockCard}
+        variant='removeFromWishlist'
+        onClick={mockOnRemove}
+      />,
+    );
+    fireEvent.click(screen.getByTestId('wishlist-button'));
+    expect(mockOnRemove).toHaveBeenCalled();
   });
 });

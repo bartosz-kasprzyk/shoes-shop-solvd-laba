@@ -1,6 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductDetails from '..';
 
+const showSnackbarMock = jest.fn();
+
+jest.mock('@/shared/hooks/useSnackbar', () => ({
+  useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
+}));
+
 jest.mock('@/app/not-found', () => {
   const NotFound = () => <div>Error 404</div>;
   NotFound.displayName = 'NotFound';
@@ -22,12 +28,15 @@ const productData = {
       },
       color: { data: { attributes: { name: 'White' } } },
       description: 'Some product description',
+      brand: 'Nike',
+      gender: { data: { id: 1, attributes: { name: 'Men' as const } } },
     },
   },
 };
 
 describe('ProductDetails', () => {
   beforeEach(() => {
+    showSnackbarMock.mockClear();
     window.alert = jest.fn();
   });
 
@@ -40,12 +49,16 @@ describe('ProductDetails', () => {
     expect(screen.getByText('Some product description')).toBeInTheDocument();
   });
 
-  it('shows alert when Add to Wishlist clicked', () => {
+  it('shows snackbar alert when Add to Wishlist clicked', () => {
     render(<ProductDetails initialData={productData} />);
 
     fireEvent.click(screen.getByText('Add to Wishlist'));
 
-    expect(window.alert).toHaveBeenCalledWith('Added to wishlist!');
+    expect(showSnackbarMock).toHaveBeenCalledWith(
+      'Product added to wishlist',
+      'success',
+      5000,
+    );
   });
 
   it('shows warning if Add to Bag clicked without selecting size', () => {

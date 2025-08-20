@@ -1,7 +1,5 @@
+import WishlistPage from '@/features/wishlist/components/WishlistPage';
+
 export default function MyWishlistPage() {
-  return (
-    <div>
-      <h1>My Wishlist works</h1>
-    </div>
-  );
+  return <WishlistPage />;
 }

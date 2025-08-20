@@ -1,6 +1,4 @@
-import type {
-  TextUnderButtonProps,
-} from '@/shared/components/ui/TextUnderButton/TextUnderButton';
+import type { TextUnderButtonProps } from '@/shared/components/ui/TextUnderButton/TextUnderButton';
 import TextUnderButton from '@/shared/components/ui/TextUnderButton/TextUnderButton';
 import { Box, Typography } from '@mui/material';
 
