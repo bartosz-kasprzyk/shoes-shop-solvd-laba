@@ -104,7 +104,11 @@ export default function TopBar() {
               }}
             >
               {/* Desktop logo */}
-              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Box
+                component={Link}
+                href={'/'}
+                sx={{ display: { xs: 'none', sm: 'block' } }}
+              >
                 <CompanyLogoIcon />
               </Box>
 
@@ -112,7 +116,11 @@ export default function TopBar() {
               <Box>
                 <Collapse orientation='horizontal' in={!isSearchBarOpen}>
                   {/* Mobile logo */}
-                  <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                  <Box
+                    component={Link}
+                    href={'/'}
+                    sx={{ display: { xs: 'block', sm: 'none' } }}
+                  >
                     <CompanyLogoIcon />
                   </Box>
 

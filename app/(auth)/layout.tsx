@@ -5,6 +5,7 @@ import type { Testimonial } from '@/features/layout/components/ReviewCarousel/in
 import { Box } from '@mui/material';
 
 import { CompanyLogoIcon } from '@/shared/icons';
+import Link from 'next/link';
 
 const testimonials: Testimonial[] = [
   {
@@ -54,6 +55,8 @@ export default function Layout({
           }}
         >
           <Box
+            component={Link}
+            href={'/'}
             padding={2}
             borderBottom={{
               xs: '1px solid color-mix(in srgb, black 20%, transparent)',
