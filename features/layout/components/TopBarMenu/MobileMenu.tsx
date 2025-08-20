@@ -75,7 +75,13 @@ export default function MobileMenu({ user }: MobileMenuProps) {
                 </IconButton>
               </Box>
               <ScrollableContainer>
-                {user ? <Sidebar /> : <GuestSideBar />}
+                {user ? (
+                  <Box onClick={() => setIsSideBarOpen(false)}>
+                    <Sidebar />
+                  </Box>
+                ) : (
+                  <GuestSideBar />
+                )}
               </ScrollableContainer>
             </Box>
           </Box>
