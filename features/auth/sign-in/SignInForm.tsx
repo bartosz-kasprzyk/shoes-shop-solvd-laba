@@ -54,12 +54,26 @@ export function SignInForm() {
             <FormControlLabel
               control={<Checkbox {...register('remember')} color='primary' />}
               label='Remember me'
+              slotProps={{
+                typography: {
+                  sx: {
+                    transition:
+                      'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
+                    fontSize: { xs: '10px', sm: '12px', lg: '15px' },
+                  },
+                },
+              }}
             />
           </Typography>
           <Link
             underline='hover'
             href='/forgot-password'
             color='var(--color-primary)'
+            sx={{
+              transition:
+                'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
+              fontSize: { xs: '10px', sm: '12px', lg: '15px' },
+            }}
           >
             Forgot password?
           </Link>
