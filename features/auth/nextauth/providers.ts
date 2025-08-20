@@ -20,11 +20,13 @@ export const credentialsProvider = CredentialsProvider({
       headers: { 'Content-Type': 'application/json' },
     });
 
-    if (!loginResponse) {
-      return null;
-    }
-
     const loginData = await loginResponse.json();
+
+    if (!loginResponse.ok || !loginData.jwt) {
+      const errorMessage =
+        loginData?.error?.message || "'Invalid email or password'";
+      throw new Error(errorMessage);
+    }
 
     const profileUrl = `${process.env.SHOES_SHOP_BASE_API}/users/me?populate=avatar`;
     const profileResponse = await fetch(profileUrl, {
@@ -33,8 +35,8 @@ export const credentialsProvider = CredentialsProvider({
       },
     });
 
-    if (!profileResponse) {
-      return null;
+    if (!profileResponse.ok) {
+      throw new Error('Failed to fetch user profile');
     }
 
     const profileData = await profileResponse.json();

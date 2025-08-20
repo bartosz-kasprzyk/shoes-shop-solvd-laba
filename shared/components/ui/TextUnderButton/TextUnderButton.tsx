@@ -1,6 +1,6 @@
 import { Typography, Link } from '@mui/material';
 
-interface TextUnderButtonProps {
+export interface TextUnderButtonProps {
   text?: string;
   linkText: string;
   href: string;

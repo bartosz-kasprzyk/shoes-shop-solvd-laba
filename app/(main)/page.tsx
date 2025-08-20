@@ -37,6 +37,7 @@ function HomePageContent() {
         boxSizing: 'border-box', //important when you add padding or margin
 
         overflowX: 'hidden', // not that important but prevents horizontall scrollbar
+        outline: 'none',
       }}
     >
       {getLongArray(100).map((elem) => (

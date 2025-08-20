@@ -46,7 +46,14 @@ export const ForgotPasswordForm = () => {
         {status === 'loading' ? 'Sending...' : 'Reset password'}
       </Button>
 
-      <Typography textAlign='center'>
+      <Typography
+        textAlign='center'
+        sx={{
+          fontSize: { xs: '10px', sm: '15px' },
+          transition:
+            'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
+        }}
+      >
         <Link underline='hover' color='inherit' href='/sign-in'>
           Back to log in
         </Link>

@@ -14,6 +14,7 @@ export function ProductsContainer({ products, pages }: ProductsContainerProps) {
 
     showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
   };
+
   const items = products ? products : pages.flatMap((page) => page.data);
   return (
     <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
