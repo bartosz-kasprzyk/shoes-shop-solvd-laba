@@ -1,6 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { ProductCardProps } from '../../../types/index';
 import ProductCard from '..';
+import { useSession } from 'next-auth/react';
+
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(),
+}));
+
+(useSession as jest.Mock).mockReturnValue({
+  data: { user: { accessToken: 'fake' } },
+});
 
 jest.mock('@/shared/components/ui/DropDownMenu', () => {
   const MockDropDownMenu = () => <div data-testid='dropdown-menu' />;
@@ -84,7 +93,9 @@ describe('ProductCard', () => {
         onClick={mockOnRemove}
       />,
     );
+
     fireEvent.click(screen.getByTestId('wishlist-button'));
+
     expect(mockOnRemove).toHaveBeenCalled();
   });
 });

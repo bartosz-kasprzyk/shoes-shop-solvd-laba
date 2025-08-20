@@ -11,11 +11,14 @@ import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyV
 import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
+import { useSession } from 'next-auth/react';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
   const { showSnackbar } = useSnackbar();
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user?.accessToken;
 
   const product = initialData.data.attributes;
 
@@ -30,8 +33,12 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
   );
 
   const handleAddToWishlist = () => {
-    const result = addToWishlist(adaptProductToCard(initialData.data));
+    if (!isAuthenticated) {
+      showSnackbar('You need to be logged in', 'warning', 5000);
+      return;
+    }
 
+    const result = addToWishlist(adaptProductToCard(initialData.data));
     showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
   };
 

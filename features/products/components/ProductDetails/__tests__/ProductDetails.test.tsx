@@ -1,5 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductDetails from '..';
+import { useSession } from 'next-auth/react';
+
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(),
+}));
+
+(useSession as jest.Mock).mockReturnValue({
+  data: { user: { accessToken: 'fake' } },
+});
 
 const showSnackbarMock = jest.fn();
 
@@ -38,6 +47,7 @@ describe('ProductDetails', () => {
   beforeEach(() => {
     showSnackbarMock.mockClear();
     window.alert = jest.fn();
+    localStorage.clear();
   });
 
   it('renders product info', () => {
@@ -49,9 +59,8 @@ describe('ProductDetails', () => {
     expect(screen.getByText('Some product description')).toBeInTheDocument();
   });
 
-  it('shows snackbar alert when Add to Wishlist clicked', () => {
+  it('adds product to wishlist when authenticated', () => {
     render(<ProductDetails initialData={productData} />);
-
     fireEvent.click(screen.getByText('Add to Wishlist'));
 
     expect(showSnackbarMock).toHaveBeenCalledWith(
