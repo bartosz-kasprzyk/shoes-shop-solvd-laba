@@ -62,9 +62,9 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ### 🔍 Shared Layer
 
-- `shared/components` — used in multiple features or pages (e.g. `ReviewCarousel`, `CardsContainer`, `ProductCard`)
-- `shared/ui` — atomic UI elements (Button, Input, Dropdown, etc.)
-- `shared/icons` — icon components exported via a central `index.ts`
+- `shared/components` — used in multiple features or pages (e.g. `ReviewCarousel`, `CardsContainer`, `ProductCard`).
+- `shared/ui` — atomic UI elements (Button, Input, Dropdown, etc.).
+- `shared/icons` — icon components exported via a central `index.ts`.
 
 ### 🔺 Component Naming and Grouping
 
