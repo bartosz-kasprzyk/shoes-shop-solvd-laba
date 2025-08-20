@@ -22,7 +22,7 @@ export default function UserProfile() {
         gap: 3,
       }}
     >
-      <IconButton href='/profile'>
+      <IconButton href='/settings'>
         <Avatar
           src={user?.avatar}
           alt={user?.name || 'User'}
