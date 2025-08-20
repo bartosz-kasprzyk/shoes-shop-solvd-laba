@@ -91,7 +91,10 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
                 display: 'block',
               }}
             >
-              {`$${product.price}`}
+              {`${new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(product.price)}`}
             </Typography>
           </Box>
           <Typography

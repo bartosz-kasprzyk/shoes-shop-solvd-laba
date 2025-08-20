@@ -84,7 +84,10 @@ export default function ProductCard({
               fontWeight={500}
               sx={{ ml: 'auto' }}
             >
-              {price}
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(price)}
             </Typography>
           </Box>
           <Typography

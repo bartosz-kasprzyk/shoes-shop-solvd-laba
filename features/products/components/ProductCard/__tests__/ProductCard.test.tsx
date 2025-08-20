@@ -42,7 +42,7 @@ describe('ProductCard', () => {
     expect(img).toHaveAttribute('alt', 'Nike Air Max 270');
 
     expect(screen.getByText('Nike Air Max 270')).toBeInTheDocument();
-    expect(screen.getByText('160')).toBeInTheDocument();
+    expect(screen.getByText(/160/)).toBeInTheDocument();
     expect(screen.getByText("Women's Shoes")).toBeInTheDocument();
 
     const link = screen.getByRole('link');

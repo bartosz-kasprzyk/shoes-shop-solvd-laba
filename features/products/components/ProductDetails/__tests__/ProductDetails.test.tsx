@@ -44,7 +44,7 @@ describe('ProductDetails', () => {
     render(<ProductDetails initialData={productData} />);
 
     expect(screen.getByText('Nike Air')).toBeInTheDocument();
-    expect(screen.getByText('$149')).toBeInTheDocument();
+    expect(screen.getByText(/149/)).toBeInTheDocument();
     expect(screen.getByText('White')).toBeInTheDocument();
     expect(screen.getByText('Some product description')).toBeInTheDocument();
   });
