@@ -23,7 +23,6 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  jest.clearAllMocks();
   (useProfile as jest.Mock).mockReturnValue({
     profile: mockProfile,
     onSubmit: mockOnSubmit,
