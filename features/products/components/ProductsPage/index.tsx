@@ -1,16 +1,15 @@
 'use client';
-import { Box, CircularProgress, Grid, Slide, Typography } from '@mui/material';
+import { Box, CircularProgress, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
-import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
-import ProductCard from '../ProductCard';
 import useProductsCountStore from '@/features/filter/stores/productCount';
+import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -29,6 +28,8 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const { ref, inView } = useInView({
     rootMargin: '1000px',
   });
+
+  const { handleAddToWishlist } = useAddToWishlist();
 
   const { setAllFilterValues } = useFilterStore();
   const { setValue } = useProductsCountStore();
@@ -60,7 +61,11 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     );
   return (
     <Box px={2}>
-      <ProductsContainer pages={data.pages} withOverlay={true} />
+      <ProductsContainer
+        variant='addToWishlist'
+        onProductAction={handleAddToWishlist}
+        pages={data.pages}
+      />
       <div ref={ref}></div>
       <Slide direction='up' in={isFetchingNextPage}>
         <Box display={'flex'} p={10} justifyContent={'center'}>

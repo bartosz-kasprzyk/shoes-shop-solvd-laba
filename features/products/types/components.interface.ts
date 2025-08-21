@@ -18,5 +18,17 @@ export interface ProductDetailsProps {
 }
 
 export type ProductsContainerProps =
-  | { products: Product[]; pages?: never; withOverlay?: boolean }
-  | { products?: never; pages: { data: Product[] }[]; withOverlay?: boolean };
+  | {
+      products: Product[];
+      pages?: never;
+      variant?: 'dropdown' | 'addToWishlist' | 'removeFromWishlist';
+      onProductAction?: (product: Product) => void;
+      isCard?: boolean;
+    }
+  | {
+      products?: never;
+      pages: { data: Product[] }[];
+      variant?: 'dropdown' | 'addToWishlist' | 'removeFromWishlist';
+      onProductAction?: (product: Product) => void;
+      isCard?: boolean;
+    };
