@@ -50,7 +50,7 @@ export default function TopBarSearch({
           boxSizing: 'border-box',
           position: 'relative',
           maxWidth: '100%',
-          width: !isExpanded ? { xs: '0px', md: '20ch' } : '100%',
+          width: !isExpanded ? { xs: '0px', md: '25ch' } : '100%',
           transition: 'width 300ms ease-in-out',
         }}
       >
