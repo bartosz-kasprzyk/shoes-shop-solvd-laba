@@ -6,6 +6,7 @@ import {
   Link,
   Checkbox,
   FormControlLabel,
+  Fade,
 } from '@mui/material';
 import { Input, Button } from '@/shared/components/ui';
 import { useForm } from 'react-hook-form';
@@ -23,11 +24,11 @@ export function SignInForm() {
     resolver: zodResolver(signInSchema),
   });
 
-  const { signInUser, serverError } = useSignIn();
+  const { signInUser, serverError, success } = useSignIn();
 
   return (
     <form onSubmit={handleSubmit(signInUser)}>
-      <Box gap={1} display='flex' flexDirection='column' mb={4}>
+      <Box display='flex' flexDirection='column' mb={2}>
         <Input
           title='Email'
           id='email'
@@ -80,15 +81,26 @@ export function SignInForm() {
         </Box>
       </Box>
 
-      {serverError && (
-        <Typography color='error' mb={2} role='alert'>
-          {serverError}
+      <Box>
+        <Typography
+          position={'absolute'}
+          sx={{ lineHeight: '1em' }}
+          color='error'
+          height={'line'}
+          role={serverError ? 'alert' : undefined}
+        >
+          {serverError && !success ? serverError : '\u00A0'}
         </Typography>
-      )}
+        <Fade in={success}>
+          <Typography textAlign='center' color='success.main'>
+            Success! Redirecting...
+          </Typography>
+        </Fade>
+      </Box>
 
       <Button
         type='submit'
-        sx={{ width: '100%', mb: 1 }}
+        sx={{ width: '100%', my: 1 }}
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Signing in...' : 'Sign in'}

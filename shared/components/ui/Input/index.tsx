@@ -26,7 +26,7 @@ export default function Input({
         id={id}
         variant='outlined'
         error={error}
-        helperText={error ? helperText : ''}
+        helperText={error ? helperText : ' '}
         multiline={isMultiline}
         rows={props.rows}
         slotProps={{

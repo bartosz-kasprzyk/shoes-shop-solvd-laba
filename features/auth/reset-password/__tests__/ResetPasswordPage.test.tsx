@@ -29,24 +29,6 @@ describe('Reset Password Page', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows error on invalid link', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      json: () => ({ error: { message: 'Invalid code' } }),
-    });
-
-    render(<ResetPasswordPage />);
-    fireEvent.change(screen.getByLabelText(/^password$/i), {
-      target: { value: '12345678' },
-    });
-    fireEvent.change(screen.getByLabelText(/confirm password/i), {
-      target: { value: '12345678' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
-
-    expect(await screen.findByText(/invalid code/i)).toBeInTheDocument();
-  });
-
   it('shows success message and redirect', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -98,26 +80,7 @@ describe('Reset Password Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
 
     expect(
-      await screen.findByText(/something went wrong. please try again./i),
+      await screen.findByText(/something went wrong/i),
     ).toBeInTheDocument();
-  });
-
-  it('shows a generic error if the server error format is unexpected', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      json: () => Promise.resolve({}),
-    });
-
-    render(<ResetPasswordPage />);
-
-    fireEvent.change(screen.getByLabelText(/^password$/i), {
-      target: { value: '123456123456' },
-    });
-    fireEvent.change(screen.getByLabelText(/confirm password/i), {
-      target: { value: '123456123456' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
-
-    expect(await screen.findByText(/reset failed/i)).toBeInTheDocument();
   });
 });

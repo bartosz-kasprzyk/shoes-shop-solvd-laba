@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography, Collapse, Link } from '@mui/material';
+import { Box, Typography, Collapse, Link, Fade } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from '@/shared/components/ui';
@@ -18,10 +18,10 @@ export const ResetPasswordForm = () => {
   });
 
   const { resetPassword, status, serverError } = useResetPassword();
-
+  const success = status === 'success';
   return (
     <form onSubmit={handleSubmit(resetPassword)}>
-      <Box mb={1} display='flex' flexDirection='column' gap={2}>
+      <Box display='flex' flexDirection='column'>
         <Input
           title='Password'
           id='password'
@@ -44,12 +44,25 @@ export const ResetPasswordForm = () => {
         />
       </Box>
 
-      <Collapse in={status === 'success'}>
-        <Typography textAlign='center' color='success.main'>
-          Password reset! Redirecting...
+      <Box>
+        <Typography
+          position={'absolute'}
+          sx={{ lineHeight: '1em' }}
+          color='error'
+          mb={2}
+          height={'line'}
+          role={serverError ? 'alert' : undefined}
+        >
+          {serverError && !success
+            ? 'Something went wrong. Try again later.'
+            : '\u00A0'}
         </Typography>
-      </Collapse>
-      {serverError && <Typography color='error'>{serverError}</Typography>}
+        <Fade in={success}>
+          <Typography textAlign='center' color='success.main'>
+            Password reset! Redirecting...
+          </Typography>
+        </Fade>
+      </Box>
 
       <Button sx={{ my: 2, width: '100%' }} type='submit'>
         {status === 'loading' ? 'Resetting...' : 'Reset password'}

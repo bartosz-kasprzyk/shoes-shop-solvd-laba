@@ -7,11 +7,12 @@ import type { SignInFormData } from './signIn.schema';
 export const useSignIn = (): {
   signInUser: (data: SignInFormData) => Promise<boolean>;
   serverError: string;
+  success: boolean;
 } => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [serverError, setServerError] = useState('');
-
+  const [success, setSuccess] = useState<boolean>(false);
   const signInUser = async (data: SignInFormData) => {
     setServerError('');
 
@@ -29,6 +30,7 @@ export const useSignIn = (): {
       setServerError('Invalid email or password.');
       return false;
     } else {
+      setSuccess(true);
       // Use the NextAuth response URL or fall back to the callback URL or products page
       const redirectUrl = res?.url || callbackUrl || '/products';
       router.push(redirectUrl);
@@ -36,5 +38,5 @@ export const useSignIn = (): {
     }
   };
 
-  return { signInUser, serverError };
+  return { signInUser, serverError, success };
 };
