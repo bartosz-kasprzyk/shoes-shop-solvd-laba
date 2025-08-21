@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Typography, Collapse, Link } from '@mui/material';
+import { Box, Typography, Link, Fade } from '@mui/material';
 import { Input, Button } from '@/shared/components/ui';
 
 import type { ForgotPasswordFormData } from './forgotPassword.schema';
@@ -19,10 +19,10 @@ export const ForgotPasswordForm = () => {
   });
 
   const { requestReset, status, serverError } = useForgotPassword();
-
+  const success = status === 'sent';
   return (
     <form onSubmit={handleSubmit(requestReset)}>
-      <Box mb={1}>
+      <Box>
         <Input
           title='Email'
           id='email'
@@ -34,13 +34,22 @@ export const ForgotPasswordForm = () => {
         />
       </Box>
 
-      <Collapse in={status === 'sent'}>
-        <Typography textAlign='center' color='success.main'>
-          Email sent. Check your inbox!
+      <Box>
+        <Typography
+          position={'absolute'}
+          sx={{ lineHeight: '1em' }}
+          color='error'
+          height={'line'}
+          role='alert'
+        >
+          {serverError && !success ? serverError : '\u00A0'}
         </Typography>
-      </Collapse>
-
-      {serverError && <Typography color='error'>{serverError}</Typography>}
+        <Fade in={success}>
+          <Typography textAlign='center' color='success.main'>
+            Email sent. Check your inbox!
+          </Typography>
+        </Fade>
+      </Box>
 
       <Button sx={{ my: 2, width: '100%' }} type='submit'>
         {status === 'loading' ? 'Sending...' : 'Reset password'}

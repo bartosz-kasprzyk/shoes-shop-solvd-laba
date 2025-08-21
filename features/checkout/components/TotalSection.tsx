@@ -1,8 +1,9 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
+import type { TotalSectionProps } from './TotalSection.interface';
 
-export default function TotalSection({ total }: { total: number }) {
+export default function TotalSection({ total }: TotalSectionProps) {
   return (
     <Box
       paddingY={2}

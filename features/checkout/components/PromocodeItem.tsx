@@ -1,16 +1,13 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
-
-import type { promocode } from './CartSummary/interface';
 import { Button } from '@/shared/components/ui';
+import type { PromocodeItemProps } from './PromocodeItem.interface';
 
-interface Props {
-  promocode: promocode;
-  onRemove: (code: string) => void;
-}
-
-export default function PromocodeItem({ promocode, onRemove }: Props) {
+export default function PromocodeItem({
+  promocode,
+  onRemove,
+}: PromocodeItemProps) {
   return (
     <Box
       display='flex'

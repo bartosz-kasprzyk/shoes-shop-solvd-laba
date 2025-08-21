@@ -2,6 +2,8 @@ import { authOptions } from '@/features/auth/nextauth/authOptions';
 import UserSideBar from '@/features/layout/components/UserSideBar';
 import ServerSessionProvider from '@/shared/providers/ServerSessionProvider';
 import { Box } from '@mui/material';
+import { headers } from 'next/headers';
+
 import { getServerSession } from 'next-auth';
 
 export default async function ProtectedLayout({
@@ -9,6 +11,11 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+
+  const shouldHideSidebar =
+    pathname.includes('/cart') || pathname.includes('/checkout');
   const session = await getServerSession(authOptions);
 
   return (
@@ -20,13 +27,15 @@ export default async function ProtectedLayout({
         flexDirection: 'row',
       }}
     >
-      <Box
-        width={'40%'}
-        maxWidth={'320px'}
-        sx={{ display: { xs: 'none', md: 'block' } }}
-      >
-        <UserSideBar />
-      </Box>
+      {!shouldHideSidebar && (
+        <Box
+          width={'40%'}
+          maxWidth={'320px'}
+          sx={{ display: { xs: 'none', md: 'block' } }}
+        >
+          <UserSideBar />
+        </Box>
+      )}
       <Box height={'100%'} width={'100%'} overflow={'hidden'}>
         <ServerSessionProvider session={session}>
           {children}

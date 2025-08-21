@@ -202,7 +202,7 @@ export default function TopBar() {
             </Box>
 
             {/* Right section: cart, menu and close button */}
-            <Box display='flex' width='auto'>
+            <Box display='flex' width='auto' ml={1}>
               <Box display='flex' overflow='hidden' width='auto'>
                 {/* Cart and menu visible when search bar is closed */}
                 <Collapse

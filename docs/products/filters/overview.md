@@ -1,7 +1,9 @@
 # Overview
+
 Overview of filters.
 
 ## Filter representation
+
 ```mermaid
 classDiagram
     class FilterType {
@@ -29,10 +31,12 @@ classDiagram
     Filter --> FilterType : key
     Filter --> FilterValue : value[]
 ```
+
 A **Filter** is a flexible structure that can hold multiple fields, each identified by a FilterType.
 The available filter types are: search, price, gender, brand, color, size, category.
 
 Each filter field stores a list of FilterValue objects shaped as:
+
 ```
 {
   id?: number;
@@ -73,9 +77,9 @@ It provides a consistent API for **adding, removing, toggling, resetting, and se
   Removes a specific filter value by its `slug`.
 
 - **`toggleFilterValue(type, value, maxSelections?)`**  
-  Toggles a filter value on/off.  
-  - If `maxSelections` is set to `1`, it ensures only one active value per type.  
-  - If `maxSelections` > 1, it enforces a maximum number of selected values.  
+  Toggles a filter value on/off.
+  - If `maxSelections` is set to `1`, it ensures only one active value per type.
+  - If `maxSelections` > 1, it enforces a maximum number of selected values.
 
 - **`setFilterValues(type, values)`**  
   Replaces all values for a specific filter type.
@@ -85,7 +89,7 @@ It provides a consistent API for **adding, removing, toggling, resetting, and se
 
 - **`applyFilters()`**  
   Serializes the active filters into a clean **URL path**.  
-  Example:  
+  Example:
 
   ```ts
   /products/gender:men/color:red-blue/brand:nike
@@ -99,6 +103,7 @@ The main idea is to reuse as much logic as possible across filter sections, whil
 ---
 
 ### Grouping
+
 Filters were divided into two main groups based on their logic:
 
 - **Group 1:** `Gender`, `Size`, `Brand`, `Color`, `Category`  
@@ -113,36 +118,36 @@ Filters were divided into two main groups based on their logic:
 
 All Group 1 filters are built inside the **`FilterSideBar`** and wrapped by reusable components:
 
-- **`FilterSection`**  
-  - A wrapper with shared logic for Group 1.  
-  - Provides its own **context** to avoid prop drilling.  
-  - The context exposes:  
-    - `filterType`  
-    - `filterValues`  
-    - `areFiltersUsed`  
-    - `filterCountByValue`  
-    - `maxSelections`  
+- **`FilterSection`**
+  - A wrapper with shared logic for Group 1.
+  - Provides its own **context** to avoid prop drilling.
+  - The context exposes:
+    - `filterType`
+    - `filterValues`
+    - `areFiltersUsed`
+    - `filterCountByValue`
+    - `maxSelections`
   - Child components can consume these values directly without passing props down manually.
 
 - **`FilterSectionDropdown`**  
   A wrapper that displays the section as a dropdown.
 
 - **`FilterContainer`**  
-  Two interchangeable components:  
-  - **Grid layout**  
+  Two interchangeable components:
+  - **Grid layout**
   - **List layout**  
-  Both can be modularly injected into `FilterSection` via props.
+    Both can be modularly injected into `FilterSection` via props.
 
 - **`FilterItem`**  
-  Two variants depending on the filter type:  
-  - **Tile component** for `Size`  
+  Two variants depending on the filter type:
+  - **Tile component** for `Size`
   - **List item component** for the rest (Gender, Brand, Color, Category)
 
 - **`SearchWrapper`**  
-  A higher-order component (HOC) that:  
-  - Adds search logic  
-  - Limits the visible list to ~6 items  
-  - Provides its own **context**, consumed by child `CheckboxItem`s  
+  A higher-order component (HOC) that:
+  - Adds search logic
+  - Limits the visible list to ~6 items
+  - Provides its own **context**, consumed by child `CheckboxItem`s
   - If used outside its context, it falls back to values provided by the `FilterSection`.
 
 ---
@@ -157,7 +162,7 @@ All Group 1 filters are built inside the **`FilterSideBar`** and wrapped by reus
 
 ### Why this structure?
 
-- **Semi-modular** → avoids a fully fragmented design while still encouraging reuse.  
-- **DRY principle** → prevents code duplication across similar filters.  
-- **Context-driven** → eliminates prop drilling and makes components easier to plug and play.  
-- **Maintainability** → easier to extend or adjust logic per filter type without touching unrelated parts.  
+- **Semi-modular** → avoids a fully fragmented design while still encouraging reuse.
+- **DRY principle** → prevents code duplication across similar filters.
+- **Context-driven** → eliminates prop drilling and makes components easier to plug and play.
+- **Maintainability** → easier to extend or adjust logic per filter type without touching unrelated parts.

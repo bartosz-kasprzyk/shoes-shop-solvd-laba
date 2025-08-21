@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Typography, Collapse } from '@mui/material';
+import { Box, Typography, Fade } from '@mui/material';
 import { Button, Input } from '@/shared/components/ui';
 import type { SignUpFormData } from './signUp.schema';
 import { signUpSchema } from './signUp.schema';
@@ -21,7 +21,7 @@ export const SignUpForm = () => {
 
   return (
     <form onSubmit={handleSubmit(registerUser)}>
-      <Box gap={1} display='flex' flexDirection='column' mb={7}>
+      <Box display='flex' flexDirection='column' mb={4}>
         <Input
           required
           title='Name'
@@ -61,17 +61,27 @@ export const SignUpForm = () => {
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
         />
-
-        {serverError && <Typography color='error'>{serverError}</Typography>}
-        <Collapse in={success}>
-          <Typography textAlign='center' color='success.main'>
-            Success! Redirecting...
+        <Box>
+          <Typography
+            position={'absolute'}
+            sx={{ lineHeight: '1em' }}
+            color='error'
+            mb={2}
+            height={'line'}
+            role='alert'
+          >
+            {!!serverError && !success ? serverError : '\u00A0'}
           </Typography>
-        </Collapse>
+          <Fade in={success}>
+            <Typography textAlign='center' color='success.main'>
+              Success! Redirecting...
+            </Typography>
+          </Fade>
+        </Box>
       </Box>
       <Button
         type='submit'
-        sx={{ width: '100%', mt: 2 }}
+        sx={{ width: '100%', mt: 0 }}
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Creating...' : 'Sign up'}

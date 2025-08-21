@@ -41,8 +41,9 @@ export default function CartSummary(props: BoxProps) {
       fontSize={{ xs: 20, sm: 20, lg: 30 }}
     >
       <Typography
+        variant='h4'
         marginBottom='30px'
-        fontSize='1.5em'
+        fontSize={{ xs: '24px', md: '32px' }}
         paddingY={1}
         fontWeight={500}
         borderTop={{
