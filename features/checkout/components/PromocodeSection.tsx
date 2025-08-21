@@ -9,20 +9,14 @@ import PromocodeItem from './PromocodeItem';
 import type { promocode } from './CartSummary/interface';
 import { Button, Input } from '@/shared/components/ui';
 import { DropdownArrowIcon } from '@/shared/icons';
-
-interface Props {
-  promocodes: promocode[];
-  setPromocodes: React.Dispatch<React.SetStateAction<promocode[]>>;
-  validPromocodes: promocode[];
-  handleDeletePromocode: (code: string) => void;
-}
+import type { PromocodeSectionProps } from './PromocodeSection.interface';
 
 export default function PromocodeSection({
   promocodes,
   setPromocodes,
   validPromocodes,
   handleDeletePromocode,
-}: Props) {
+}: PromocodeSectionProps) {
   const [arePromocodesOpened, setArePromocodesOpened] = useState(false);
   const [inputPromocode, setInputPromocode] = useState('');
   const [isInputError, setIsInputError] = useState(false);

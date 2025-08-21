@@ -14,6 +14,7 @@ const protectedRoutes = [
   // other
   '/cart',
   '/checkout',
+  '/cart',
 ];
 
 const authRoutes = [
@@ -64,7 +65,11 @@ export default withAuth(
       return NextResponse.redirect(signInUrl);
     }
 
-    return NextResponse.next();
+    // Add the pathname to headers for server components
+    const response = NextResponse.next();
+    response.headers.set('x-pathname', pathname);
+
+    return response;
   },
   {
     callbacks: {

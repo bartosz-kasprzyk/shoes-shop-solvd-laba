@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-import type { Card } from '../../ProductCard/interface';
 import CardsContainer from '..';
+import type { Card } from '@/features/products/types';
 
 jest.mock('../../ProductCard', () => {
   const MockProductCard = ({ card }: any) => (
