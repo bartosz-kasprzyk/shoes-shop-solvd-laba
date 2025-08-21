@@ -1,16 +1,15 @@
 'use client';
-import { Box, CircularProgress, Grid, Slide, Typography } from '@mui/material';
+import { Box, CircularProgress, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
-import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
-import ProductCard from '../ProductCard';
 import useProductsCountStore from '@/features/filter/stores/productCount';
+import EmptyState from '../EmptyState';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -56,6 +55,15 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
         <Typography variant='h6' color='error'>
           Something went wrong...
         </Typography>
+      </>
+    );
+  if (!data?.pages[0]?.total)
+    return (
+      <>
+        <EmptyState
+          text='There are no products match search'
+          subText='Try to apply diffrent filters.'
+        />
       </>
     );
   return (
