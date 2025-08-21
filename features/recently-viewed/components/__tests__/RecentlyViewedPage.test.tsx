@@ -22,6 +22,12 @@ jest.mock('next-auth/react', () => ({
   }),
 }));
 
+const showSnackbarMock = jest.fn();
+
+jest.mock('@/shared/hooks/useSnackbar', () => ({
+  useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
+}));
+
 describe('RecentlyViewedPageClient', () => {
   it('renders products from localStorage', () => {
     const products: Product[] = [

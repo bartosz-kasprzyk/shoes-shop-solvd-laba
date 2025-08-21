@@ -88,7 +88,7 @@ describe('WishlistPage', () => {
 
     expect(removeFromWishlistMock).toHaveBeenCalledWith(1);
     expect(showSnackbarMock).toHaveBeenCalledWith(
-      'Product removed from wishlist!',
+      'Product removed from wishlist',
       'warning',
       5000,
     );

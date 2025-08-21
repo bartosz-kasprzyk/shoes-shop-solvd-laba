@@ -32,7 +32,7 @@ export default function WishlistPage() {
       setWishlist([]);
     }
 
-    showSnackbar('Product removed from wishlist!', 'warning', 5000);
+    showSnackbar('Product removed from wishlist', 'warning', 5000);
   };
 
   if (wishlist.length === 0) {
