@@ -3,35 +3,45 @@ export interface ImagesData {
   attributes: { url: string };
 }
 
-interface Images {
-  data: ImagesData[];
-}
+// interface Images {
+//   data: ImagesData[];
+// }
 
-interface SizeData {
-  id: number;
-  attributes: { value: number };
-}
+// interface SizeData {
+//   id: number;
+//   attributes: { value: number };
+// }
 
-interface Sizes {
-  data: SizeData[] | null;
+// interface Sizes {
+//   data: SizeData[] | null;
+// }
+export interface ServerEntity<T> {
+  data: {
+    id: number;
+    attributes: T;
+  };
 }
 
 export interface ProductData {
   id: number;
   attributes: {
     name: string;
-    images: Images;
-    price: number;
-    color: { data: { attributes: { name: string } } | null };
-    sizes: Sizes;
     description: string;
-    gender: {
+    brand: ServerEntity<{ name: string }>;
+    categories: { data: { id: number; attributes: { name: string } }[] };
+    color: ServerEntity<{ name: string }>;
+    gender: ServerEntity<{ name: string }>;
+    sizes: { data: { id: number; attributes: { value: number } }[] };
+    price: number;
+    userID: string;
+    teamName: string;
+    images: {
       data: {
         id: number;
         attributes: {
-          name: 'Men' | 'Women';
+          url: string;
         };
-      };
+      }[];
     };
   };
 }

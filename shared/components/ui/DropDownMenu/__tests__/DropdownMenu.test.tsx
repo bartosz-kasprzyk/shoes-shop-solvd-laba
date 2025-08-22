@@ -58,7 +58,6 @@ describe('DropDownMenu', () => {
 
     expect(screen.getByText('View')).toBeInTheDocument();
     expect(screen.getByText('Edit')).toBeInTheDocument();
-    expect(screen.getByText('Duplicate')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
   });
 
@@ -69,17 +68,17 @@ describe('DropDownMenu', () => {
     expect(push).toHaveBeenCalledWith('/product/1');
   });
 
-  it('logs action for Edit and Duplicate', () => {
-    renderComponent();
-    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+  // it('logs action for Edit and Duplicate', () => {
+  //   renderComponent();
+  //   fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
 
-    fireEvent.click(screen.getByText('Edit'));
-    expect(console.log).toHaveBeenCalledWith('Edit clicked');
+  //   fireEvent.click(screen.getByText('Edit'));
+  //   expect(console.log).toHaveBeenCalledWith('Edit clicked');
 
-    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-    fireEvent.click(screen.getByText('Duplicate'));
-    expect(console.log).toHaveBeenCalledWith('Duplicate clicked');
-  });
+  //   fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+  //   fireEvent.click(screen.getByText('Duplicate'));
+  //   expect(console.log).toHaveBeenCalledWith('Duplicate clicked');
+  // });
 
   it('opens DeleteConfirmationModal when Delete is clicked', () => {
     renderComponent();

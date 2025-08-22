@@ -10,10 +10,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useUser from '@/shared/hooks/useUser';
 import { deleteProduct } from '@/app/api/products';
 import { DropdownDotsIcon } from '@/shared/icons';
+import EditProductModal from '@/features/products/components/EditProductModal';
 
 export default function DropDownMenu({ id }: { id: number }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
   const { session } = useUser();
@@ -29,7 +31,7 @@ export default function DropDownMenu({ id }: { id: number }) {
           query.queryKey[1] === session?.user.id,
       });
 
-      setIsModalOpen(false);
+      setIsDeleteModalOpen(false);
     },
   });
 
@@ -40,11 +42,6 @@ export default function DropDownMenu({ id }: { id: number }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleAction = (action: string) => {
-    console.log(`${action} clicked`);
-    handleClose();
   };
 
   const handleDeleteProduct = () => {
@@ -90,19 +87,29 @@ export default function DropDownMenu({ id }: { id: number }) {
         disableScrollLock
       >
         <MenuItem onClick={() => router.push(`/product/${id}`)}>View</MenuItem>
-        <MenuItem onClick={() => handleAction('Edit')}>Edit</MenuItem>
-        <MenuItem onClick={() => handleAction('Duplicate')}>Duplicate</MenuItem>
-        <MenuItem onClick={() => setIsModalOpen(true)}>Delete</MenuItem>
+        <MenuItem onClick={() => setIsEditModalOpen(true)}>Edit</MenuItem>
+        {/* <MenuItem onClick={() => handleAction('Duplicate')}>Duplicate</MenuItem> */}
+        <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Delete</MenuItem>
       </Menu>
-      {isModalOpen &&
+      {isDeleteModalOpen &&
         typeof window !== 'undefined' &&
         createPortal(
           <DeleteConfirmationModal
             isOpen={true}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => setIsDeleteModalOpen(false)}
             onDelete={handleDeleteProduct}
             header='Are you sure to delete selected item '
             text='Lorem ipsum dolor sit amet consectetur. Sed imperdiet tempor facilisi massa aliquet sit habitant. Lorem ipsum dolor sit amet consectetur. '
+          />,
+          document.body,
+        )}
+      {isEditModalOpen &&
+        typeof window !== 'undefined' &&
+        createPortal(
+          <EditProductModal
+            isOpen={true}
+            onClose={() => setIsEditModalOpen(false)}
+            productId={id}
           />,
           document.body,
         )}

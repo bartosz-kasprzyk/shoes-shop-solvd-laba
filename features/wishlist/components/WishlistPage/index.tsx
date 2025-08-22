@@ -10,6 +10,7 @@ import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import type { Product } from '@/shared/interfaces/Product';
+import type { ProductFromServer } from '@/features/products/types/components.interface';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<Product[]>([]);
@@ -22,7 +23,7 @@ export default function WishlistPage() {
     }
   }, []);
 
-  const handleRemoveFromWishlist = (product: Product) => {
+  const handleRemoveFromWishlist = (product: Product | ProductFromServer) => {
     removeFromWishlist(product.id);
 
     const saved = localStorage.getItem('wishlist');

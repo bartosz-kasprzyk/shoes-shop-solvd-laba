@@ -4,22 +4,14 @@ import { ScrollableContainer } from '@/features/layout/components/ScrollableCont
 import EmptyStateForMuProducts from '@/features/products/components/EmptyStateForMuProducts';
 import useUser from '@/shared/hooks/useUser';
 import { useQuery } from '@tanstack/react-query';
-import { fetchProducts } from '@/app/api/products';
+import { fetchMyProducts } from '@/app/api/products';
 import { Typography, Box, Avatar } from '@mui/material';
-import { useEffect, useState } from 'react';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import { Button } from '@/shared/components/ui';
 import Link from 'next/link';
 
 export default function MyProductsPage() {
-  const [userName, setUserName] = useState<string | null | undefined>('');
   const { session, isLoading } = useUser();
-
-  useEffect(() => {
-    if (session?.user) {
-      setUserName(session.user.name);
-    }
-  }, [session?.user]);
 
   const user = session?.user
     ? {
@@ -33,7 +25,7 @@ export default function MyProductsPage() {
 
   const { data, isLoading: isProductsLoading } = useQuery({
     queryKey: ['myProducts', id],
-    queryFn: () => fetchProducts(token, id),
+    queryFn: () => fetchMyProducts(token, id),
     enabled: !!token && !!id,
   });
 
@@ -65,6 +57,8 @@ export default function MyProductsPage() {
             }}
           >
             <Avatar
+              src={user?.avatar || undefined}
+              alt={user?.name || 'User'}
               sx={{
                 width: { xs: 60, lg: 120 },
                 height: { xs: 60, lg: 120 },
@@ -83,7 +77,7 @@ export default function MyProductsPage() {
                   fontSize: { xs: 16, lg: 22 },
                 }}
               >
-                {userName}
+                {user?.name}
               </Typography>
               <Typography
                 variant='body2'

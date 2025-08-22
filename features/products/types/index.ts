@@ -5,16 +5,26 @@ import type { Product } from '@/shared/interfaces/Product';
 export type ProductSchemaType = z.infer<typeof productSchema>;
 
 import type { Dispatch, SetStateAction, ChangeEvent } from 'react';
+import type { ProductFromServer } from './components.interface';
+// import type { ProductData } from './shared.interface';
 
 export interface ImageData {
-  file: File;
+  file?: File;
   preview: string;
+  id?: number;
 }
 
 export interface AddProductFormProps {
   images: ImageData[];
   setImagesError: Dispatch<SetStateAction<string>>;
   setImages: Dispatch<SetStateAction<ImageData[]>>;
+  mode: 'create' | 'update';
+  // initialData?: Product;
+  initialData?: ProductFromServer;
+  formId: string;
+  onLoadingChange: (pending: boolean) => void;
+  productId?: number;
+  onClose?: () => void;
 }
 
 export interface DeleteModalProps {
@@ -23,6 +33,12 @@ export interface DeleteModalProps {
   onDelete: () => void;
   header: string;
   text: string;
+}
+
+export interface EditModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  productId: number;
 }
 
 export interface Card {
@@ -64,9 +80,11 @@ export interface UploadedImageCardProps {
 
 type ImageFile = {
   file: File;
+  id: number;
 };
 
 export interface CreateProductDataProps {
+  productID?: number;
   token: string;
   name: string;
   price: number;
@@ -96,8 +114,9 @@ export interface ProductResponseProps {
   attributes: ProductAttributesProps;
 }
 
-export type FetchProductsResponse = {
-  data: Product[];
+export type FetchMyProductsResponse = {
+  data: ProductFromServer[];
+  // data: ProductData[];
   meta: any;
 };
 

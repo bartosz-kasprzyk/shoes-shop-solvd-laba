@@ -1,4 +1,8 @@
-import type { ImagesData, ProductApiResponse } from './shared.interface';
+import type {
+  ImagesData,
+  ProductApiResponse,
+  // ProductData,
+} from './shared.interface';
 import type { Product } from '@/shared/interfaces/Product';
 
 export interface ProductImagesProps {
@@ -24,12 +28,12 @@ export type ProductActionVariant =
 
 interface CommonProps {
   variant?: ProductActionVariant;
-  onProductAction?: (product: Product) => void;
+  onProductAction?: (product: Product | ProductFromServer) => void;
   isCard?: boolean;
 }
 
 type ProductsOnly = {
-  products: Product[];
+  products: Product[] | ProductFromServer[];
   pages?: never;
 };
 
@@ -39,3 +43,34 @@ type PagesOnly = {
 };
 
 export type ProductsContainerProps = (ProductsOnly | PagesOnly) & CommonProps;
+
+export interface ServerEntity<T> {
+  data: {
+    id: number;
+    attributes: T;
+  };
+}
+
+export interface ProductFromServer {
+  id: number;
+  attributes: {
+    name: string;
+    description: string;
+    brand: ServerEntity<{ name: string }>;
+    categories: { data: { id: number; attributes: { name: string } }[] };
+    color: ServerEntity<{ name: string }>;
+    gender: ServerEntity<{ name: string }>;
+    sizes: { data: { id: number; attributes: { value: number } }[] };
+    price: number;
+    userID: string;
+    teamName: string;
+    images: {
+      data: {
+        id: number;
+        attributes: {
+          url: string;
+        };
+      }[];
+    };
+  };
+}

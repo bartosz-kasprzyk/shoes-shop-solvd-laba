@@ -1,6 +1,6 @@
 import type {
   CreateProductDataProps,
-  FetchProductsResponse,
+  FetchMyProductsResponse,
   ProductResponseProps,
   DeleteProductResponse,
 } from '@/features/products/types';
@@ -45,7 +45,7 @@ export async function fetchOptions(
 export async function createProduct(
   data: CreateProductDataProps,
 ): Promise<ProductResponseProps> {
-  const { token, ...productDats } = data;
+  const { token, ...productData } = data;
   const imageIDs: number[] = [];
 
   for (const img of data.images) {
@@ -54,7 +54,7 @@ export async function createProduct(
   }
 
   const productPayload = {
-    ...productDats,
+    ...productData,
     images: imageIDs,
   };
 
@@ -72,6 +72,51 @@ export async function createProduct(
   );
   if (!res.ok) {
     throw new Error('Failed to add product');
+  }
+
+  const json = await res.json();
+
+  return {
+    id: json.data.id,
+    ...json.data.attributes,
+  };
+}
+
+export async function updateProduct(
+  data: CreateProductDataProps,
+): Promise<ProductResponseProps> {
+  const { token, productID, ...productData } = data;
+  const imageIDs: number[] = [];
+
+  for (const img of data.images) {
+    if (img.file) {
+      const id = await uploadImageToServer(img.file, token);
+      imageIDs.push(id);
+    }
+    if (img.id) {
+      imageIDs.push(img.id);
+    }
+  }
+
+  const productPayload = {
+    ...productData,
+    images: imageIDs,
+  };
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products/${productID}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ data: productPayload }),
+    },
+  );
+  if (!res.ok) {
+    throw new Error('Failed to update product');
   }
 
   const json = await res.json();
@@ -103,12 +148,12 @@ export async function uploadImageToServer(
   return data[0].id;
 }
 
-export async function fetchProducts(
+export async function fetchMyProducts(
   token: string,
   id: number,
-): Promise<FetchProductsResponse> {
+): Promise<FetchMyProductsResponse> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=userID&populate=images&filters%5BuserID%5D[id]=${id}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=*&filters%5BuserID%5D[id]=${id}`,
     {
       method: 'GET',
       headers: {

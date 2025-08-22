@@ -6,21 +6,26 @@ import AddProductForm from '@/features/products/components/AddProductForm';
 import ImageUploadGrid from '@/features/products/components/UploadedImagesContainer';
 import type { ImageData } from '@/features/products/types';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import { Button } from '@/shared/components/ui';
 
 export default function AddProductsPage() {
   const [images, setImages] = useState<ImageData[]>([]);
   const [imagesError, setImagesError] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   return (
     <ScrollableContainer>
       <Box
         width='100%'
-        m={{ xs: '20px', md: '50px' }}
-        maxWidth='1400px'
+        p={{ xs: '20px', md: '50px' }}
+        // maxWidth='1400px'
         sx={{
+          boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
           gap: '35px',
+          position: 'relative',
+          overflowX: 'auto',
         }}
       >
         <Typography variant='h3' fontWeight={500}>
@@ -43,6 +48,9 @@ export default function AddProductsPage() {
             images={images}
             setImagesError={setImagesError}
             setImages={setImages}
+            mode='create'
+            formId='add-product-form'
+            onLoadingChange={setLoading}
           />
           <ImageUploadGrid
             images={images}
@@ -51,6 +59,19 @@ export default function AddProductsPage() {
             imagesError={imagesError}
           />
         </Box>
+        <Button
+          form='add-product-form'
+          type='submit'
+          disabled={loading}
+          sx={{
+            width: '152px',
+            position: { xs: 'static', md: 'absolute' },
+            right: { md: '50px' },
+            top: { md: '50px' },
+          }}
+        >
+          {loading ? 'Saving...' : 'Save'}
+        </Button>
       </Box>
     </ScrollableContainer>
   );

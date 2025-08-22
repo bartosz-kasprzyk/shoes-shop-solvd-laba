@@ -3,39 +3,35 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Dropdown, Input, Button, Label } from '@/shared/components/ui';
+import { Dropdown, Input, Label } from '@/shared/components/ui';
 import SizeDisplayCheckbox from '../SizeDisplayCheckbox';
 import { Box } from '@mui/material';
-import { createProduct } from '@/app/api/products';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import type { AddProductFormProps } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
 import type { ProductSchemaType } from '../../types';
-import useUser from '@/shared/hooks/useUser';
-import { useSnackbar } from '@/shared/hooks/useSnackbar';
+import { useProductMutation } from '../../hooks/useProductMutation';
+import { adaptProductForEdit } from '../EditProductModal/EditProduct.adapter';
 
 const AddProductForm = ({
   images,
   setImagesError,
   setImages,
+  mode = 'create',
+  initialData,
+  formId,
+  onLoadingChange,
+  productId,
+  onClose,
 }: AddProductFormProps) => {
   const { data } = useAllOptions();
   const { colors, genders, brands, categories, sizes } = data || {};
-  const { showSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
-  const { session } = useUser();
-  const id = session?.user.id as number;
-  const token = session?.user.accessToken as string;
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<ProductSchemaType>({
+  const { mutateProduct, isPending } = useProductMutation(
+    mode,
+    productId,
+    onClose,
+  );
+  const productForm = useForm<ProductSchemaType>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: '',
@@ -48,9 +44,29 @@ const AddProductForm = ({
       sizes: [],
     },
   });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = productForm;
 
   useEffect(() => {
-    if (colors && genders && brands && categories) {
+    if (onLoadingChange) {
+      onLoadingChange(isPending);
+    }
+  }, [isPending, onLoadingChange]);
+
+  useEffect(() => {
+    if (!colors || !genders || !brands || !categories) return;
+
+    if (initialData) {
+      const adaptedProduct = adaptProductForEdit(initialData);
+      productForm.reset(adaptedProduct);
+      setImages(adaptedProduct.images);
+    } else {
       reset({
         name: '',
         price: undefined,
@@ -62,37 +78,18 @@ const AddProductForm = ({
         sizes: [],
       });
     }
-  }, [colors, genders, brands, categories, reset]);
-
-  const mutation = useMutation({
-    mutationFn: createProduct,
-    onSuccess: (data) => {
-      showSnackbar('Product created!', 'success', 5000);
-      reset();
-      setImages([]);
-      queryClient.invalidateQueries({
-        predicate: (query) =>
-          query.queryKey[0] === 'myProducts' &&
-          query.queryKey[1] === session?.user.id,
-      });
-    },
-    onError: (error) => {
-      showSnackbar('Server error, please try later', 'error', 1000);
-    },
-  });
+  }, [colors, genders, brands, categories, initialData, reset, setImages]);
 
   const onSubmit = (data: ProductSchemaType) => {
     if (images.length === 0) {
       setImagesError('Please upload at least one image');
       return;
     }
-    mutation.mutate({
-      ...data,
-      images: images,
-      userID: id,
-      teamName: 'team-5',
-      token,
-    });
+    mutateProduct({ ...data, images });
+    if (mode === 'create') {
+      reset();
+      setImages([]);
+    }
   };
 
   const selectedSizes = watch('sizes');
@@ -106,6 +103,7 @@ const AddProductForm = ({
 
   return (
     <form
+      id={formId}
       onSubmit={handleSubmit(onSubmit)}
       style={{
         width: '100%',
@@ -213,9 +211,6 @@ const AddProductForm = ({
             <p style={{ color: 'red' }}>{errors.sizes.message}</p>
           )}
         </Box>
-        <Button type='submit' size='medium' disabled={mutation.isPending}>
-          {mutation.isPending ? 'Saving...' : 'Save'}
-        </Button>
       </Box>
     </form>
   );
