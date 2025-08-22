@@ -35,7 +35,7 @@ const mockCard: ProductCardProps['card'] = {
   name: 'Nike Air Max 270',
   price: 160,
   gender: 'Women',
-  img: { src: 'img1.png' },
+  img: { src: 'http://example.com/test-image.png' },
 };
 
 describe('ProductCard', () => {
@@ -47,7 +47,12 @@ describe('ProductCard', () => {
     render(<ProductCard card={mockCard} />);
 
     const img = screen.getByRole('img');
-    expect(img).toHaveAttribute('src', 'img1.png');
+    const decodedSrc = decodeURIComponent(img.getAttribute('src') || '');
+    expect(decodedSrc).toContain('http://example.com/test-image.png');
+    // expect(img).toHaveAttribute(
+    //   'src',
+    //   expect.stringContaining('http://example.com/test-image.png'),
+    // );
     expect(img).toHaveAttribute('alt', 'Nike Air Max 270');
 
     expect(screen.getByText('Nike Air Max 270')).toBeInTheDocument();

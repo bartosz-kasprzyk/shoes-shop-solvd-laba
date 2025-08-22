@@ -1,10 +1,9 @@
-'use client';
-
-import { Card, CardMedia, Typography, Box } from '@mui/material';
+import { Card, Typography, Box } from '@mui/material';
 import { DropDownMenu } from '@/shared/components/ui';
 import Link from 'next/link';
 import type { ProductCardProps } from '../../types';
 import WishlistButton from '@/shared/components/ui/WishlistButton';
+import Image from 'next/image';
 
 export default function ProductCard({
   card,
@@ -29,19 +28,18 @@ export default function ProductCard({
   return (
     <Card
       sx={{
-        maxWidth: '320px',
-        maxHeight: '443px',
         boxShadow: 'none',
         display: 'flex',
         flexDirection: 'column',
         gap: '11px',
         position: 'relative',
         transition: 'all 0.3s ease',
-        border: '1px solid transparent',
-        padding: '5px',
         borderRadius: 0,
         '&:hover': {
-          boxShadow: 4,
+          boxShadow:
+            '0 8px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06)',
+
+          // transform: 'translateY(-2px)',
         },
       }}
     >
@@ -50,18 +48,21 @@ export default function ProductCard({
         href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <CardMedia
-          component='img'
-          image={img.src}
+        <Image
+          src={img.src}
           alt={name}
           title={name}
-          sx={{
+          width={320}
+          height={380}
+          priority
+          style={{
             aspectRatio: '320 / 380',
             objectFit: 'cover',
             width: '100%',
+            height: 'auto',
           }}
         />
-        <div>
+        <Box sx={{ p: '10px' }}>
           <Box
             sx={{
               display: 'flex',
@@ -100,7 +101,7 @@ export default function ProductCard({
           >
             {`${gender}'s Shoes`}
           </Typography>
-        </div>
+        </Box>
       </Link>
     </Card>
   );
