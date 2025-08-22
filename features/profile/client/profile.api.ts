@@ -1,4 +1,4 @@
-import { profileSchema } from '../schemas/profile.schema';
+import { profileSchema, profileUpdateSchema } from '../schemas/profile.schema';
 import type { Profile } from '../types';
 import endpoints from './endpoints';
 
@@ -33,15 +33,13 @@ export async function updateProfile({
 }) {
   const url = `${apiBaseUrl}${endpoints.updateProfile}/${id}`;
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(profile),
+    body: JSON.stringify(profileUpdateSchema.parse(profile)),
   });
 
   if (!res.ok) {

@@ -92,7 +92,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
               alt={`Thumbnail ${index}`}
               width={76}
               height={76}
-              style={{ display: 'block' }}
+              style={{ display: 'block', maxWidth: '100%', maxHeight: '100%' }}
             />
           </Box>
         ))}
@@ -110,43 +110,42 @@ export default function ProductImages({ images }: ProductImagesProps) {
       >
         {images ? (
           <AnimatePresence initial={false} custom={direction}>
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              }}
+            <motion.div
+              key={images[selectedIndex].attributes.url}
+              custom={direction}
+              variants={variants}
+              initial='enter'
+              animate='center'
+              exit='exit'
+              transition={{ duration: 0.3 }}
+              {...(isMobile && {
+                drag: 'x',
+                dragConstraints: { left: 0, right: 0 },
+                onDragEnd: (_, info) => {
+                  if (info.offset.x < -50) handleNext();
+                  else if (info.offset.x > 50) handlePrev();
+                },
+                whileTap: { cursor: 'grabbing' },
+              })}
+              style={
+                {
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                } as React.CSSProperties
+              }
             >
-              <motion.div
-                key={images[selectedIndex].attributes.url}
-                custom={direction}
-                variants={variants}
-                initial='enter'
-                animate='center'
-                exit='exit'
-                transition={{ duration: 0.3 }}
-                {...(isMobile && {
-                  drag: 'x',
-                  dragConstraints: { left: 0, right: 0 },
-                  onDragEnd: (_, info) => {
-                    if (info.offset.x < -50) handleNext();
-                    else if (info.offset.x > 50) handlePrev();
-                  },
-                  whileTap: { cursor: 'grabbing' },
-                })}
-              >
-                <Image
-                  src={images[selectedIndex].attributes.url}
-                  alt='Main product image'
-                  fill
-                  sizes='(max-width: 600px) 100vw, 588px'
-                  style={{ objectFit: 'cover', pointerEvents: 'none' }}
-                  priority
-                />
-              </motion.div>
-            </div>
+              <Image
+                src={images[selectedIndex].attributes.url}
+                alt='Main product image'
+                fill
+                sizes='(max-width: 600px) 100vw, 588px'
+                style={{ objectFit: 'cover', pointerEvents: 'none' }}
+                priority
+              />
+            </motion.div>
           </AnimatePresence>
         ) : null}
         {/* Desktop arrows bottom-right */}

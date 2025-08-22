@@ -11,6 +11,7 @@ import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
 import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
 import { useSession } from 'next-auth/react';
+import EmptyState from '../EmptyState';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -60,6 +61,15 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
         <Typography variant='h6' color='error'>
           Something went wrong...
         </Typography>
+      </>
+    );
+  if (!data?.pages[0]?.total)
+    return (
+      <>
+        <EmptyState
+          text='There are no products match search'
+          subText='Try to apply diffrent filters.'
+        />
       </>
     );
   return (

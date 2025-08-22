@@ -1,10 +1,9 @@
 'use client';
 
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, useMediaQuery } from '@mui/material';
 import {
   createContext,
   useContext,
-  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -12,9 +11,9 @@ import {
 } from 'react';
 import { SearchIcon } from '@/shared/icons';
 import { useFilterSection } from '../FilterSection';
-import type { SearchWrapperProps } from '../FilterValuesContainers/interface';
 import type { FilterValue } from '../../types';
 
+import { useTheme } from '@mui/material/styles';
 type SearchContextType = {
   displayedFilterValues?: FilterValue[];
 };
@@ -33,6 +32,8 @@ export function withSearch<T extends object>(
   ItemsContainer: React.ComponentType<T>,
 ) {
   return function SearchWrapper(props: T) {
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('md'));
     const [searchTerm, setSearchTerm] = useState('');
     const { filterValues } = useFilterSection();
 
@@ -44,7 +45,7 @@ export function withSearch<T extends object>(
         setHeight(
           `${(contentHeightRef.current?.scrollHeight / filterValues.length) * 6}px`,
         );
-    }, [contentHeightRef, contentHeightRef.current]);
+    }, [contentHeightRef, matches]);
 
     const displayedFilterValues = useMemo(() => {
       if (!filterValues) return [];

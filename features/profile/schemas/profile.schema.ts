@@ -22,3 +22,8 @@ export const profileSchema = z
   .extend({
     avatarUrl: z.url().optional().or(z.literal('')),
   });
+
+export const profileUpdateSchema = profileSchema.omit({
+  email: true,
+  avatarUrl: true,
+});

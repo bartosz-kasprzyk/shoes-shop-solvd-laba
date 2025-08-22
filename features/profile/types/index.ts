@@ -1,7 +1,11 @@
 import type z from 'zod';
-import type { profileSchema } from '../schemas/profile.schema';
+import type {
+  profileSchema,
+  profileUpdateSchema,
+} from '../schemas/profile.schema';
 
 export type Profile = z.infer<typeof profileSchema>;
+export type UpdateProfile = z.infer<typeof profileUpdateSchema>;
 
 export type AvatarOperation = 'none' | 'update' | 'delete';
 
