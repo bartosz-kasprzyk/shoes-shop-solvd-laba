@@ -19,7 +19,7 @@ export function ProductsContainer({ products, pages }: ProductsContainerProps) {
   return (
     <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
       {items.map((product) => (
-        <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
+        <Grid key={product.id} size={{ xs: 6, md: 4, lg: 3, xl: 3 }}>
           <ProductCard
             card={adaptProductToCard(product)}
             variant='addToWishlist'

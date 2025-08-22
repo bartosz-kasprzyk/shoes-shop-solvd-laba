@@ -3,6 +3,7 @@
 import FilterSideBar from '@/features/filter/components/FilterSideBar';
 import {
   Box,
+  Collapse,
   Divider,
   Fade,
   Icon,
@@ -55,21 +56,21 @@ export default function ProductsLayout({
     <Box
       sx={{
         height: '100%',
-        width: '100%',
+        width: '100vw',
         display: 'flex',
         flexDirection: 'row',
         overflow: 'hidden',
-        position: 'relative',
       }}
     >
-      <Slide direction='left' in={isSideBarOpen}>
+      <Slide direction='left' in={isSideBarOpen} appear={false}>
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
-            position: 'absolute',
-            maxWidth: '100%',
+            position: 'fixed',
+            maxWidth: '100vw',
+            pointerEvents: 'painted',
           }}
-          zIndex={13}
+          zIndex={2223}
           justifyContent={'flex-end'}
           bgcolor={'color-mix(in srgb, white 80%, black 10%)'}
           flexDirection={'row'}
@@ -107,65 +108,93 @@ export default function ProductsLayout({
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
-            position: 'absolute',
+            position: 'fixed',
             maxWidth: '100%',
+            pointerEvents: 'painted',
           }}
-          zIndex={12}
+          zIndex={2222}
           justifyContent={'flex-end'}
           bgcolor={'color-mix(in srgb, white 80%, black 10%)'}
           flexDirection={'row'}
           top={0}
           right={0}
+          onClick={() => setIsSideBarOpen((prev) => !prev)}
           width={'100%'}
           height={'100%'}
         ></Box>
       </Fade>
-
-      <Box
-        sx={{ display: { xs: 'none', md: 'flex' }, maxWidth: '400px' }}
-        zIndex={12}
-        display={'flex'}
-        justifyContent={'flex-end'}
-        flexDirection={'row'}
-        width={'100%'}
-        top={0}
-        right={0}
-        height={'100%'}
-      >
+      <Collapse orientation='horizontal' in={isSideBarOpen}>
         <Box
-          height={'100%'}
-          width={'100%'}
-          bgcolor='white'
-          position={'relative'}
-          overflow={'hidden'}
+          sx={{ display: { xs: 'none', md: 'flex' }, maxWidth: '400px' }}
+          zIndex={12}
           display={'flex'}
-          flexDirection={'column'}
-          maxWidth={'500px'}
+          justifyContent={'flex-end'}
+          flexDirection={'row'}
+          width={'100%'}
+          top={0}
+          right={0}
+          height={'100%'}
         >
-          <FilterSideBar />
+          <Box
+            height={'100%'}
+            width={'100%'}
+            bgcolor='white'
+            position={'relative'}
+            overflow={'hidden'}
+            display={'flex'}
+            flexDirection={'column'}
+            maxWidth={'500px'}
+          >
+            <FilterSideBar />
+          </Box>
         </Box>
-      </Box>
+      </Collapse>
       <Box
         sx={{
           height: '100%',
           mx: 'auto',
-
           overflowY: 'auto',
           scrollbarWidth: 'none',
           overfloxX: 'hidden',
           position: 'relative',
           width: '100%',
+          overflowX: 'hidden',
+          boxSizing: 'border-box',
         }}
       >
         <Typography px={2} pt={4} pb={1} variant='h4'>
           Search results
         </Typography>
+        <Box
+          sx={{ display: { xs: 'none', md: 'flex' }, cursor: 'pointer' }}
+          alignItems={'start'}
+          right={0}
+          top={0}
+          px={2}
+          pt={4}
+          position='absolute'
+          onClick={() => setIsSideBarOpen((prev) => !prev)}
+        >
+          <Typography color='#5C5C5C' fontWeight={300}>
+            {isSideBarOpen ? 'Hide ' : 'Open '}Filters
+          </Typography>
+          <Icon
+            sx={{
+              height: '0.8em',
+              width: '0.8em',
+              position: 'relative',
+              overflow: 'visible',
+            }}
+          >
+            <FiltersIcon color='#5C5C5C' />
+          </Icon>
+        </Box>
         <Divider sx={{ display: { xs: 'block', md: 'none' } }} />
 
         <Box
           px={1}
           py={0.5}
-          position={'sticky'}
+          width={'100%'}
           bgcolor={'white'}
           top={'0'}
           zIndex={11}
@@ -184,6 +213,7 @@ export default function ProductsLayout({
               {productsCount ? ` (${productsCount})` : ''}
             </Typography>
             <Box
+              px={1}
               display={'flex'}
               alignItems={'start'}
               onClick={() => setIsSideBarOpen((prev) => !prev)}
