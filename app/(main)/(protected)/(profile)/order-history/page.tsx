@@ -1,7 +1,5 @@
-export default function OrderHistoryPage() {
-  return (
-    <div>
-      <h1>Order History works</h1>
-    </div>
-  );
+import OrderHistoryPage from '@/features/order-history/components/OrderHistoryPage';
+
+export default function OrderHistoryPageWrapper() {
+  return <OrderHistoryPage />;
 }
