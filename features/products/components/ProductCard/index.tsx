@@ -5,7 +5,6 @@ import { DropDownMenu } from '@/shared/components/ui';
 import Link from 'next/link';
 import type { ProductCardProps } from '../../types';
 import WishlistButton from '@/shared/components/ui/WishlistButton';
-import { useSession } from 'next-auth/react';
 
 export default function ProductCard({
   card,
@@ -13,8 +12,6 @@ export default function ProductCard({
   onClick,
 }: ProductCardProps) {
   const { img, name, price, gender, id } = card;
-  const { data: session } = useSession();
-  const isAuthenticated = !!session?.user?.accessToken;
 
   function renderButton() {
     switch (variant) {
@@ -23,9 +20,7 @@ export default function ProductCard({
       case 'removeFromWishlist':
         return <WishlistButton operation='remove' onClick={onClick} />;
       case 'addToWishlist':
-        return isAuthenticated ? (
-          <WishlistButton operation='add' onClick={onClick} />
-        ) : null;
+        return onClick && <WishlistButton operation='add' onClick={onClick} />;
       default:
         return null;
     }
@@ -34,6 +29,8 @@ export default function ProductCard({
   return (
     <Card
       sx={{
+        maxWidth: '320px',
+        maxHeight: '443px',
         boxShadow: 'none',
         display: 'flex',
         flexDirection: 'column',

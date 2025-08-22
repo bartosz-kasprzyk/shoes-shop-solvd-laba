@@ -10,6 +10,7 @@ import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
 import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
+import { useSession } from 'next-auth/react';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -30,6 +31,8 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
   });
 
   const { handleAddToWishlist } = useAddToWishlist();
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user?.accessToken;
 
   const { setAllFilterValues } = useFilterStore();
   const { setValue } = useProductsCountStore();
@@ -63,7 +66,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     <Box px={2}>
       <ProductsContainer
         variant='addToWishlist'
-        onProductAction={handleAddToWishlist}
+        onProductAction={isAuthenticated ? handleAddToWishlist : undefined}
         pages={data.pages}
       />
       <div ref={ref}></div>

@@ -23,7 +23,9 @@ export function ProductsContainer({
                 : adaptProductToCard(product)
             }
             variant={variant}
-            onClick={() => onProductAction?.(product)}
+            onClick={
+              onProductAction ? () => onProductAction(product) : undefined
+            }
           />
         </Grid>
       ))}

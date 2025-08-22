@@ -63,8 +63,14 @@ describe('ProductCard', () => {
     expect(screen.getByTestId('dropdown-menu')).toBeInTheDocument();
   });
 
-  it('renders wishlist button if variant is addToWishlist', () => {
-    render(<ProductCard card={mockCard} variant='addToWishlist' />);
+  it('renders wishlist button if variant is addToWishlist and user is authenticated', () => {
+    render(
+      <ProductCard
+        card={mockCard}
+        variant='addToWishlist'
+        onClick={mockOnAdd}
+      />,
+    );
     expect(screen.getByTestId('wishlist-button')).toBeInTheDocument();
   });
 
