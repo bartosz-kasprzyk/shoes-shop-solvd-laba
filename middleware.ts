@@ -17,6 +17,7 @@ const protectedRoutes = [
   '/cart',
 ];
 
+// Logged in user cannot go here
 const authRoutes = [
   '/sign-in',
   '/sign-up',
