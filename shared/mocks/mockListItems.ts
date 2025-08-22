@@ -1,10 +1,10 @@
-import type { CartListItem } from '@/features/checkout/components/CartListItem/interface';
+import type { CartItemForDisplay } from '@/features/cart/components/interface';
 import img1 from './assets/img-1.png';
 import img2 from './assets/img-2.png';
 import img3 from './assets/img-3.png';
 import img4 from './assets/img-4.png';
 
-const items: CartListItem[] = [
+const items: CartItemForDisplay[] = [
   {
     id: 1,
     img: img1,
@@ -12,7 +12,8 @@ const items: CartListItem[] = [
     price: 17000000,
     gender: 'Women',
     available: true,
-    url: '/sign-in',
+    size: '39',
+    quantity: 1,
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ const items: CartListItem[] = [
     price: 140,
     gender: 'Men',
     available: true,
-    url: '/',
+    size: '38',
+    quantity: 1,
   },
   {
     id: 3,
@@ -30,7 +32,8 @@ const items: CartListItem[] = [
     price: 160,
     gender: 'Women',
     available: true,
-    url: '/sign-in',
+    size: '37',
+    quantity: 1,
   },
   {
     id: 4,
@@ -39,7 +42,8 @@ const items: CartListItem[] = [
     price: 120,
     gender: 'Men',
     available: false,
-    url: '/sign-in',
+    size: '39',
+    quantity: 1,
   },
 ];
 

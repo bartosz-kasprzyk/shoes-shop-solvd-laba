@@ -2,6 +2,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ProductDetails from '..';
 import { useSession } from 'next-auth/react';
 
+const showSnackbarMock = jest.fn();
+const addItemMock = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    refresh: jest.fn(),
+  }),
+}));
+
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }));
@@ -9,8 +19,6 @@ jest.mock('next-auth/react', () => ({
 (useSession as jest.Mock).mockReturnValue({
   data: { user: { accessToken: 'fake' } },
 });
-
-const showSnackbarMock = jest.fn();
 
 jest.mock('@/shared/hooks/useSnackbar', () => ({
   useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
@@ -21,6 +29,10 @@ jest.mock('@/app/not-found', () => {
   NotFound.displayName = 'NotFound';
   return NotFound;
 });
+
+jest.mock('@/shared/hooks/useCart', () => ({
+  useCart: () => ({ addItem: addItemMock }),
+}));
 
 const productData = {
   data: {
@@ -70,10 +82,10 @@ describe('ProductDetails', () => {
     );
   });
 
-  it('shows warning if Add to Bag clicked without selecting size', () => {
+  it('shows warning if Add to Cart clicked without selecting size', () => {
     render(<ProductDetails initialData={productData} />);
 
-    fireEvent.click(screen.getByText('Add to Bag'));
+    fireEvent.click(screen.getByText('Add to Cart'));
 
     expect(screen.getByText(/please choose your size/i)).toBeInTheDocument();
   });
@@ -82,9 +94,13 @@ describe('ProductDetails', () => {
     render(<ProductDetails initialData={productData} />);
 
     fireEvent.click(screen.getByText('EU-38'));
-    fireEvent.click(screen.getByText('Add to Bag'));
+    fireEvent.click(screen.getByText('Add to Cart'));
 
-    expect(window.alert).toHaveBeenCalledWith('Product added to the bag!');
+    expect(addItemMock).toHaveBeenCalledWith({
+      productId: productData.data.id.toString(),
+      size: '38',
+      quantity: 1,
+    });
   });
 
   // it('renders NotFound if no product data', () => {

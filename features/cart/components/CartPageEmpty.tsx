@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 
-export default function CartPage() {
+export default function CartPageEmpty() {
   return (
     <ScrollableContainer>
       <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>

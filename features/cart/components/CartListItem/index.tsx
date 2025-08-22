@@ -1,6 +1,6 @@
 'use client';
 
-import type { CartListItemProps } from './interface';
+import type { CartListItemProps } from '../interface';
 import {
   Button,
   Typography,
@@ -12,6 +12,7 @@ import {
 import { useState } from 'react';
 import NextLink from 'next/link';
 import { MinusIcon, PlusIcon, TrashIcon } from '@/shared/icons';
+import DeleteConfirmationModal from '@/features/products/components/DeleteConfirmationModal';
 
 const CustomIconButton = styled(IconButton)(() => ({
   borderRadius: '100%',
@@ -22,18 +23,22 @@ const CustomIconButton = styled(IconButton)(() => ({
 
 export default function CartListItem({
   cartItem,
-  handleDelete,
+  handleDeleteItem,
+  handleQuantityChange,
 }: CartListItemProps) {
-  const [amount, setAmount] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleChangeAmount = (increase: boolean): void => {
-    setAmount((prev) => {
-      if (increase) {
-        return Math.min(prev + 1, 999);
-      } else {
-        return Math.max(prev - 1, 1);
-      }
-    });
+  const handleConfirmDelete = () => {
+    handleDeleteItem();
+    setIsModalOpen(false);
+  };
+
+  const handleMinusClick = () => {
+    if (cartItem.quantity === 1) {
+      setIsModalOpen(true);
+    } else {
+      handleQuantityChange(cartItem.quantity - 1);
+    }
   };
 
   return (
@@ -55,7 +60,7 @@ export default function CartListItem({
         height='100%'
         display={'block'}
         sx={{ aspectRatio: '1/1' }}
-        href={cartItem.url}
+        href={`/product/${cartItem.id}`}
       >
         <Box
           height='100%'
@@ -100,7 +105,7 @@ export default function CartListItem({
                 lineHeight='normal'
                 mb={0}
                 color='inherit'
-                href={cartItem.url}
+                href={`/product/${cartItem.id}`}
                 underline='hover'
               >
                 {cartItem.name}
@@ -120,7 +125,7 @@ export default function CartListItem({
             color='color-mix(in srgb, black 60%, transparent)'
             component='p'
           >
-            {cartItem.gender}&apos;s Shoes
+            {cartItem.gender}&apos;s Shoes | Size {cartItem.size}
           </Typography>
           <Typography
             display={{ xs: 'none', sm: 'block' }}
@@ -149,7 +154,7 @@ export default function CartListItem({
               minWidth={{ xs: 75, sm: 120, lg: 160 }}
             >
               <CustomIconButton
-                onClick={() => handleChangeAmount(false)}
+                onClick={handleMinusClick}
                 sx={{
                   background: 'color-mix(in srgb, black 10%, transparent)',
                   padding: 0,
@@ -163,10 +168,10 @@ export default function CartListItem({
                 color='#494949'
                 component='p'
               >
-                {amount}
+                {cartItem.quantity}
               </Typography>
               <CustomIconButton
-                onClick={() => handleChangeAmount(true)}
+                onClick={() => handleQuantityChange(cartItem.quantity + 1)}
                 sx={{
                   background: '#FFD7D6',
                   padding: 0,
@@ -196,9 +201,7 @@ export default function CartListItem({
           ></Box>
 
           <Button
-            onClick={() => {
-              handleDelete();
-            }}
+            onClick={() => setIsModalOpen(true)}
             sx={{
               textTransform: 'none',
               fontWeight: 500,
@@ -234,6 +237,14 @@ export default function CartListItem({
           </Button>
         </Box>
       </Box>
+
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onDelete={handleConfirmDelete}
+        header='Remove from Cart'
+        text={`Are you sure you want to remove ${cartItem.name} from your cart?`}
+      />
     </Box>
   );
 }

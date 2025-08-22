@@ -5,18 +5,24 @@ import { useState } from 'react';
 
 import { TransitionGroup } from 'react-transition-group';
 
-import PromocodeItem from './PromocodeItem';
-import type { promocode } from './CartSummary/interface';
+import type { promocode } from './interface';
 import { Button, Input } from '@/shared/components/ui';
 import { DropdownArrowIcon } from '@/shared/icons';
-import type { PromocodeSectionProps } from './PromocodeSection.interface';
+import PromocodeItem from './PromocodeItem';
+
+interface Props {
+  promocodes: promocode[];
+  setPromocodes: React.Dispatch<React.SetStateAction<promocode[]>>;
+  validPromocodes: promocode[];
+  handleDeletePromocode: (code: string) => void;
+}
 
 export default function PromocodeSection({
   promocodes,
   setPromocodes,
   validPromocodes,
   handleDeletePromocode,
-}: PromocodeSectionProps) {
+}: Props) {
   const [arePromocodesOpened, setArePromocodesOpened] = useState(false);
   const [inputPromocode, setInputPromocode] = useState('');
   const [isInputError, setIsInputError] = useState(false);

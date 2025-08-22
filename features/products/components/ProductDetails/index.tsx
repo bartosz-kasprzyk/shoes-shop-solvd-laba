@@ -12,6 +12,8 @@ import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/shared/hooks/useCart';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
@@ -19,6 +21,9 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user?.accessToken;
+
+  const router = useRouter();
+  const { addItem } = useCart();
 
   const product = initialData.data.attributes;
 
@@ -46,7 +51,13 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
     if (!selectedSize) {
       setShowSizeWarning(true);
     } else {
-      alert('Product added to the bag!');
+      addItem({
+        productId: initialData.data.id.toString(),
+        size: selectedSize.toString(),
+        quantity: 1,
+      });
+
+      router.push('/cart');
     }
   };
 
@@ -136,7 +147,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
             <Button variant='outline' onClick={handleAddToWishlist}>
               Add to Wishlist
             </Button>
-            <Button onClick={handleAddToCart}>Add to Bag</Button>
+            <Button onClick={handleAddToCart}>Add to Cart</Button>
           </Box>
 
           <Box

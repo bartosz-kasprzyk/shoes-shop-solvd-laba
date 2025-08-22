@@ -1,9 +1,16 @@
+'use client';
+
 import { CartLogoIcon } from '@/shared/icons';
-import { Button } from '@mui/material';
+import { useCart } from '@/shared/hooks/useCart';
+import { Badge, Button, Link } from '@mui/material';
 
 export default function TopBarCart() {
+  const { totalItems } = useCart();
+
   return (
     <Button
+      component={Link}
+      href='/cart'
       sx={{
         cursor: 'pointer',
         borderRadius: '50%',
@@ -15,7 +22,19 @@ export default function TopBarCart() {
         },
       }}
     >
-      <CartLogoIcon />
+      <Badge
+        badgeContent={totalItems}
+        color='primary'
+        overlap='circular'
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        sx={{
+          '& .MuiBadge-badge': {
+            color: 'white',
+          },
+        }}
+      >
+        <CartLogoIcon />
+      </Badge>
     </Button>
   );
 }

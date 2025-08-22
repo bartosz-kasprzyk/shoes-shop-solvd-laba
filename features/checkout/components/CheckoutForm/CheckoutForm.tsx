@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import CartSummary from '@/features/checkout/components/CartSummary';
+import CartSummary from '@/features/cart/components/CartSummary';
 import ShippingInfoSection from '../ShippingInfoSection';
 import PaymentInfoSection from '../PaymentInfoSection';
 import SectionSeparator from '../SectionSeparator';

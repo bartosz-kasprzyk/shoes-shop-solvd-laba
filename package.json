@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "refresh": "rm -rf node_modules .next && npm install"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [

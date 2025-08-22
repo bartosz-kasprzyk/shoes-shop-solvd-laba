@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import { SessionProvider } from 'next-auth/react';
 import theme from './theme';
+import { CartProvider } from '@/shared/providers/CartProvider';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +14,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider theme={theme}>
         <SessionProvider>
           <QueryProvider>
-            <SnackbarProvider>{children}</SnackbarProvider>
+            <SnackbarProvider>
+              <CartProvider>{children}</CartProvider>
+            </SnackbarProvider>
           </QueryProvider>
         </SessionProvider>
       </ThemeProvider>

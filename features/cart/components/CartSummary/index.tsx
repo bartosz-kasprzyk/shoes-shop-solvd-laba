@@ -6,22 +6,30 @@ import { useState } from 'react';
 import Button from '@/shared/components/ui/Button';
 import { mockPromocodes as validPromocodes } from '@/shared/mocks/mockPromocodes';
 import type { promocode } from './interface';
-import SummaryLine from '../SummaryLine';
-import DiscountLine from '../DiscountLine';
-import PromocodeSection from '../PromocodeSection';
-import TotalSection from '../TotalSection';
+import SummaryLine from './SummaryLine';
+import DiscountLine from './DiscountLine';
+import PromocodeSection from './PromocodeSection';
+import TotalSection from './TotalSection';
 import { TransitionGroup } from 'react-transition-group';
+import { useCartDetails } from '../CartDetailsContext';
 
 export default function CartSummary(props: BoxProps) {
+  const { cartItems } = useCartDetails();
   const [promocodes, setPromocodes] = useState<promocode[]>([]);
-  const subtotal = 410;
+
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
   const shipping = 20;
-  const tax = 0;
-  const stageText = 'checkout';
+
+  const tax = (subtotal + shipping) * 0.23;
+
   const discountInCash = promocodes.reduce(
     (acc, curr) => acc + curr.discoutInCash,
     0,
   );
+
   const total = subtotal + shipping + tax - discountInCash;
 
   const handleChangeStageButton = () => {
@@ -66,9 +74,9 @@ export default function CartSummary(props: BoxProps) {
       />
 
       <Box display='flex' flexDirection='column' gap='20px'>
-        <SummaryLine label='Subtotal' value={subtotal} />
-        <SummaryLine label='Shipping' value={shipping} />
-        <SummaryLine label='Tax' value={tax} />
+        <SummaryLine label='Subtotal' value={subtotal.toFixed(2)} />
+        <SummaryLine label='Shipping' value={shipping.toFixed(2)} />
+        <SummaryLine label='Tax' value={tax.toFixed(2)} />
         <TransitionGroup>
           {promocodes.map((promo) => (
             <Collapse key={promo.code}>
@@ -78,13 +86,13 @@ export default function CartSummary(props: BoxProps) {
         </TransitionGroup>
       </Box>
 
-      <TotalSection total={total} />
+      <TotalSection total={total.toFixed(2)} />
 
       <Button
         onClick={handleChangeStageButton}
         sx={{ width: '100%', marginTop: '80px' }}
       >
-        {stageText}
+        Go to checkout
       </Button>
     </Box>
   );
