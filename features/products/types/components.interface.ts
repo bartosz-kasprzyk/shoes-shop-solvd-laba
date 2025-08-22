@@ -17,18 +17,25 @@ export interface ProductDetailsProps {
   initialData: ProductApiResponse;
 }
 
-export type ProductsContainerProps =
-  | {
-      products: Product[];
-      pages?: never;
-      variant?: 'dropdown' | 'addToWishlist' | 'removeFromWishlist';
-      onProductAction?: (product: Product) => void;
-      isCard?: boolean;
-    }
-  | {
-      products?: never;
-      pages: { data: Product[] }[];
-      variant?: 'dropdown' | 'addToWishlist' | 'removeFromWishlist';
-      onProductAction?: (product: Product) => void;
-      isCard?: boolean;
-    };
+export type ProductActionVariant =
+  | 'dropdown'
+  | 'addToWishlist'
+  | 'removeFromWishlist';
+
+interface CommonProps {
+  variant?: ProductActionVariant;
+  onProductAction?: (product: Product) => void;
+  isCard?: boolean;
+}
+
+type ProductsOnly = {
+  products: Product[];
+  pages?: never;
+};
+
+type PagesOnly = {
+  products?: never;
+  pages: { data: Product[] }[];
+};
+
+export type ProductsContainerProps = (ProductsOnly | PagesOnly) & CommonProps;
