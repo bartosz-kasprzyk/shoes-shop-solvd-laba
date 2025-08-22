@@ -9,6 +9,8 @@ import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
+import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
+import { useSession } from 'next-auth/react';
 import EmptyState from '../EmptyState';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
@@ -28,6 +30,10 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const { ref, inView } = useInView({
     rootMargin: '1000px',
   });
+
+  const { handleAddToWishlist } = useAddToWishlist();
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user?.accessToken;
 
   const { setAllFilterValues } = useFilterStore();
   const { setValue } = useProductsCountStore();
@@ -68,7 +74,11 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     );
   return (
     <Box px={2}>
-      <ProductsContainer pages={data.pages} withOverlay={true} />
+      <ProductsContainer
+        variant='addToWishlist'
+        onProductAction={isAuthenticated ? handleAddToWishlist : undefined}
+        pages={data.pages}
+      />
       <div ref={ref}></div>
       <Slide direction='up' in={isFetchingNextPage}>
         <Box display={'flex'} p={10} justifyContent={'center'}>

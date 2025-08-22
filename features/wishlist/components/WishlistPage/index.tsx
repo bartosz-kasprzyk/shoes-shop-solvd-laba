@@ -1,18 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
-import ProductCard from '@/features/products/components/ProductCard';
+import { Box, Typography } from '@mui/material';
 import { removeFromWishlist } from '../../utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { MyWishlistIcon } from '@/shared/icons';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
-import type { Card } from '@/features/products/types';
+import ProductsContainer from '@/features/products/components/ProductsContainer';
+import type { Product } from '@/shared/interfaces/Product';
 
 export default function WishlistPage() {
-  const [wishlist, setWishlist] = useState<Card[]>([]);
+  const [wishlist, setWishlist] = useState<Product[]>([]);
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export default function WishlistPage() {
     }
   }, []);
 
-  const handleRemove = (id: number) => {
-    removeFromWishlist(id);
+  const handleRemoveFromWishlist = (product: Product) => {
+    removeFromWishlist(product.id);
 
     const saved = localStorage.getItem('wishlist');
     if (saved) {
@@ -32,7 +32,7 @@ export default function WishlistPage() {
       setWishlist([]);
     }
 
-    showSnackbar('Product removed from wishlist!', 'warning', 5000);
+    showSnackbar('Product removed from wishlist', 'warning', 5000);
   };
 
   if (wishlist.length === 0) {
@@ -111,17 +111,12 @@ export default function WishlistPage() {
         >
           My Wishlist
         </Typography>
-        <Grid container spacing={2}>
-          {wishlist.map((product) => (
-            <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
-              <ProductCard
-                card={product}
-                variant='removeFromWishlist'
-                onClick={() => handleRemove(product.id)}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <ProductsContainer
+          products={wishlist}
+          variant='removeFromWishlist'
+          onProductAction={handleRemoveFromWishlist}
+          isCard={true}
+        />
       </Box>
     </ScrollableContainer>
   );

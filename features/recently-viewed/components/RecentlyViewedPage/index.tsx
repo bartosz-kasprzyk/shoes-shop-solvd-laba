@@ -1,18 +1,19 @@
 'use client';
-import { Box, Grid, Typography } from '@mui/material';
-import ProductCard from '@/features/products/components/ProductCard';
-import { adaptProductToCard } from '@/features/products/components/ProductCard/ProductCard.adapter';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import type { Product } from '@/shared/interfaces/Product';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { RecentlyViewedIcon } from '@/shared/icons';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
+import ProductsContainer from '@/features/products/components/ProductsContainer';
+import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
 
 export default function RecentlyViewedPage() {
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<
     Product[]
   >([]);
+  const { handleAddToWishlist } = useAddToWishlist();
 
   useEffect(() => {
     const saved = localStorage.getItem('recentlyViewed');
@@ -113,13 +114,11 @@ export default function RecentlyViewedPage() {
           }}
         >
           <Box px={2}>
-            <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
-              {recentlyViewedProducts.map((product) => (
-                <Grid key={product.id} size={{ xs: 6, md: 6, lg: 4, xl: 3 }}>
-                  <ProductCard card={adaptProductToCard(product)} />
-                </Grid>
-              ))}
-            </Grid>
+            <ProductsContainer
+              products={recentlyViewedProducts}
+              variant='addToWishlist'
+              onProductAction={handleAddToWishlist}
+            />
           </Box>
         </Box>
       </Box>

@@ -121,7 +121,7 @@ export default function MyProductsPage() {
           </Box>
 
           {products.length > 0 ? (
-            <ProductsContainer products={products} />
+            <ProductsContainer variant='dropdown' products={products} />
           ) : (
             <EmptyStateForMuProducts />
           )}
