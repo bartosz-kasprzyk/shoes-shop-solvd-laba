@@ -157,12 +157,10 @@ export default function OrderHistoryCard({
         <Box
           sx={{
             display: 'flex',
-            // gap: { xs: 2, md: 5 },
             justifyContent: 'space-between',
             alignItems: 'center',
             borderTop: '1px solid #E7EBEF',
             pt: '20px',
-            // border: '1px solid red',
           }}
         >
           <Link
