@@ -1,27 +1,32 @@
 import type { CartAddedItem } from '@/features/cart/components/interface';
 import type { ReactNode } from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { CartContext } from '../contexts/CartContext';
+import useUser from '../hooks/useUser';
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartAddedItem[]>([]);
-  const [isClient, setIsClient] = useState(false);
+  const { session } = useUser();
+
+  const userId = session?.user.id?.toString() || 'guest';
+  const cartKey = `cart_${userId}`;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('cart');
+      const stored = localStorage.getItem(cartKey);
       if (stored) {
         setCart(JSON.parse(stored));
+      } else {
+        setCart([]);
       }
-      setIsClient(true);
     }
-  }, []);
+  }, [cartKey]);
 
   useEffect(() => {
-    if (isClient) {
-      localStorage.setItem('cart', JSON.stringify(cart));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
     }
-  }, [cart, isClient]);
+  }, [cart, cartKey]);
 
   const addItem = (item: CartAddedItem) => {
     setCart((prev) => {
