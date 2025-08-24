@@ -5,10 +5,17 @@ import CartListItem from '../CartListItem';
 import { Fragment } from 'react';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { useCartDetails } from '../CartDetailsContext';
+import CartListItemSkeleton from '../CartListItem/skeleton';
+import { useCart } from '@/shared/hooks/useCart';
 
 export default function CartList({ isMobile }: { isMobile: boolean }) {
-  const { cartItems, handleDeleteItem, handleQuantityChange } =
-    useCartDetails();
+  const {
+    cartItems,
+    handleDeleteItem,
+    handleQuantityChange,
+    isCartDetailsLoading,
+  } = useCartDetails();
+  const { totalItems } = useCart();
 
   const cartContent = (
     <Box pr={{ xs: 0, md: 1 }}>
@@ -33,6 +40,20 @@ export default function CartList({ isMobile }: { isMobile: boolean }) {
                 height={'0px'}
               ></Box>
             )}
+          </Fragment>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const seletonCartContent = (
+    <Box pr={{ xs: 0, md: 1 }}>
+      <List>
+        {[...Array(totalItems).keys()].map((item) => (
+          <Fragment key={item}>
+            <ListItem sx={{ padding: 0 }}>
+              <CartListItemSkeleton />
+            </ListItem>
           </Fragment>
         ))}
       </List>
@@ -78,11 +99,9 @@ export default function CartList({ isMobile }: { isMobile: boolean }) {
             : {}
         }
       >
-        {isMobile ? (
-          cartContent
-        ) : (
-          <ScrollableContainer>{cartContent}</ScrollableContainer>
-        )}
+        <ScrollableContainer>
+          {!isCartDetailsLoading ? cartContent : seletonCartContent}
+        </ScrollableContainer>
       </Box>
     </Box>
   );

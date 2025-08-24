@@ -42,8 +42,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     })),
   });
 
-  if (productQueries.some((q) => q.isLoading)) return <p>Loading...</p>;
-
   const products: ProductData[] = productQueries
     .map((q) => q.data?.data)
     .filter((p): p is ProductData => !!p);

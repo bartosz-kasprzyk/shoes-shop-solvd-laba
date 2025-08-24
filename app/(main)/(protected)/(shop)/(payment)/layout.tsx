@@ -1,37 +1,33 @@
 'use client';
-import { useCartDetails } from '@/features/cart/components/CartDetailsContext';
 import CartPageEmpty from '@/features/cart/components/CartPageEmpty';
 import CartSummary from '@/features/cart/components/CartSummary';
-import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
-import { Box, Link } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCart } from '@/shared/hooks/useCart';
+import { Box, Button, Link } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export default function ShopLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { cartItems } = useCartDetails();
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
-
+  const { totalItems } = useCart();
+  const router = useRouter();
   return (
     <Box py={5} px={10} height={'100%'} overflow={'hidden'}>
-      <Link
-        href='/cart'
+      <Button
+        variant='text'
+        onClick={() => router.back()}
         style={{
           textDecoration: 'underline',
+          textTransform: 'none',
           color: '#666',
           fontSize: '14px',
           fontWeight: 400,
         }}
       >
         Back
-      </Link>
-      {cartItems.length ? (
+      </Button>
+      {totalItems > 0 ? (
         <Box
           display={'flex'}
           flexDirection={{ xs: 'column', md: 'row' }}

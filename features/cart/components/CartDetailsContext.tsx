@@ -15,6 +15,7 @@ interface CartDetailsContextType {
     newQuantity: number,
   ) => void;
   handleDeleteItem: (productId: string, size: string) => void;
+  isCartDetailsLoading: boolean;
 }
 
 const CartDetailsContext = createContext<CartDetailsContextType | null>(null);
@@ -46,7 +47,9 @@ export const CartDetailsProvider = ({
     })),
   });
 
-  if (productQueries.some((q) => q.isLoading)) return <p>Loading...</p>;
+  const isCartDetailsLoading = productQueries.some((q) => q.isLoading)
+    ? true
+    : false;
 
   const products: ProductData[] = productQueries
     .map((q) => q.data?.data)
@@ -83,6 +86,7 @@ export const CartDetailsProvider = ({
     cartItems: cartItemsForComponent,
     handleQuantityChange: updateQuantity,
     handleDeleteItem: deleteItem,
+    isCartDetailsLoading,
   };
 
   return (
