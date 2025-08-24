@@ -14,8 +14,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { SignInFormData } from './signIn.schema';
 import { signInSchema } from './signIn.schema';
 import { useSignIn } from './useSignIn';
+import { useEffect } from 'react';
+import type { SignInFormProps } from './interface';
 
-export function SignInForm() {
+export function SignInForm({ callbackUrl, closeModal }: SignInFormProps) {
   const {
     register,
     handleSubmit,
@@ -24,7 +26,16 @@ export function SignInForm() {
     resolver: zodResolver(signInSchema),
   });
 
-  const { signInUser, serverError, success } = useSignIn();
+  const { signInUser, serverError, success } = useSignIn(callbackUrl);
+
+  useEffect(() => {
+    if (success && closeModal) {
+      const timer = setTimeout(() => {
+        closeModal();
+      }, 500); // close modal after short delay so success message shows
+      return () => clearTimeout(timer);
+    }
+  }, [success, closeModal]);
 
   return (
     <form onSubmit={handleSubmit(signInUser)}>

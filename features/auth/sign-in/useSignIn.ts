@@ -4,7 +4,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import type { SignInFormData } from './signIn.schema';
 
-export const useSignIn = (): {
+export const useSignIn = (
+  passedCallbackUrl?: string,
+): {
   signInUser: (data: SignInFormData) => Promise<boolean>;
   serverError: string;
   success: boolean;
@@ -16,8 +18,9 @@ export const useSignIn = (): {
   const signInUser = async (data: SignInFormData) => {
     setServerError('');
 
-    // Get the callback URL from search params or default to '/products'
-    const callbackUrl = searchParams.get('callbackUrl') || '/products';
+    // Get the callback URL from search params or passed through props or default to '/products'
+    const callbackUrl =
+      searchParams.get('callbackUrl') || passedCallbackUrl || '/products';
 
     const res = await signIn('credentials', {
       redirect: false,
@@ -32,7 +35,8 @@ export const useSignIn = (): {
     } else {
       setSuccess(true);
       // Use the NextAuth response URL or fall back to the callback URL or products page
-      const redirectUrl = res?.url || callbackUrl || '/products';
+      const redirectUrl =
+        res?.url || callbackUrl || passedCallbackUrl || '/products';
       router.push(redirectUrl);
       return true;
     }

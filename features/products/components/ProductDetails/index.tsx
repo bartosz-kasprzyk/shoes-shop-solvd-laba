@@ -12,12 +12,15 @@ import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/shared/hooks/useCart';
+import { SignInModal } from '../SignInToContinueModal';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const pathname = usePathname();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user?.accessToken;
@@ -37,9 +40,10 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
       : [],
   );
 
-  const handleAddToWishlist = () => {
+  const handleAddToWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isAuthenticated) {
-      showSnackbar('You need to be logged in', 'warning', 5000);
+      setShowSignInModal(true);
+      (e.currentTarget as HTMLButtonElement).blur();
       return;
     }
 
@@ -47,17 +51,27 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
     showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!isAuthenticated) {
+      setShowSignInModal(true);
+      (e.currentTarget as HTMLButtonElement).blur();
+      return;
+    }
+
     if (!selectedSize) {
       setShowSizeWarning(true);
     } else {
-      addItem({
+      const result = addItem({
         productId: initialData.data.id.toString(),
         size: selectedSize.toString(),
         quantity: 1,
       });
 
-      router.push('/cart');
+      showSnackbar(
+        `${product.name} (EU-${selectedSize}) added to the cart!`,
+        'success',
+        5000,
+      );
     }
   };
 
@@ -149,6 +163,12 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
             </Button>
             <Button onClick={handleAddToCart}>Add to Cart</Button>
           </Box>
+
+          <SignInModal
+            isOpen={showSignInModal}
+            onClose={() => setShowSignInModal(false)}
+            callbackUrl={pathname}
+          />
 
           <Box
             sx={{
