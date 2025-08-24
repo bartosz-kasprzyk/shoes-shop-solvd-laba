@@ -25,7 +25,7 @@ export default function PriceFilterSection() {
   const [innerPrice, setInnerPrice] = useState<number[]>([urlMin, urlMax]);
 
   useEffect(() => {
-    setInnerPrice([urlMin, urlMax]);
+    setInnerPrice([urlMin ?? min, urlMax ?? max]);
   }, [filters.price]);
 
   const isPriceSet =
