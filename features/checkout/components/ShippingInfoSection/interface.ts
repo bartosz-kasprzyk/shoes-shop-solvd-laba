@@ -8,5 +8,6 @@ export interface ShippingInfo {
 
 export interface ShippingInfoSectionProps {
   shippingInfo: ShippingInfo;
+  shippingErrors: Record<string, string>;
   onChange: (field: keyof ShippingInfo, value: string) => void;
 }

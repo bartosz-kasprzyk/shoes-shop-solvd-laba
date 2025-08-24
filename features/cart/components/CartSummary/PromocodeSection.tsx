@@ -55,7 +55,7 @@ export default function PromocodeSection({
         alignItems={'center'}
         gap={1}
       >
-        <Typography fontSize={{ xs: '0.8em', sm: '0.67em' }}>
+        <Typography noWrap fontSize={{ xs: '0.8em', sm: '0.67em' }}>
           Do you have a promocode?
         </Typography>
         <DropdownArrowIcon />

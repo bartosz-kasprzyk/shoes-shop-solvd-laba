@@ -4,7 +4,6 @@ export { default as ShippingInfoSection } from './ShippingInfoSection';
 export { default as PaymentInfoSection } from './PaymentInfoSection';
 export { default as PaymentMethodSelector } from './PaymentMethodSelector';
 export { default as CardPaymentForm } from './CardPaymentForm';
-export { default as SectionSeparator } from './SectionSeparator';
 
 export type { PersonalInfo } from './PersonalInfoSection';
 export type { ShippingInfo } from './ShippingInfoSection';

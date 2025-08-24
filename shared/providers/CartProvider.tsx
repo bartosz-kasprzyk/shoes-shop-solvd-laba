@@ -6,27 +6,37 @@ import useUser from '../hooks/useUser';
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartAddedItem[]>([]);
+  const [cartId, setCartId] = useState<string | null>(null);
   const { session } = useUser();
+  const [total, setTotal] = useState<number | null>(null);
 
   const userId = session?.user.id?.toString() || 'guest';
   const cartKey = `cart_${userId}`;
+
+  const generateId = () =>
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Math.random().toString(36).substring(2, 15);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(cartKey);
       if (stored) {
-        setCart(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        setCart(parsed.cart || []);
+        setCartId(parsed.cart.length > 0 ? parsed.cartId : generateId());
       } else {
         setCart([]);
+        setCartId(generateId());
       }
     }
   }, [cartKey]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(cartKey, JSON.stringify(cart));
+    if (typeof window !== 'undefined' && cartId) {
+      localStorage.setItem(cartKey, JSON.stringify({ cart, cartId }));
     }
-  }, [cart, cartKey]);
+  }, [cart, cartId, cartKey]);
 
   const addItem = (item: CartAddedItem) => {
     setCart((prev) => {
@@ -71,12 +81,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    if (typeof window !== 'undefined' && cartId) {
+      localStorage.setItem(cartKey, JSON.stringify({ cart: [], cartId: null }));
+    }
+    setCart([]);
+    setCartId(null);
+  };
 
   const totalItems = cart.length;
 
   const value = {
     cart,
+    cartId,
+    total,
+    setTotal,
     addItem,
     updateQuantity,
     deleteItem,

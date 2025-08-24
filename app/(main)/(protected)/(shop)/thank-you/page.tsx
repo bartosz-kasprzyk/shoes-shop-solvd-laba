@@ -1,15 +1,18 @@
+import { CartClearer } from '@/features/checkout/components/CartCleanerer';
 import Button from '@/shared/components/ui/Button';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 interface ThankYouPageProps {
-  params: Promise<{ orderNumber: string }>;
+  searchParams: Promise<{ orderId?: string; cartId?: string }>;
 }
 
-export default async function ThankYouPage({ params }: ThankYouPageProps) {
-  const resolvedParams = await params;
-  const orderNumber = resolvedParams.orderNumber;
-
+export default async function ThankYouPage({
+  searchParams,
+}: ThankYouPageProps) {
+  const awaitedSearchParams = await searchParams;
+  const orderNumber = awaitedSearchParams?.orderId;
   return (
     <Box
       sx={{
@@ -22,6 +25,7 @@ export default async function ThankYouPage({ params }: ThankYouPageProps) {
         alignItems: 'center',
       }}
     >
+      <CartClearer />
       <Box
         sx={{
           display: 'flex',
@@ -60,7 +64,9 @@ export default async function ThankYouPage({ params }: ThankYouPageProps) {
                 fontStyle: 'initial',
               }}
             >
-              {orderNumber || 'Missing order number'}
+              <Suspense fallback={'Missing order number'}>
+                {'#' + orderNumber}
+              </Suspense>
             </Typography>
           </Typography>
 

@@ -56,8 +56,6 @@ export default function CartList({ isMobile }: { isMobile: boolean }) {
           height={'100%'}
           marginBottom='30px'
           fontSize='1.5em'
-          py={1}
-          px={{ xs: 2, md: 0 }}
           fontWeight={500}
           borderBottom={{
             xs: '1px color-mix(in srgb, black 10%, transparent) solid',

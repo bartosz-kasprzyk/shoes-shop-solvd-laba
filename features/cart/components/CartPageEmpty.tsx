@@ -9,7 +9,7 @@ export default function CartPageEmpty() {
         <Box
           sx={{
             flex: 1,
-            padding: {
+            paddingX: {
               xs: '40px 16px',
               sm: '60px 32px',
               md: '80px 64px',
