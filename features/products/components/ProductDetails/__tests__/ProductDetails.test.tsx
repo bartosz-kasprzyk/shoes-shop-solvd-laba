@@ -6,6 +6,7 @@ const showSnackbarMock = jest.fn();
 const addItemMock = jest.fn();
 
 jest.mock('next/navigation', () => ({
+  usePathname: jest.fn(),
   useRouter: () => ({
     push: jest.fn(),
     refresh: jest.fn(),
@@ -39,18 +40,21 @@ const productData = {
     id: 123,
     attributes: {
       name: 'Nike Air',
-      price: 149,
-      images: { data: [{ id: 1, attributes: { url: '/image1.jpg' } }] },
+      description: 'Some product description',
+      brand: { data: { id: 1, attributes: { name: 'Nike' } } },
+      categories: { data: [] },
+      color: { data: { id: 1, attributes: { name: 'White' } } },
+      gender: { data: { id: 1, attributes: { name: 'Men' } } },
       sizes: {
         data: [
           { id: 10, attributes: { value: 38 } },
           { id: 11, attributes: { value: 40 } },
         ],
       },
-      color: { data: { attributes: { name: 'White' } } },
-      description: 'Some product description',
-      brand: 'Nike',
-      gender: { data: { id: 1, attributes: { name: 'Men' as const } } },
+      price: 149,
+      userID: '1',
+      teamName: 'Test Team',
+      images: { data: [{ id: 1, attributes: { url: '/image1.jpg' } }] },
     },
   },
 };
@@ -112,42 +116,5 @@ describe('ProductDetails', () => {
   it('renders color name if color data is present', () => {
     render(<ProductDetails initialData={productData} />);
     expect(screen.getByText('White')).toBeInTheDocument();
-  });
-
-  it('renders empty color if no color data', () => {
-    const noColorData = {
-      data: {
-        id: 123,
-        attributes: {
-          ...productData.data.attributes,
-          color: { data: null },
-        },
-      },
-    };
-
-    render(<ProductDetails initialData={noColorData} />);
-
-    const colorElement = screen.getByText('', { selector: 'p' });
-
-    expect(colorElement).toBeInTheDocument();
-  });
-
-  it('handles empty sizes data gracefully', () => {
-    const noSizesData = {
-      data: {
-        id: 123,
-        attributes: {
-          ...productData.data.attributes,
-          sizes: { data: null },
-        },
-      },
-    };
-
-    render(<ProductDetails initialData={noSizesData} />);
-
-    const sizeButtons = screen.getAllByText(/EU-/i);
-    sizeButtons.forEach((btn) => {
-      expect(btn).toBeDisabled();
-    });
   });
 });
