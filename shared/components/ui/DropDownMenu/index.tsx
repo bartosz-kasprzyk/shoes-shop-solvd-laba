@@ -58,6 +58,11 @@ export default function DropDownMenu({ id }: { id: number }) {
           right: 14,
           borderRadius: '20%',
           zIndex: 1,
+          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.35)',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.45)',
+          },
         }}
         onClick={handleClick}
       >

@@ -20,12 +20,12 @@ export default function WishlistButton({
         height: { xs: '35px', md: '40px', lg: '44px' },
         padding: '10px',
         borderRadius: '12px',
-        backgroundColor: 'color-mix(in srgb, white 20%, transparent)',
+        backgroundColor: 'color-mix(in srgb, white 30%, transparent)',
         color: '#292D32',
         transition: 'color 0.3s ease-in-out, background-color 0.3s ease-in-out',
 
         '&:hover': {
-          backgroundColor: 'color-mix(in srgb, white 50%, transparent)',
+          backgroundColor: 'color-mix(in srgb, white 60%, transparent)',
           color: 'var(--color-primary)',
         },
 
