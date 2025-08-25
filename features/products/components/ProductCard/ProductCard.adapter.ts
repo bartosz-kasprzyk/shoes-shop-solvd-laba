@@ -1,6 +1,5 @@
 import type { Card } from '../../types/index';
-// import type { ProductData } from '@/features/products/types/shared.interface';
-import type { ProductFromServer } from '../../types/components.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import type { Product } from '@/shared/interfaces/Product';
 
 export function adaptProductToCard(product: Product | ProductFromServer): Card {

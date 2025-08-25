@@ -29,10 +29,6 @@ const createMockSession = (
 };
 
 describe('UserProfile', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('renders avatar image and user name when user is authenticated', () => {
     const sessionData: Session = {
       user: {

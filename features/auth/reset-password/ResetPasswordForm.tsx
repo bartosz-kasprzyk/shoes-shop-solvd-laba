@@ -53,9 +53,7 @@ export const ResetPasswordForm = () => {
           height={'line'}
           role={serverError ? 'alert' : undefined}
         >
-          {serverError && !success
-            ? 'Something went wrong. Try again later.'
-            : '\u00A0'}
+          {serverError && !success ? serverError : '\u00A0'}
         </Typography>
         <Fade in={success}>
           <Typography textAlign='center' color='success.main'>

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import TextUnderButton from '../../TextUnderButton/TextUnderButton';
+import TextUnderButton from '..';
 
 describe('TextUnderButton', () => {
   it('renders with both text and linkText', () => {

@@ -26,10 +26,6 @@ describe('profile.api with fetch', () => {
     global.fetch = jest.fn();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('getProfile should return parsed profile data', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,

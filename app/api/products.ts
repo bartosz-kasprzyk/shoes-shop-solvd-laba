@@ -92,8 +92,7 @@ export async function updateProduct(
     if (img.file) {
       const id = await uploadImageToServer(img.file, token);
       imageIDs.push(id);
-    }
-    if (img.id) {
+    } else if (img.id) {
       imageIDs.push(img.id);
     }
   }

@@ -1,4 +1,4 @@
-import type { ProductData } from '@/features/products/types/shared.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import {
   RECENTLY_VIEWED_LIMIT,
   updateRecentlyViewed,
@@ -9,8 +9,11 @@ describe('updateRecentlyViewed', () => {
     localStorage.clear();
   });
 
-  it('should store product in localStorage when viewed', () => {
-    const product: ProductData = { id: 1, attributes: { name: 'Test' } } as any;
+  it('stores product in localStorage when viewed', () => {
+    const product: ProductFromServer = {
+      id: 1,
+      attributes: { name: 'Test' },
+    } as any;
 
     updateRecentlyViewed(product, product.id);
 
@@ -19,11 +22,11 @@ describe('updateRecentlyViewed', () => {
     expect(stored[0].id).toBe(1);
   });
 
-  it('should remove oldest products when limit is exceeded', () => {
+  it('removes oldest products when limit is exceeded', () => {
     const limit = RECENTLY_VIEWED_LIMIT;
     const amountOfExtraProducts = 3;
     for (let i = 1; i <= limit + amountOfExtraProducts; i++) {
-      const product: ProductData = {
+      const product: ProductFromServer = {
         id: i,
         attributes: { name: `Test ${i}` },
       } as any;

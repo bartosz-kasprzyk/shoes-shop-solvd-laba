@@ -25,7 +25,7 @@ describe('ProductImages component', () => {
     (useMediaQuery as jest.Mock).mockImplementation(() => false); // desktop view
   });
 
-  test('renders all thumbnails and main image correctly', () => {
+  it('renders all thumbnails and main image correctly', () => {
     render(<ProductImages images={mockImages} />);
 
     const thumbnails = screen.getAllByAltText(/Thumbnail \d+/i);
@@ -36,7 +36,7 @@ describe('ProductImages component', () => {
     expect(mainImage).toHaveAttribute('src', mockImages[0].attributes.url);
   });
 
-  test('clicking a thumbnail updates the main image', () => {
+  it('clicking a thumbnail updates the main image', () => {
     render(<ProductImages images={mockImages} />);
 
     let mainImages = screen.getAllByAltText('Main product image'); // 2 exist because of framer-motion
@@ -62,7 +62,7 @@ describe('ProductImages component', () => {
     );
   });
 
-  test('next and prev buttons navigate correctly', () => {
+  it('next and prev buttons navigate correctly', () => {
     render(<ProductImages images={mockImages} />);
 
     const [prevBtn, nextBtn] = screen.getAllByRole('button');
@@ -107,7 +107,7 @@ describe('ProductImages component', () => {
     expect(nextBtn).not.toBeDisabled();
   });
 
-  test('renders dot indicators and reacts to clicks on mobile', () => {
+  it('renders dot indicators and reacts to clicks on mobile', () => {
     (useMediaQuery as jest.Mock).mockImplementation(() => true); // mobile view
     render(<ProductImages images={mockImages} />);
 

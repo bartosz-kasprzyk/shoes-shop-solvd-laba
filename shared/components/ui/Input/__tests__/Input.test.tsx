@@ -36,4 +36,21 @@ describe('Input component', () => {
     const inputWrapper = container.querySelector('.MuiOutlinedInput-root');
     expect(inputWrapper).toHaveStyle('height: auto');
   });
+
+  it('displays current length and max length when value and maxLength are provided', () => {
+    const testValue = 'hello';
+    const maxLength = 100;
+    render(
+      <Input
+        id='length-input'
+        title='Length Field'
+        value={testValue}
+        maxLength={maxLength}
+      />,
+    );
+
+    expect(
+      screen.getByText(`${testValue.length}/${maxLength}`),
+    ).toBeInTheDocument();
+  });
 });

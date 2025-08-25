@@ -53,12 +53,11 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
 }));
 
 beforeEach(() => {
-  jest.clearAllMocks();
   window.localStorage.setItem('wishlist', JSON.stringify(mockWishlist));
 });
 
 describe('WishlistPage', () => {
-  test('renders empty wishlist message with Browse products button when no items', async () => {
+  it('renders empty wishlist message with Browse products button when no items', async () => {
     window.localStorage.removeItem('wishlist');
     render(<WishlistPage />);
 
@@ -72,7 +71,7 @@ describe('WishlistPage', () => {
     ).toBeInTheDocument();
   });
 
-  test('renders wishlist items', async () => {
+  it('renders wishlist items', async () => {
     render(<WishlistPage />);
 
     for (const item of mockWishlist) {
@@ -80,7 +79,7 @@ describe('WishlistPage', () => {
     }
   });
 
-  test('removes item from wishlist and shows snackbar alert', async () => {
+  it('removes item from wishlist and shows snackbar alert', async () => {
     render(<WishlistPage />);
 
     const removeBtn = await screen.findByRole('button', { name: 'remove-1' });

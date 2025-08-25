@@ -1,4 +1,4 @@
-import type { ProductFromServer } from '../../types/components.interface';
+import type { ProductFromServer } from '../../types/shared.interface';
 
 interface adaptProductForEditReturnProps {
   id: number;
@@ -28,7 +28,7 @@ export function adaptProductForEdit(
     gender: String(product.attributes.gender.data.id),
     brand: String(product.attributes.brand.data.id),
     categories: String(product.attributes.categories.data[0].id),
-    sizes: product.attributes.sizes.data.map((s) => String(s.id)),
+    sizes: product.attributes.sizes?.data?.map((s) => String(s.id)) || [],
     images: product.attributes.images.data.map(
       (i: { id: number; attributes: { url: string } }) => ({
         preview: i.attributes.url,

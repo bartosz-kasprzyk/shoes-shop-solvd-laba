@@ -4,7 +4,7 @@ import React, { createContext, useContext } from 'react';
 import type { CartItemForDisplay, CartItemWithProduct } from './interface';
 import { useCart } from '@/shared/hooks/useCart';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
-import type { ProductData } from '@/features/products/types/shared.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { useQueries } from '@tanstack/react-query';
 
 interface CartContextType {
@@ -42,9 +42,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     })),
   });
 
-  const products: ProductData[] = productQueries
+  const products: ProductFromServer[] = productQueries
+
     .map((q) => q.data?.data)
-    .filter((p): p is ProductData => !!p);
+    .filter((p): p is ProductFromServer => !!p);
 
   const cartWithProducts: CartItemWithProduct[] = cart
     .map((item) => {

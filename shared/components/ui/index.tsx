@@ -5,4 +5,4 @@ export { default as EmptyState } from './EmptyState';
 export { default as ImageOverlay } from './ImageOverlay';
 export { default as Input } from './Input';
 export { default as Label } from './Label';
-export { default as TextUnderButton } from './TextUnderButton/TextUnderButton';
+export { default as TextUnderButton } from './TextUnderButton';

@@ -1,5 +1,5 @@
 import { adaptProductToCard } from '@/features/products/components/ProductCard/ProductCard.adapter';
-import type { ProductFromServer } from '@/features/products/types/components.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import type { Product } from '@/shared/interfaces/Product';

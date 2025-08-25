@@ -20,10 +20,6 @@ const profile = {
 };
 
 describe('handleProfileUpdate', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('updates avatar and profile when avatarOperation is "update"', async () => {
     const avatarFile = new File(['test file'], 'avatar.png', {
       type: 'image/png',
