@@ -11,6 +11,7 @@ import useUser from '@/shared/hooks/useUser';
 import { deleteProduct } from '@/app/api/products';
 import { DropdownDotsIcon } from '@/shared/icons';
 import EditProductModal from '@/features/products/components/EditProductModal';
+import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
 export default function DropDownMenu({ id }: { id: number }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -30,7 +31,7 @@ export default function DropDownMenu({ id }: { id: number }) {
           query.queryKey[0] === 'myProducts' &&
           query.queryKey[1] === session?.user.id,
       });
-
+      revalidateProductPaths(id);
       setIsDeleteModalOpen(false);
     },
   });

@@ -18,3 +18,13 @@ export function updateRecentlyViewed(
 
   localStorage.setItem('recentlyViewed', JSON.stringify(storedProducts));
 }
+
+export function removeRecentlyViewed(productId: number) {
+  const stored = localStorage.getItem('recentlyViewed');
+  if (!stored) return;
+
+  let storedProducts: ProductData[] = JSON.parse(stored);
+  storedProducts = storedProducts.filter((p) => p.id !== productId);
+
+  localStorage.setItem('recentlyViewed', JSON.stringify(storedProducts));
+}
