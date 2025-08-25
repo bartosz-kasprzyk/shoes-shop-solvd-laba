@@ -1,7 +1,13 @@
 import { useContext } from 'react';
 import { SnackbarContext } from '../contexts/SnackbarContext';
 
-export function useSnackbar() {
+export function useSnackbar(): {
+  showSnackbar: (
+    message: string,
+    severity?: 'success' | 'info' | 'warning' | 'error',
+    duration?: number,
+  ) => void;
+} {
   const context = useContext(SnackbarContext);
   if (!context) {
     throw new Error('useSnackbar must be used within a SnackbarProvider');

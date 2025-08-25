@@ -22,7 +22,7 @@ export function adaptProductForEdit(
   const adapted = {
     id: product.id,
     name: product.attributes.name,
-    price: product.attributes.price ?? undefined,
+    price: product.attributes.price,
     description: product.attributes.description,
     color: String(product.attributes.color.data.id),
     gender: String(product.attributes.gender.data.id),

@@ -1,6 +1,5 @@
 import type { ApiItem } from '../../../shared/interfaces/ApiItem';
 import type { FilterTypeUrlSegment } from '../types';
-import { FilterType } from '../types';
 import { buildQueryForCategory } from './buildQuaryForCategory';
 
 export const fetchFilterValuesByFilterType = async (

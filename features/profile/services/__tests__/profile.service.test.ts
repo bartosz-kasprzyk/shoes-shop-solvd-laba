@@ -1,5 +1,4 @@
 import * as profileClient from '../../client/profile.api';
-import { Profile } from '../../types';
 import { handleProfileUpdate } from '../profile.service';
 
 jest.mock('../../client/profile.api');

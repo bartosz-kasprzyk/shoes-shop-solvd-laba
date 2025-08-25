@@ -44,7 +44,7 @@ const UploadedImagesContainer = ({
       }));
 
       setImages((prev) => [...prev, ...newImages]);
-    } catch (error) {
+    } catch {
       setImagesError('Failed to compress image.');
     }
   };

@@ -10,7 +10,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { session } = useUser();
   const [total, setTotal] = useState<number | null>(null);
 
-  const userId = session?.user.id?.toString() || 'guest';
+  const userId = session?.user.id.toString() || 'guest';
   const cartKey = `cart_${userId}`;
 
   const generateId = () =>

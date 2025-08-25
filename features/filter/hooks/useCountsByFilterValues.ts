@@ -7,7 +7,9 @@ export function useCountsByFilterValues(
   filterValues: FilterValue[],
   filterType: FilterType,
   initialRawFilters: Filter,
-) {
+): {
+  [key: string]: number;
+} {
   const queries = useQueries({
     queries: filterValues.map((name) => {
       const filters = { ...initialRawFilters };

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography, Collapse, Link, Fade } from '@mui/material';
+import { Box, Typography, Link, Fade } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from '@/shared/components/ui';

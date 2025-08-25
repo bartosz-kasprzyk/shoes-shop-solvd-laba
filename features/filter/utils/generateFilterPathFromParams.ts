@@ -1,4 +1,6 @@
-export function generateFilterPathFromParams(params: Record<string, string[]>) {
+export function generateFilterPathFromParams(
+  params: Record<string, string[]>,
+): string {
   const segments: string[] = [];
 
   for (const [key, values] of Object.entries(params)) {

@@ -128,7 +128,7 @@ describe('ProfileForm', () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it('disables the submit button when submitting', async () => {
+  it('disables the submit button when submitting', () => {
     (useProfile as jest.Mock).mockReturnValue({
       profile: {
         data: {

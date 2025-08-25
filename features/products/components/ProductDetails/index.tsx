@@ -20,7 +20,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [showSizeWarning, setShowSizeWarning] = useState(false);
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
-  const isAuthenticated = !!session?.user?.accessToken;
+  const isAuthenticated = !!session?.user.accessToken;
 
   const router = useRouter();
   const { addItem } = useCart();
@@ -32,8 +32,8 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
   }, [initialData.data]);
 
   const availableSizes = new Set(
-    Array.isArray(product.sizes?.data)
-      ? product.sizes?.data.map(({ attributes }) => attributes.value)
+    Array.isArray(product.sizes.data)
+      ? product.sizes.data.map(({ attributes }) => attributes.value)
       : [],
   );
 
@@ -124,7 +124,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
               marginLeft: '2px',
             }}
           >
-            {product.color?.data ? product.color.data.attributes.name : ''}
+            {product.color.data ? product.color.data.attributes.name : ''}
           </Typography>
 
           <SizeSelector

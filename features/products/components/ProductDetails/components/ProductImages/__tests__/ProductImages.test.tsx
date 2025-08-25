@@ -4,8 +4,9 @@ import ProductImages from '..';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 jest.mock('next/image', () => {
-  const MockedImage = (props: any) => {
-    const { alt, fill, priority, ...rest } = props;
+  const MockedImage = (props: { alt: string }) => {
+    const { alt, ...rest } = props;
+    // eslint-disable-next-line @next/next/no-img-element
     return <img {...rest} alt={alt} />;
   };
   MockedImage.displayName = 'NextImageMock';

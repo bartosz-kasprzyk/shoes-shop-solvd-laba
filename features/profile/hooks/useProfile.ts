@@ -2,16 +2,19 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as profileClient from '../client/profile.api';
 import type { OnSubmitPayload } from '../types';
 import { handleProfileUpdate } from '../services/profile.service';
-import useUser from '@/shared/hooks/useUser';
 import { useServerSession } from '@/shared/hooks/useServerSession';
 
-export default function useProfile() {
+export default function useProfile(): {
+  profile: ReturnType<typeof useQuery>;
+  onSubmit: (data: OnSubmitPayload) => void;
+  isSubmitting: boolean;
+} {
   // const { session, status } = useUser();
   const session = useServerSession();
   const queryClient = useQueryClient();
 
-  const id = session?.user.id as number;
-  const token = session?.user.accessToken as string;
+  const id = session.user.id as number;
+  const token = session.user.accessToken as string;
   // const isSessionReady = status === 'authenticated' && !!id && !!token;
 
   const profile = useQuery({
