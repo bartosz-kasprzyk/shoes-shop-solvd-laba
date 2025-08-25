@@ -16,10 +16,6 @@ export default function ProfileForm() {
   const { profile, onSubmit, isSubmitting } = useProfile();
   const { session, update } = useUser();
 
-  const fullName = session?.user.name ?? '';
-  const [firstName, ...rest] = fullName.split(' ');
-  const lastName = rest.join(' ');
-
   const profileForm = useForm<Profile>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -57,7 +53,6 @@ export default function ProfileForm() {
   function changeAvatar(file: File) {
     setAvatarFile(file);
     setAvatarOperation('update');
-
     const newAvatarUrl = URL.createObjectURL(file);
     setValue('avatarUrl', newAvatarUrl);
   }
