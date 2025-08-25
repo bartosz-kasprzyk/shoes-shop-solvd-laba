@@ -3,7 +3,7 @@ import type { ProductFromServer } from '@/features/products/types/shared.interfa
 export const RECENTLY_VIEWED_LIMIT = 12;
 
 export function updateRecentlyViewed(
-  product: ProductData,
+  product: ProductFromServer,
   productId: number,
 ): void {
   const stored = localStorage.getItem('recentlyViewed');

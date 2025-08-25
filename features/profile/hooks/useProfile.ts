@@ -4,11 +4,7 @@ import type { OnSubmitPayload } from '../types';
 import { handleProfileUpdate } from '../services/profile.service';
 import { useServerSession } from '@/shared/hooks/useServerSession';
 
-export default function useProfile(): {
-  profile: ReturnType<typeof useQuery>;
-  onSubmit: (data: OnSubmitPayload) => void;
-  isSubmitting: boolean;
-} {
+export default function useProfile() {
   // const { session, status } = useUser();
   const session = useServerSession();
   const queryClient = useQueryClient();
