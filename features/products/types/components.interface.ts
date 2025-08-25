@@ -28,8 +28,7 @@ export type ProductActionVariant =
 
 interface CommonProps {
   variant?: ProductActionVariant;
-  onProductAction?: (product: Product | ProductFromServer) => void;
-  isCard?: boolean;
+  onProductAction?: (productId: number) => void;
 }
 
 type ProductsOnly = {

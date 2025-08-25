@@ -10,7 +10,6 @@ import { ScrollableContainer } from '@/features/layout/components/ScrollableCont
 import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
 import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
-import { adaptProductToCard } from '../ProductCard/ProductCard.adapter';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/shared/hooks/useCart';
@@ -43,7 +42,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
       return;
     }
 
-    const result = addToWishlist(adaptProductToCard(initialData.data));
+    const result = addToWishlist(initialData.data.id);
     showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
   };
 
