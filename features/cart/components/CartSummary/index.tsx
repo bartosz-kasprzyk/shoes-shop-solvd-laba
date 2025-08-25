@@ -2,7 +2,7 @@
 
 import { Box, Collapse, Typography } from '@mui/material';
 import type { BoxProps } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/shared/components/ui/Button';
 import { mockPromocodes as validPromocodes } from '@/shared/mocks/mockPromocodes';
 import type { promocode } from './interface';
@@ -13,9 +13,18 @@ import TotalSection from './TotalSection';
 import { TransitionGroup } from 'react-transition-group';
 import { useCartDetails } from '../CartDetailsContext';
 
+import { usePathname, useRouter } from 'next/navigation';
+import { useCheckoutStore } from '@/features/checkout/stores/checkoutStore';
+import { useCart } from '@/shared/hooks/useCart';
+
 export default function CartSummary(props: BoxProps) {
   const { cartItems } = useCartDetails();
+  const { setTotal } = useCart();
   const [promocodes, setPromocodes] = useState<promocode[]>([]);
+  const pathname = usePathname();
+  const router = useRouter();
+  const buttonText = pathname === '/checkout' ? 'Pay' : 'Go to checkout';
+  const { submit } = useCheckoutStore();
 
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -32,8 +41,16 @@ export default function CartSummary(props: BoxProps) {
 
   const total = subtotal + shipping + tax - discountInCash;
 
+  useEffect(() => {
+    setTotal(total);
+  }, [total, setTotal]);
+
   const handleChangeStageButton = () => {
-    console.log('button was clicked');
+    if (pathname !== '/checkout') {
+      router.push('/checkout');
+    } else {
+      submit?.();
+    }
   };
 
   const handleDeletePromocode = (code: string) => {
@@ -52,7 +69,6 @@ export default function CartSummary(props: BoxProps) {
         variant='h4'
         marginBottom='30px'
         fontSize={{ xs: '24px', md: '32px' }}
-        paddingY={1}
         fontWeight={500}
         borderTop={{
           xs: '1px color-mix(in srgb, black 10%, transparent) solid',
@@ -92,7 +108,7 @@ export default function CartSummary(props: BoxProps) {
         onClick={handleChangeStageButton}
         sx={{ width: '100%', marginTop: '80px' }}
       >
-        Go to checkout
+        {buttonText}
       </Button>
     </Box>
   );

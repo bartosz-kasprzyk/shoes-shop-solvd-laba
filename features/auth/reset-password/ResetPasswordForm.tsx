@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography, Collapse, Link, Fade } from '@mui/material';
+import { Box, Typography, Link, Fade } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from '@/shared/components/ui';
@@ -53,9 +53,7 @@ export const ResetPasswordForm = () => {
           height={'line'}
           role={serverError ? 'alert' : undefined}
         >
-          {serverError && !success
-            ? 'Something went wrong. Try again later.'
-            : '\u00A0'}
+          {serverError && !success ? serverError : '\u00A0'}
         </Typography>
         <Fade in={success}>
           <Typography textAlign='center' color='success.main'>

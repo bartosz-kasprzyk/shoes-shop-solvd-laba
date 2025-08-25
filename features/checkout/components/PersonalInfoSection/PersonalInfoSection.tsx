@@ -6,6 +6,7 @@ import type { PersonalInfo, PersonalInfoSectionProps } from './interface';
 
 export default function PersonalInfoSection({
   personalInfo,
+  personalErrors,
   onChange,
 }: PersonalInfoSectionProps) {
   const handleChange =
@@ -15,7 +16,7 @@ export default function PersonalInfoSection({
     };
 
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box>
       <Typography variant='h6' sx={{ mb: 2, fontWeight: 500 }}>
         Personal info
       </Typography>
@@ -34,6 +35,8 @@ export default function PersonalInfoSection({
             placeholder='Jane'
             value={personalInfo.name}
             onChange={handleChange('name')}
+            error={!!personalErrors.name}
+            helperText={personalErrors.name}
             required
           />
         </Box>
@@ -44,6 +47,8 @@ export default function PersonalInfoSection({
             placeholder='Meldrum'
             value={personalInfo.surname}
             onChange={handleChange('surname')}
+            error={!!personalErrors.surname}
+            helperText={personalErrors.surname}
             required
           />
         </Box>
@@ -64,6 +69,8 @@ export default function PersonalInfoSection({
             placeholder='rhc23@mail.co'
             value={personalInfo.email}
             onChange={handleChange('email')}
+            error={!!personalErrors.email}
+            helperText={personalErrors.email}
             required
           />
         </Box>
@@ -74,6 +81,8 @@ export default function PersonalInfoSection({
             placeholder='(949) 354-2574'
             value={personalInfo.phoneNumber}
             onChange={handleChange('phoneNumber')}
+            error={!!personalErrors.phoneNumber}
+            helperText={personalErrors.phoneNumber}
             required
           />
         </Box>

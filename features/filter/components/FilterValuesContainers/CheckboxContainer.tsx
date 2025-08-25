@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Grid, List, ListItem } from '@mui/material';
+import { Box, List } from '@mui/material';
 import CheckboxItem from '../FilterValuesItems/CheckboxItem';
 import { useFilterSection } from '../FilterSection';
 import { useSearch } from '../SearchWrapper/SearchWrapper';

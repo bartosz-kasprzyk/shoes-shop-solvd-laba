@@ -1,25 +1,69 @@
 'use client';
 
-import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import CartSummary from '@/features/cart/components/CartSummary';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Box, CircularProgress, Collapse, Typography } from '@mui/material';
 import ShippingInfoSection from '../ShippingInfoSection';
-import PaymentInfoSection from '../PaymentInfoSection';
-import SectionSeparator from '../SectionSeparator';
 import type { PersonalInfo } from '../PersonalInfoSection/interface';
 import type { ShippingInfo } from '../ShippingInfoSection/interface';
-import type { PaymentInfo } from '../PaymentInfoSection/interface';
-import type { CardPaymentData } from '../CardPaymentForm/interface';
 import PersonalInfoSection from '../PersonalInfoSection';
 import type { CheckoutFormProps } from './interface';
+import {
+  PaymentElement,
+  useElements,
+  useStripe,
+} from '@stripe/react-stripe-js';
+import convertToSubcurrency from '@/features/shop/lib/convertToSubcurrency';
+import useUser from '@/shared/hooks/useUser';
+
+import { z } from 'zod';
+import { useCheckoutStore } from '../../stores/checkoutStore';
+import { useCart } from '@/shared/hooks/useCart';
+
+export const personalInfoSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  surname: z.string().min(2, 'Surname is required'),
+  email: z.email('Invalid email address'),
+  phoneNumber: z.string().min(7, 'Phone number is too short'),
+});
+
+export const shippingInfoSchema = z.object({
+  country: z.string().min(2, 'Country is required'),
+  city: z.string().min(2, 'City is required'),
+  state: z.string().min(2, 'State is required'),
+  zipCode: z.string().min(3, 'Zip code is required'),
+  address: z.string().min(5, 'Address is required'),
+});
+
+export const checkoutSchema = z.object({
+  personalInfo: personalInfoSchema,
+  shippingInfo: shippingInfoSchema,
+});
+
+function generateOrderNumber(): string {
+  return Math.floor(1000000 + Math.random() * 9000000).toString();
+}
 
 export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { clearCart, cartId, cart, total } = useCart();
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [clientSecret, setClientSecret] = useState('');
+  const [pIId, setPIId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { session } = useUser();
+  const id = session?.user.id as number;
+  const isFetching = useRef(false);
+
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     name: '',
     surname: '',
     email: '',
     phoneNumber: '',
   });
+  const [personalErrors, setPersonalErrors] = useState<Record<string, string>>(
+    {},
+  );
 
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     country: '',
@@ -28,14 +72,39 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     zipCode: '',
     address: '',
   });
+  const [shippingErrors, setShippingErrors] = useState<Record<string, string>>(
+    {},
+  );
+  const { setSubmit } = useCheckoutStore();
 
-  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
-    paymentMethod: 'card',
-    cardNumber: '',
-    expirationDate: '',
-    securityCode: '',
-    country: '',
-  });
+  useEffect(() => {
+    if (id && total && !loading && !pIId && !isFetching.current) {
+      isFetching.current = true;
+      setLoading(true);
+      fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: convertToSubcurrency(total),
+          personalInfo,
+          shippingInfo,
+          cartId,
+          strapiUserId: id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+          setPIId(data.paymentIntentId);
+        })
+        .finally(() => {
+          setLoading(false);
+          isFetching.current = false;
+        });
+    }
+  }, [total, id]);
 
   const handlePersonalInfoChange = (
     field: keyof PersonalInfo,
@@ -51,30 +120,108 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     setShippingInfo((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handlePaymentMethodChange = (method: string) => {
-    setPaymentInfo((prev) => ({ ...prev, paymentMethod: method }));
-  };
+  const handleSubmit = useCallback(async () => {
+    setLoading(true);
 
-  const handlePaymentDataChange = (
-    field: keyof CardPaymentData,
-    value: string,
-  ) => {
-    setPaymentInfo((prev) => ({ ...prev, [field]: value }));
-  };
+    const result = checkoutSchema.safeParse({
+      personalInfo,
+      shippingInfo,
+    });
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onSubmit({ personalInfo, shippingInfo, paymentInfo });
-  };
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      console.log(result);
+      result.error.issues.forEach((issue) => {
+        const path = issue.path.join('.');
+        fieldErrors[path] = issue.message;
+      });
+
+      setPersonalErrors(
+        Object.fromEntries(
+          Object.entries(fieldErrors)
+            .filter(([key]) => key.startsWith('personalInfo'))
+            .map(([key, value]) => [key.replace('personalInfo.', ''), value]),
+        ),
+      );
+
+      setShippingErrors(
+        Object.fromEntries(
+          Object.entries(fieldErrors)
+            .filter(([key]) => key.startsWith('shippingInfo'))
+            .map(([key, value]) => [key.replace('shippingInfo.', ''), value]),
+        ),
+      );
+      setLoading(false);
+      return;
+    }
+    setPersonalErrors({});
+    setShippingErrors({});
+
+    if (!stripe || !elements) {
+      return;
+    }
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setErrorMessage(submitError.message);
+      setLoading(false);
+      return;
+    }
+    const orderId = generateOrderNumber();
+    const res = await fetch('/api/update-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        strapiUserId: id,
+        orderId,
+        cart: JSON.stringify(cart),
+        personalInfo,
+        shippingInfo,
+        paymentIntentId: pIId,
+      }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      setErrorMessage(data.error);
+      setLoading(false);
+      return;
+    }
+    const { error } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        payment_method_data: {
+          billing_details: {
+            name: personalInfo.name,
+            email: personalInfo.email,
+            address: {
+              country: shippingInfo.country,
+              line1: shippingInfo.address,
+              city: shippingInfo.city,
+              state: shippingInfo.state,
+              postal_code: shippingInfo.zipCode,
+            },
+          },
+        },
+        return_url: `http://localhost:3000/thank-you?orderId=${orderId}&cartId=${cartId}`, // to be changed, make dynamic instead of localhost, pass data
+      },
+    });
+  }, [personalInfo, shippingInfo, clientSecret, stripe, elements]);
+
+  useEffect(() => {
+    setSubmit(handleSubmit);
+  }, [handleSubmit]);
+  if (!stripe || !elements) {
+    return <CircularProgress />;
+  }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Box height={'100%'}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: 'space-between',
-          gap: { xs: 3, md: 4 },
+          gap: 1,
         }}
       >
         <Box sx={{ flexBasis: '800px' }}>
@@ -88,34 +235,49 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           >
             Checkout
           </Typography>
-
           <PersonalInfoSection
             personalInfo={personalInfo}
+            personalErrors={personalErrors}
             onChange={handlePersonalInfoChange}
           />
 
-          <SectionSeparator />
-
           <ShippingInfoSection
             shippingInfo={shippingInfo}
+            shippingErrors={shippingErrors}
             onChange={handleShippingInfoChange}
           />
 
-          <SectionSeparator />
-
-          <PaymentInfoSection
-            paymentInfo={paymentInfo}
-            onPaymentMethodChange={handlePaymentMethodChange}
-            onPaymentDataChange={handlePaymentDataChange}
-          />
-        </Box>
-
-        <Box sx={{ flexBasis: '400px' }}>
-          <Box sx={{ position: 'sticky' }}>
-            <CartSummary />
-          </Box>
+          {clientSecret && (
+            <Box>
+              <Typography variant='h6' sx={{ my: 3, fontWeight: 500 }}>
+                Payment info
+              </Typography>
+              <PaymentElement
+                options={{
+                  layout: {
+                    type: 'tabs',
+                    defaultCollapsed: false,
+                  },
+                  fields: {
+                    billingDetails: {
+                      address: 'never',
+                    },
+                  },
+                }}
+              />
+            </Box>
+          )}
+          <Typography
+            mt={2}
+            sx={{ lineHeight: '1em' }}
+            color='error'
+            height={'line'}
+            role={errorMessage ? 'alert' : undefined}
+          >
+            {errorMessage && errorMessage}
+          </Typography>
         </Box>
       </Box>
-    </form>
+    </Box>
   );
 }

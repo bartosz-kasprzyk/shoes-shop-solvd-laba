@@ -39,10 +39,6 @@ const mockCard: ProductCardProps['card'] = {
 };
 
 describe('ProductCard', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('renders image, name, price, gender, and link', () => {
     render(<ProductCard card={mockCard} />);
 

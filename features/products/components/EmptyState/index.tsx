@@ -1,7 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import Link from 'next/link';
 import CartIcon from '../../../../shared/icons/CartIcon';
-import { Button } from '@/shared/components/ui';
 import type { ReactNode } from 'react';
 
 export default function EmptyState({

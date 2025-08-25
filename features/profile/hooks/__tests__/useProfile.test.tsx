@@ -38,10 +38,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('useProfile', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('fetches profile when session is provided', async () => {
     (profileClient.getProfile as jest.Mock).mockResolvedValue({
       id: 123,

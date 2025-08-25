@@ -7,5 +7,6 @@ export interface PersonalInfo {
 
 export interface PersonalInfoSectionProps {
   personalInfo: PersonalInfo;
+  personalErrors: Record<string, string>;
   onChange: (field: keyof PersonalInfo, value: string) => void;
 }

@@ -26,14 +26,10 @@ describe('profile.api with fetch', () => {
     global.fetch = jest.fn();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('getProfile should return parsed profile data', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => profileResponse,
+      json: () => profileResponse,
     });
 
     const profile = await getProfile(token);
@@ -53,7 +49,7 @@ describe('profile.api with fetch', () => {
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => profileResponse,
+      json: () => profileResponse,
     });
 
     const result = await updateProfile({ profile, id, token });
@@ -74,7 +70,7 @@ describe('profile.api with fetch', () => {
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => response,
+      json: () => response,
     });
 
     const result = await updateProfileAvatar(file, token);
@@ -86,7 +82,7 @@ describe('profile.api with fetch', () => {
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ id }),
+      json: () => ({ id }),
     });
 
     const result = await deleteProfileAvatar(id, token);

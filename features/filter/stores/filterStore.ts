@@ -87,7 +87,7 @@ const useFilterStore = create<FiltersState>((set, get) => ({
     })),
 
   setAllFilterValues: (filter) =>
-    set((state) => ({
+    set(() => ({
       filters: {
         ...filter,
       },

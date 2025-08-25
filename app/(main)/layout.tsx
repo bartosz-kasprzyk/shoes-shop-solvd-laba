@@ -1,7 +1,13 @@
 import { Box } from '@mui/material';
 import TopBar from '@/features/layout/components/TopBar';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+  singleProductPage,
+}: {
+  children: React.ReactNode;
+  singleProductPage: React.ReactNode;
+}) {
   return (
     <Box
       sx={{
@@ -14,6 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     >
       <TopBar />
       <Box height={'100%'} overflow={'hidden'}>
+        {singleProductPage}
         {children}
       </Box>
     </Box>

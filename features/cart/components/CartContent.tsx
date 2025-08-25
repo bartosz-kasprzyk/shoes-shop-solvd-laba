@@ -1,12 +1,12 @@
 'use client';
 
-import { useCartDetails } from '@/features/cart/components/CartDetailsContext';
-import CartPage from '@/features/cart/components/CartPage';
-import CartPageEmpty from '@/features/cart/components/CartPageEmpty';
 import { useEffect, useState } from 'react';
+import { useCartContext } from './CartContext';
+import CartPage from './CartPage';
+import CartPageEmpty from './CartPageEmpty';
 
-export default function CartPageWrapper() {
-  const { cartItems } = useCartDetails();
+export default function CartContent() {
+  const { cartItems } = useCartContext();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

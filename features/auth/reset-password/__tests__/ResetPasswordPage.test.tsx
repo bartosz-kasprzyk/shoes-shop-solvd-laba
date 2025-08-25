@@ -83,4 +83,33 @@ describe('Reset Password Page', () => {
       await screen.findByText(/something went wrong/i),
     ).toBeInTheDocument();
   });
+
+  it('shows error message on bad response', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: () =>
+        Promise.resolve({
+          error: {
+            message:
+              'The reset password link is invalid or has expired. Please try again.',
+          },
+        }),
+    });
+
+    render(<ResetPasswordPage />);
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: '12345678' },
+    });
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
+      target: { value: '12345678' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /reset password/i }));
+
+    expect(
+      await screen.findByText(
+        /the reset password link is invalid or has expired. please try again./i,
+      ),
+    ).toBeInTheDocument();
+  });
 });

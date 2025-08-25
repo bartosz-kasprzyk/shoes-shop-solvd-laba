@@ -15,6 +15,7 @@ export interface ImagesData {
 // interface Sizes {
 //   data: SizeData[] | null;
 // }
+
 export interface ServerEntity<T> {
   data: {
     id: number;
@@ -22,7 +23,7 @@ export interface ServerEntity<T> {
   };
 }
 
-export interface ProductData {
+export interface ProductFromServer {
   id: number;
   attributes: {
     name: string;
@@ -47,5 +48,5 @@ export interface ProductData {
 }
 
 export interface ProductApiResponse {
-  data: ProductData;
+  data: ProductFromServer;
 }

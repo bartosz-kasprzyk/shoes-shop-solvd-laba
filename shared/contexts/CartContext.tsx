@@ -5,6 +5,9 @@ import { createContext } from 'react';
 
 interface CartContextType {
   cart: CartAddedItem[];
+  cartId: string | null;
+  total: number | null;
+  setTotal: (total: number) => void;
   addItem: (item: CartAddedItem) => void;
   updateQuantity: (
     productId: string,

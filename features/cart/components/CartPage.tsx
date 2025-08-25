@@ -38,61 +38,8 @@ export default function CartPage() {
   }, [isMobile]);
 
   return (
-    <Box
-      boxSizing={'border-box'}
-      height={'100%'}
-      display={'flex'}
-      justifyContent={'center'}
-      flexDirection={{ xs: 'column', md: 'row' }}
-      px={{ xs: 0, md: 8 }}
-      sx={{
-        gap: 'clamp(45px, 5vw, 160px)',
-      }}
-    >
-      {isMobile ? (
-        <>
-          <ScrollableContainer>
-            <CartList isMobile={isMobile} />
-            <Box ref={summaryRef}>
-              <CartSummary />
-            </Box>
-          </ScrollableContainer>
-
-          <Button
-            variant='primary'
-            onClick={handleScrollToSummary}
-            sx={{
-              position: 'fixed',
-              bottom: 20,
-              left: '50%',
-              zIndex: 14,
-              borderRadius: '50px',
-              px: 2.5,
-              py: 1.2,
-              transition: 'transform 1s ease-in-out',
-              transform: showButton
-                ? 'translateX(-50%) translateY(0)'
-                : 'translateX(-50%) translateY(calc(100% + 20px))',
-
-              visibility: showButton ? 'visible' : 'hidden',
-              '&:hover': {
-                transform: 'translateX(-50%) translateY(0) !important',
-              },
-            }}
-          >
-            Go to summary
-          </Button>
-        </>
-      ) : (
-        <>
-          <Box flex={{ md: '0 0 51%' }} minWidth={0}>
-            <CartList isMobile={isMobile} />
-          </Box>
-          <Box flex={{ md: '0 0 21%' }} minWidth={0}>
-            <CartSummary />
-          </Box>
-        </>
-      )}
+    <Box boxSizing={'border-box'} height={'100%'}>
+      <CartList isMobile={isMobile} />
     </Box>
   );
 }

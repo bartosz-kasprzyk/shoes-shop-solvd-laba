@@ -10,7 +10,7 @@ import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import type { Product } from '@/shared/interfaces/Product';
-import type { ProductFromServer } from '@/features/products/types/components.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<Product[]>([]);

@@ -3,7 +3,7 @@
 import React, { createContext, useContext } from 'react';
 import type { CartItemForDisplay, CartItemWithProduct } from './interface';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
-import type { ProductData } from '@/features/products/types/shared.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { useQueries } from '@tanstack/react-query';
 import { useCart } from '@/shared/hooks/useCart';
 
@@ -15,6 +15,7 @@ interface CartDetailsContextType {
     newQuantity: number,
   ) => void;
   handleDeleteItem: (productId: string, size: string) => void;
+  isCartDetailsLoading: boolean;
 }
 
 const CartDetailsContext = createContext<CartDetailsContextType | null>(null);
@@ -46,11 +47,13 @@ export const CartDetailsProvider = ({
     })),
   });
 
-  if (productQueries.some((q) => q.isLoading)) return <p>Loading...</p>;
+  const isCartDetailsLoading = productQueries.some((q) => q.isLoading)
+    ? true
+    : false;
 
-  const products: ProductData[] = productQueries
+  const products: ProductFromServer[] = productQueries
     .map((q) => q.data?.data)
-    .filter((p): p is ProductData => !!p);
+    .filter((p): p is ProductFromServer => !!p);
 
   const cartWithProducts: CartItemWithProduct[] = cart
     .map((item) => {
@@ -83,6 +86,7 @@ export const CartDetailsProvider = ({
     cartItems: cartItemsForComponent,
     handleQuantityChange: updateQuantity,
     handleDeleteItem: deleteItem,
+    isCartDetailsLoading,
   };
 
   return (

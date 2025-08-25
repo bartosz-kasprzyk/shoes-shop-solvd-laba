@@ -37,9 +37,10 @@ export const useResetPassword = (): {
       );
 
       if (!res.ok) {
-        const json = await res.json();
         setStatus('error');
-        setServerError(json?.error?.message || 'Reset failed');
+        setServerError(
+          'The reset password link is invalid or has expired. Please try again.',
+        );
         return;
       }
 

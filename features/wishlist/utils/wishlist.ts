@@ -4,7 +4,10 @@ function getWishlist(): Card[] {
   return JSON.parse(localStorage.getItem('wishlist') || '[]');
 }
 
-export function addToWishlist(product: Card) {
+export function addToWishlist(product: Card): {
+  success: boolean;
+  message: string;
+} {
   const wishlist = getWishlist();
   const exists = wishlist.some((p) => p.id === product.id);
 
@@ -18,7 +21,7 @@ export function addToWishlist(product: Card) {
   return { success: true, message: 'Product added to wishlist' };
 }
 
-export function removeFromWishlist(productId: number) {
+export function removeFromWishlist(productId: number): void {
   const wishlist = getWishlist().filter((p) => p.id !== productId);
   localStorage.setItem('wishlist', JSON.stringify(wishlist));
 }

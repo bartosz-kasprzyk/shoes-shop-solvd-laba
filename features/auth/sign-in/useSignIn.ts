@@ -31,8 +31,8 @@ export const useSignIn = (): {
       return false;
     } else {
       setSuccess(true);
-      // Use the NextAuth response URL or fall back to the callback URL or products page
-      const redirectUrl = res?.url || callbackUrl || '/products';
+      // Use the NextAuth response URL or fall back to the callback URL
+      const redirectUrl = res?.url || callbackUrl;
       router.push(redirectUrl);
       return true;
     }

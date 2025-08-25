@@ -1,13 +1,4 @@
-import ProductCard from '@/features/products/components/ProductCard';
-import { DropDownMenu, ImageOverlay } from '@/shared/components/ui';
-import {
-  Box,
-  Card,
-  CardMedia,
-  Grid,
-  Skeleton,
-  Typography,
-} from '@mui/material';
+import { Box, Grid, Skeleton, Typography } from '@mui/material';
 
 export default function LoadingProductsSkeleton() {
   const products = [];

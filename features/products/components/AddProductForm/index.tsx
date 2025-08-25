@@ -92,7 +92,7 @@ const AddProductForm = ({
     }
   };
 
-  const selectedSizes = watch('sizes');
+  const selectedSizes = watch('sizes') || [];
 
   const toggleSize = (sizeValue: string) => {
     const updatedSizes = selectedSizes.includes(sizeValue)

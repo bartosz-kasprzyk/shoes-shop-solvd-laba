@@ -1,7 +1,7 @@
 'use client';
 
 import { Typography } from '@mui/material';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext } from 'react';
 import { useFilterValuesByFilterType } from '../../hooks/useFilterValuesByFilterType';
 import { useCountsByFilterValues } from '../../hooks/useCountsByFilterValues';
 import type { FilterSectionProps } from './types';
@@ -42,7 +42,7 @@ export default function FilterSection({
 
   const filterValues: FilterValue[] = (data ?? []).map(apiItemToFilterValue);
 
-  const { filters, applyFilters } = useFilterStore();
+  const { filters } = useFilterStore();
 
   const areFiltersUsed =
     (filters[filterType] ?? []).length > 0 && !maxSelections;

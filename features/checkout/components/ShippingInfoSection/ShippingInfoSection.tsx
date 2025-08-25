@@ -6,6 +6,7 @@ import type { ShippingInfo, ShippingInfoSectionProps } from './interface';
 
 export default function ShippingInfoSection({
   shippingInfo,
+  shippingErrors,
   onChange,
 }: ShippingInfoSectionProps) {
   const handleChange =
@@ -16,7 +17,7 @@ export default function ShippingInfoSection({
 
   return (
     <Box>
-      <Typography variant='h6' sx={{ mb: 2, fontWeight: 500 }}>
+      <Typography variant='h6' sx={{ mb: 3, fontWeight: 500 }}>
         Shipping info
       </Typography>
       <Box
@@ -33,6 +34,8 @@ export default function ShippingInfoSection({
             placeholder='USA'
             value={shippingInfo.country}
             onChange={handleChange('country')}
+            error={!!shippingErrors.country}
+            helperText={shippingErrors.country}
             required
           />
         </Box>
@@ -43,6 +46,8 @@ export default function ShippingInfoSection({
             placeholder='New York'
             value={shippingInfo.city}
             onChange={handleChange('city')}
+            error={!!shippingErrors.city}
+            helperText={shippingErrors.city}
             required
           />
         </Box>
@@ -53,6 +58,8 @@ export default function ShippingInfoSection({
             placeholder='New York'
             value={shippingInfo.state}
             onChange={handleChange('state')}
+            error={!!shippingErrors.state}
+            helperText={shippingErrors.state}
             required
           />
         </Box>
@@ -63,6 +70,8 @@ export default function ShippingInfoSection({
             placeholder='10001'
             value={shippingInfo.zipCode}
             onChange={handleChange('zipCode')}
+            error={!!shippingErrors.zipCode}
+            helperText={shippingErrors.zipCode}
             required
           />
         </Box>
@@ -74,6 +83,8 @@ export default function ShippingInfoSection({
           placeholder='street, apartment, studio'
           value={shippingInfo.address}
           onChange={handleChange('address')}
+          error={!!shippingErrors.address}
+          helperText={shippingErrors.address}
           required
         />
       </Box>

@@ -42,15 +42,6 @@ export default function ProductsLayout({
     router.push(applyFilters());
   };
 
-  const queries = useQueries({
-    queries: filtersSections.map((filterType) => {
-      const categoryUrlSegment = filterTypeToUrlSegmentMap[filterType];
-      return {
-        queryKey: [filterType],
-        queryFn: () => fetchFilterValuesByFilterType(categoryUrlSegment),
-      };
-    }),
-  });
   const slugs = useFiltersSlugsFromPath();
   return (
     <Box

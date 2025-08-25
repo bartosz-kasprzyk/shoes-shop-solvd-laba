@@ -5,8 +5,7 @@ import type { Product } from '@/shared/interfaces/Product';
 export type ProductSchemaType = z.infer<typeof productSchema>;
 
 import type { Dispatch, SetStateAction, ChangeEvent } from 'react';
-import type { ProductFromServer } from './components.interface';
-// import type { ProductData } from './shared.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
 
 export interface ImageData {
   file?: File;
@@ -19,7 +18,6 @@ export interface AddProductFormProps {
   setImagesError: Dispatch<SetStateAction<string>>;
   setImages: Dispatch<SetStateAction<ImageData[]>>;
   mode: 'create' | 'update';
-  // initialData?: Product;
   initialData?: ProductFromServer;
   formId: string;
   onLoadingChange: (pending: boolean) => void;
@@ -78,7 +76,7 @@ export interface UploadedImageCardProps {
   deleteImage: (idx: number) => void;
 }
 
-type ImageFile = {
+export type ImageFile = {
   file: File;
   id: number;
 };
@@ -116,7 +114,6 @@ export interface ProductResponseProps {
 
 export type FetchMyProductsResponse = {
   data: ProductFromServer[];
-  // data: ProductData[];
   meta: any;
 };
 

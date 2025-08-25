@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import DropDownMenu from '..';
 import { useRouter } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -14,13 +15,36 @@ jest.mock('@/shared/hooks/useUser', () => ({
 
 jest.mock('@/features/products/components/DeleteConfirmationModal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, onDelete }: any) =>
+  default: ({ isOpen, onClose, onDelete, header, text }: any) =>
     isOpen ? (
       <div data-testid='delete-modal'>
-        <button onClick={onDelete}>Delete</button>
-        <button onClick={onClose}>Close</button>
+        <p>{header}</p>
+        <p>{text}</p>
+        <button onClick={onDelete}>Delete Confirm</button>
+        <button onClick={onClose}>Delete Close</button>
       </div>
     ) : null,
+}));
+
+jest.mock('@/features/products/components/EditProductModal', () => ({
+  __esModule: true,
+  default: ({ isOpen, onClose, productId }: any) =>
+    isOpen ? (
+      <div data-testid='edit-modal'>
+        <p>Edit Product {productId}</p>
+        <button onClick={onClose}>Edit Close</button>
+      </div>
+    ) : null,
+}));
+
+jest.mock('@/app/api/products', () => ({
+  deleteProduct: jest.fn(),
+}));
+
+jest.mock('@tanstack/react-query', () => ({
+  ...jest.requireActual('@tanstack/react-query'),
+  useMutation: jest.fn(),
+  useQueryClient: jest.fn(),
 }));
 
 describe('DropDownMenu', () => {
@@ -29,18 +53,31 @@ describe('DropDownMenu', () => {
 
   const queryClient = new QueryClient();
 
+  const mockUseMutation = useMutation as jest.Mock;
+  const mockUseQueryClient = useQueryClient as jest.Mock;
+  const mockInvalidateQueries = jest.fn();
+
+  let mockMutate = jest.fn();
+
   beforeEach(() => {
-    jest.spyOn(console, 'log').mockImplementation(jest.fn());
+    mockMutate = jest.fn();
+
+    mockUseMutation.mockReturnValue({
+      mutate: mockMutate,
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+    });
+
+    mockUseQueryClient.mockReturnValue({
+      invalidateQueries: mockInvalidateQueries,
+    });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  const renderComponent = () =>
+  const renderComponent = (id: number = 1) =>
     render(
       <QueryClientProvider client={queryClient}>
-        <DropDownMenu id={1} />
+        <DropDownMenu id={id} />
       </QueryClientProvider>,
     );
 
@@ -68,17 +105,14 @@ describe('DropDownMenu', () => {
     expect(push).toHaveBeenCalledWith('/product/1');
   });
 
-  // it('logs action for Edit and Duplicate', () => {
-  //   renderComponent();
-  //   fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+  it('opens EditProductModal when Edit is clicked', () => {
+    renderComponent();
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Edit'));
 
-  //   fireEvent.click(screen.getByText('Edit'));
-  //   expect(console.log).toHaveBeenCalledWith('Edit clicked');
-
-  //   fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-  //   fireEvent.click(screen.getByText('Duplicate'));
-  //   expect(console.log).toHaveBeenCalledWith('Duplicate clicked');
-  // });
+    expect(screen.getByTestId('edit-modal')).toBeInTheDocument();
+    expect(screen.getByText('Edit Product 1')).toBeInTheDocument();
+  });
 
   it('opens DeleteConfirmationModal when Delete is clicked', () => {
     renderComponent();
@@ -86,5 +120,89 @@ describe('DropDownMenu', () => {
     fireEvent.click(screen.getByText('Delete'));
 
     expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+  });
+
+  it('calls deleteProduct mutation and invalidates queries on successful delete', async () => {
+    mockUseMutation.mockReturnValue({
+      mutate: mockMutate,
+      isLoading: false,
+      isError: false,
+      isSuccess: true,
+      data: undefined,
+    });
+
+    renderComponent(1);
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Delete'));
+
+    const deleteConfirmButton = screen.getByRole('button', {
+      name: /delete confirm/i,
+    });
+    fireEvent.click(deleteConfirmButton);
+
+    expect(mockMutate).toHaveBeenCalledWith(1);
+
+    mockUseMutation.mock.calls[0][0].onSuccess();
+
+    await waitFor(() => {
+      expect(mockInvalidateQueries).toHaveBeenCalledWith({
+        predicate: expect.any(Function),
+      });
+
+      const predicateFn = mockInvalidateQueries.mock.calls[0][0].predicate;
+      expect(predicateFn({ queryKey: ['myProducts', 1] })).toBe(true);
+      expect(predicateFn({ queryKey: ['myProducts', 2] })).toBe(false);
+      expect(predicateFn({ queryKey: ['someOtherQuery'] })).toBe(false);
+
+      expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes DeleteConfirmationModal when "Delete Close" is clicked', async () => {
+    renderComponent();
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Delete'));
+
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+
+    const deleteCloseButton = screen.getByRole('button', {
+      name: /delete close/i,
+    });
+    fireEvent.click(deleteCloseButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes EditProductModal when "Edit Close" is clicked', async () => {
+    renderComponent();
+    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
+    fireEvent.click(screen.getByText('Edit'));
+
+    expect(screen.getByTestId('edit-modal')).toBeInTheDocument();
+
+    const editCloseButton = screen.getByRole('button', { name: /edit close/i });
+    fireEvent.click(editCloseButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('edit-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes the menu when handleClose is called', () => {
+    renderComponent();
+
+    const iconButton = screen.getByRole('button', { name: /more icon/i });
+    fireEvent.click(iconButton);
+
+    expect(screen.getByText('View')).toBeInTheDocument();
+
+    const menu = screen.getByRole('menu');
+    fireEvent.keyDown(menu, { key: 'Escape', code: 'Escape' });
+
+    waitFor(() => {
+      expect(screen.queryByText('View')).not.toBeInTheDocument();
+    });
   });
 });

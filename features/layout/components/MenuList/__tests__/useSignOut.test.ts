@@ -21,13 +21,12 @@ describe('useSignOut', () => {
   >;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     mockUseSnackbar.mockReturnValue({
       showSnackbar: mockShowSnackbar,
     });
   });
 
-  it('should call signOut with correct callbackUrl when sign out succeeds', async () => {
+  it('calls signOut with correct callbackUrl when sign out succeeds', async () => {
     mockSignOut.mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useSignOut());
@@ -40,7 +39,7 @@ describe('useSignOut', () => {
     expect(mockShowSnackbar).not.toHaveBeenCalled();
   });
 
-  it('should show error snackbar when sign out fails', async () => {
+  it('shows error snackbar when sign out fails', async () => {
     const error = new Error('Sign out failed');
     mockSignOut.mockRejectedValue(error);
 

@@ -7,7 +7,7 @@ import useFilterStore from '../../stores/filterStore';
 import { useEffect, useState } from 'react';
 
 export default function PriceFilterSection() {
-  const { filters, setFilterValues, applyFilters } = useFilterStore();
+  const { filters, setFilterValues } = useFilterStore();
   const { data: prices, isLoading, isError } = usePrices();
   const formatPrice = (value: number) => `$ ${value}`;
 
@@ -25,7 +25,7 @@ export default function PriceFilterSection() {
   const [innerPrice, setInnerPrice] = useState<number[]>([urlMin, urlMax]);
 
   useEffect(() => {
-    setInnerPrice([urlMin, urlMax]);
+    setInnerPrice([urlMin ?? min, urlMax ?? max]);
   }, [filters.price]);
 
   const isPriceSet =

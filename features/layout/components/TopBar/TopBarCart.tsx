@@ -2,7 +2,8 @@
 
 import { CartLogoIcon } from '@/shared/icons';
 import { useCart } from '@/shared/hooks/useCart';
-import { Badge, Button, Link } from '@mui/material';
+import { Badge, Button } from '@mui/material';
+import Link from 'next/link';
 
 export default function TopBarCart() {
   const { totalItems } = useCart();

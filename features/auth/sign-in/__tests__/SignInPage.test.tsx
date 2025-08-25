@@ -27,7 +27,6 @@ describe('SignIn Page', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
       back: jest.fn(),

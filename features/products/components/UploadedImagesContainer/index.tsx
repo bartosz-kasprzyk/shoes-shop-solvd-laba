@@ -18,13 +18,12 @@ const UploadedImagesContainer = ({
   const MAX_IMAGES = 7;
 
   const compressAndAddImages = async (files: File[]) => {
-    setImagesError('');
-    const MAX_IMAGES = 7;
-
-    if (images.length >= MAX_IMAGES) {
+    if (images.length + files.length > MAX_IMAGES) {
       setImagesError(`You can only upload up to ${MAX_IMAGES} images.`);
       return;
     }
+
+    setImagesError('');
 
     const remainingSlots = MAX_IMAGES - images.length;
     const validFiles = files.slice(0, remainingSlots);
@@ -45,8 +44,7 @@ const UploadedImagesContainer = ({
       }));
 
       setImages((prev) => [...prev, ...newImages]);
-    } catch (error) {
-      console.error('Image compression failed:', error);
+    } catch {
       setImagesError('Failed to compress image.');
     }
   };

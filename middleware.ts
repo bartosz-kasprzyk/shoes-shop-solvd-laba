@@ -44,7 +44,7 @@ export default withAuth(
     const now = Math.floor(Date.now() / 1000);
     const isExpired =
       token?.loginAt &&
-      token?.maxAge &&
+      token.maxAge &&
       now > Number(token.loginAt) + token.maxAge;
 
     if (isExpired && isProtectedPage) {
