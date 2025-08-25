@@ -61,7 +61,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
     if (!selectedSize) {
       setShowSizeWarning(true);
     } else {
-      const result = addItem({
+      addItem({
         productId: initialData.data.id.toString(),
         size: selectedSize.toString(),
         quantity: 1,
