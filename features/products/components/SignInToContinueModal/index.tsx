@@ -25,15 +25,20 @@ export function SignInModal({
       <Box
         sx={{
           position: 'absolute',
-          top: '50%',
+          top: { xs: 0, sm: '50%' },
           left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '100%',
+          transform: {
+            xs: 'translate(-50%, 0)',
+            sm: 'translate(-50%, -50%)',
+          },
+          width: '90%',
+          height: { xs: '100%', sm: 'auto' },
           maxWidth: '656px',
           bgcolor: '#fff',
-          borderRadius: '8px',
+          borderRadius: { xs: 0, sm: '8px' },
           p: 4,
           outline: 'none',
+          padding: '30px',
         }}
       >
         <IconButton
