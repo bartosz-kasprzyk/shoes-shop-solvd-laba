@@ -41,6 +41,25 @@ jest.mock('@/features/products/components/ProductCard', () => {
   return MockProductCard;
 });
 
+jest.mock(
+  '@/features/products/components/ProductDetails/api/productApi',
+  () => ({
+    fetchProductById: jest.fn((id) =>
+      Promise.resolve({
+        data: {
+          id: Number(id),
+          attributes: {
+            name: `Product ${id}`,
+            price: 100,
+            gender: 'Men',
+            images: { data: [{ id: 1, attributes: { url: '/image.jpg' } }] },
+          },
+        },
+      }),
+    ),
+  }),
+);
+
 jest.mock('../../../utils/wishlist', () => ({
   getWishlist: () => getWishlistMock(),
   removeFromWishlist: (id: number) => removeFromWishlistMock(id),
@@ -53,12 +72,14 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
 }));
 
 beforeEach(() => {
-  window.localStorage.setItem('wishlist', JSON.stringify(mockWishlist));
+  getWishlistMock.mockReset();
+  removeFromWishlistMock.mockReset();
+  showSnackbarMock.mockReset();
 });
 
 describe('WishlistPage', () => {
   it('renders empty wishlist message with Browse products button when no items', async () => {
-    window.localStorage.removeItem('wishlist');
+    getWishlistMock.mockReturnValue([]);
     render(<WishlistPage />);
 
     expect(
@@ -72,6 +93,7 @@ describe('WishlistPage', () => {
   });
 
   it('renders wishlist items', async () => {
+    getWishlistMock.mockReturnValue(mockWishlist.map((p) => p.id));
     render(<WishlistPage />);
 
     for (const item of mockWishlist) {
@@ -80,6 +102,7 @@ describe('WishlistPage', () => {
   });
 
   it('removes item from wishlist and shows snackbar alert', async () => {
+    getWishlistMock.mockReturnValue([1]);
     render(<WishlistPage />);
 
     const removeBtn = await screen.findByRole('button', { name: 'remove-1' });
