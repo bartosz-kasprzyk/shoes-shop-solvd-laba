@@ -3,19 +3,6 @@ export interface ImagesData {
   attributes: { url: string };
 }
 
-// interface Images {
-//   data: ImagesData[];
-// }
-
-// interface SizeData {
-//   id: number;
-//   attributes: { value: number };
-// }
-
-// interface Sizes {
-//   data: SizeData[] | null;
-// }
-
 export interface ServerEntity<T> {
   data: {
     id: number;

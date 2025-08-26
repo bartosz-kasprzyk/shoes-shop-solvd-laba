@@ -1,7 +1,7 @@
 'use client';
 
 import { Modal } from '@mui/material';
-import type { EditModalProps } from '../../types';
+import type { EditModalProps, MyProductsInfiniteData } from '../../types';
 import AddProductForm from '../AddProductForm';
 import { useState } from 'react';
 import ImageUploadGrid from '@/features/products/components/UploadedImagesContainer';
@@ -10,9 +10,8 @@ import type { ImageData } from '@/features/products/types';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { Button } from '@/shared/components/ui';
 import useUser from '@/shared/hooks/useUser';
-import { useQuery } from '@tanstack/react-query';
-import { fetchMyProducts } from '@/app/api/products';
 import { CloseIcon } from '@/shared/icons';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function EditProductModal({
   isOpen,
@@ -22,18 +21,17 @@ export default function EditProductModal({
   const [images, setImages] = useState<ImageData[]>([]);
   const [imagesError, setImagesError] = useState<string>('');
   const [loading, setLoading] = useState(false);
-
+  const queryClient = useQueryClient();
   const { session } = useUser();
   const id = session?.user.id as number;
-  const token = session?.user.accessToken as string;
 
-  const { data } = useQuery({
-    queryKey: ['myProducts', id],
-    queryFn: () => fetchMyProducts(token, id),
-    enabled: !!token && !!id,
-  });
+  const cachedData = queryClient.getQueryData<MyProductsInfiniteData>([
+    'myProducts',
+    id,
+  ]);
 
-  const productData = data?.data.find((p) => p.id === productId);
+  const allProducts = cachedData?.pages.flatMap((page) => page.data) ?? [];
+  const productData = allProducts.find((p) => p.id === productId);
 
   return (
     <>

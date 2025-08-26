@@ -150,9 +150,10 @@ export async function uploadImageToServer(
 export async function fetchMyProducts(
   token: string,
   id: number,
+  pageParam = 1,
 ): Promise<FetchMyProductsResponse> {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=*&filters%5BuserID%5D[id]=${id}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=*&filters%5BuserID%5D[id]=${id}&pagination[page]=${pageParam}&pagination[pageSize]=20&sort=createdAt:desc`,
     {
       method: 'GET',
       headers: {
@@ -166,7 +167,15 @@ export async function fetchMyProducts(
     throw new Error('Failed to add product');
   }
 
-  return res.json();
+  const json = await res.json();
+  const PageCount = parseInt(json.meta.pagination.pageCount ?? '0');
+  const totalProducts = parseInt(json.meta.pagination.total ?? '0');
+  return {
+    data: json.data,
+    currentPage: pageParam,
+    nextPage: pageParam < PageCount ? pageParam + 1 : null,
+    total: totalProducts,
+  };
 }
 
 export async function deleteProduct(

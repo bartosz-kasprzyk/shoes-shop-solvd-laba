@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import EditProductModal from '..';
 import useUser from '@/shared/hooks/useUser';
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 jest.mock('@/shared/hooks/useUser');
 jest.mock('@tanstack/react-query');
@@ -43,10 +43,18 @@ const mockProductData = [
 ];
 
 describe('EditProductModal', () => {
+  let getQueryDataMock: jest.Mock;
+
   beforeEach(() => {
     (useUser as jest.Mock).mockReturnValue(mockSession);
-    (useQuery as jest.Mock).mockReturnValue({
-      data: { data: mockProductData },
+
+    getQueryDataMock = jest.fn().mockReturnValue({
+      pages: [{ data: mockProductData }],
+      pageParams: [1],
+    });
+
+    (useQueryClient as jest.Mock).mockReturnValue({
+      getQueryData: getQueryDataMock,
     });
   });
 
@@ -83,7 +91,11 @@ describe('EditProductModal', () => {
   });
 
   it('renders modal even if product data is missing', () => {
-    (useQuery as jest.Mock).mockReturnValue({ data: { data: [] } });
+    getQueryDataMock.mockReturnValueOnce({
+      pages: [{ data: [] }],
+      pageParams: [1],
+    });
+
     render(
       <EditProductModal isOpen={true} onClose={jest.fn()} productId={999} />,
     );

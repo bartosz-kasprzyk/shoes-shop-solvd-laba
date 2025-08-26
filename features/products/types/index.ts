@@ -114,9 +114,20 @@ export interface ProductResponseProps {
 
 export type FetchMyProductsResponse = {
   data: ProductFromServer[];
-  meta: any;
+  currentPage: number;
+  nextPage: number | null;
+  total: number;
 };
 
 export type DeleteProductResponse = {
   data: Product;
+};
+
+export type MyProductsInfiniteData = {
+  pages: {
+    data: ProductFromServer[];
+    nextPage?: number;
+    total?: number;
+  }[];
+  pageParams: number[];
 };

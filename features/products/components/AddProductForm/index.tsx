@@ -128,6 +128,9 @@ const AddProductForm = ({
               e.preventDefault();
             }
           }}
+          onWheel={(e) => {
+            (e.target as HTMLElement).blur();
+          }}
           slotProps={{
             input: {
               startAdornment: (

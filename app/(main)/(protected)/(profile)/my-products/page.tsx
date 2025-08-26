@@ -3,12 +3,20 @@
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import EmptyStateForMuProducts from '@/features/products/components/EmptyStateForMuProducts';
 import useUser from '@/shared/hooks/useUser';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMyProducts } from '@/app/api/products';
-import { Typography, Box, Avatar } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Avatar,
+  Slide,
+  CircularProgress,
+} from '@mui/material';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import { Button } from '@/shared/components/ui';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 export default function MyProductsPage() {
   const { session, isLoading } = useUser();
@@ -23,14 +31,36 @@ export default function MyProductsPage() {
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
 
-  const { data, isLoading: isProductsLoading } = useQuery({
-    queryKey: ['myProducts', id],
-    queryFn: () => fetchMyProducts(token, id),
-    enabled: !!token && !!id,
+  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ['myProducts', id],
+      queryFn: ({ pageParam = 1 }) => fetchMyProducts(token, id, pageParam),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      enabled: !!token && !!id,
+    });
+
+  const { ref, inView } = useInView({
+    rootMargin: '1000px',
   });
 
-  if (isLoading || isProductsLoading) return <div>Loading...</div>;
-  const products = data?.data ?? [];
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView, hasNextPage]);
+
+  if (isLoading || status === 'pending') return <div>Loading...</div>;
+
+  if (status === 'error') {
+    return (
+      <Typography variant='h6' color='error'>
+        Something went wrong...
+      </Typography>
+    );
+  }
+
+  const totalProducts = data.pages[0]?.total ?? 0;
 
   return (
     <ScrollableContainer>
@@ -83,7 +113,8 @@ export default function MyProductsPage() {
                 variant='body2'
                 sx={{ color: '#5C5C5C', fontSize: { xs: 14, lg: 18 } }}
               >
-                1 374 bonus points
+                You have <b>{totalProducts}</b>{' '}
+                {totalProducts === 1 ? 'Product' : 'Products'}
               </Typography>
             </Box>
           </Box>
@@ -107,15 +138,26 @@ export default function MyProductsPage() {
             >
               My products
             </Typography>
-            {products.length > 0 && (
+            {totalProducts > 0 && (
               <Link href='/my-products/add-product' passHref>
                 <Button variant='primary'>Add product</Button>
               </Link>
             )}
           </Box>
 
-          {products.length > 0 ? (
-            <ProductsContainer variant='dropdown' products={products} />
+          {totalProducts > 0 ? (
+            <>
+              <ProductsContainer
+                variant='dropdown'
+                products={data.pages.flatMap((page) => page.data)}
+              />
+              <div ref={ref}></div>
+              <Slide direction='up' in={isFetchingNextPage}>
+                <Box display={'flex'} p={10} justifyContent={'center'}>
+                  <CircularProgress />
+                </Box>
+              </Slide>
+            </>
           ) : (
             <EmptyStateForMuProducts />
           )}

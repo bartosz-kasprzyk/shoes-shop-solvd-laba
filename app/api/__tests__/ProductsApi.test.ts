@@ -430,6 +430,8 @@ describe('Products API Functions', () => {
     it('successfully fetches products for a given user ID', async () => {
       const mockToken = 'test-user-token';
       const mockId = 123;
+      const mockPage = 1;
+
       const mockApiResponse = {
         data: [
           {
@@ -443,7 +445,13 @@ describe('Products API Functions', () => {
             },
           },
         ],
-        meta: {},
+        meta: {
+          pagination: {
+            page: mockPage,
+            pageCount: 2,
+            total: 5,
+          },
+        },
       };
 
       (fetch as jest.Mock).mockResolvedValueOnce({
@@ -451,10 +459,10 @@ describe('Products API Functions', () => {
         json: () => mockApiResponse,
       });
 
-      const result = await fetchMyProducts(mockToken, mockId);
+      const result = await fetchMyProducts(mockToken, mockId, mockPage);
 
       expect(fetch).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=*&filters%5BuserID%5D[id]=${mockId}`,
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=*&filters%5BuserID%5D[id]=${mockId}&pagination[page]=${mockPage}&pagination[pageSize]=20&sort=createdAt:desc`,
         {
           method: 'GET',
           headers: {
@@ -465,7 +473,12 @@ describe('Products API Functions', () => {
         },
       );
 
-      expect(result).toEqual(mockApiResponse);
+      expect(result).toEqual({
+        data: mockApiResponse.data,
+        currentPage: mockPage,
+        nextPage: 2,
+        total: 5,
+      });
     });
 
     it('throws an error if the fetch request fails', async () => {
