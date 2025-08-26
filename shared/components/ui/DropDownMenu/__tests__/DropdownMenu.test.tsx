@@ -47,6 +47,10 @@ jest.mock('@tanstack/react-query', () => ({
   useQueryClient: jest.fn(),
 }));
 
+jest.mock('@/shared/actions/revalidateProductPaths', () => ({
+  revalidateProductPaths: jest.fn(),
+}));
+
 describe('DropDownMenu', () => {
   const push = jest.fn();
   (useRouter as jest.Mock).mockReturnValue({ push });
