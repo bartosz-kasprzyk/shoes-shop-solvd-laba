@@ -51,12 +51,13 @@ export default function ShopLayout({
       flexDirection={'column'}
       height={'100%'}
       overflow={'hidden'}
+      pt={{ xs: 0, sm: 3 }}
     >
       {totalItems > 0 ? (
         <>
           {!isMobile && (
             <Box
-              px={{ xs: 0, sm: 4, xl: 20 }}
+              px={{ xs: 0, sm: 4, xl: 15 }}
               py={!isMobile ? 2 : 0}
               maxWidth={'1500px'}
               width='100%'
@@ -64,13 +65,13 @@ export default function ShopLayout({
             >
               <Link
                 onClick={() => router.back()}
-                style={{
-                  margin: 5,
+                sx={{
                   textDecoration: 'underline',
                   textTransform: 'none',
                   color: '#666',
                   fontSize: '14px',
                   fontWeight: 400,
+                  cursor: 'pointer',
                 }}
               >
                 Back
@@ -119,7 +120,7 @@ export default function ShopLayout({
                       mt: '100px',
                       position: 'sticky',
                       bottom: 10,
-                      m: 'auto',
+                      mx: 'auto',
                       mb: 1,
                     }}
                   >
@@ -137,17 +138,16 @@ export default function ShopLayout({
                   mt: '30px',
                   position: 'sticky',
                   display: 'flex',
-                  bottom: 0,
-                  mx: 'auto',
+                  bottom: { xs: 0, sm: 30 },
                 }}
               >
                 <Button
                   onClick={handleNavigate}
                   sx={{
-                    width: '90%',
+                    width: '100%',
                     position: 'sticky',
                     bottom: 10,
-                    mx: 'auto',
+                    mx: { xs: '16px', sm: '32px' },
                     my: 1,
                   }}
                 >

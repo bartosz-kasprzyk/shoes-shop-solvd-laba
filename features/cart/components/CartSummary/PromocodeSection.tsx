@@ -49,7 +49,7 @@ export default function PromocodeSection({
       <Box
         onClick={() => setArePromocodesOpened((prev) => !prev)}
         // component='button'
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: 'pointer', userSelect: 'none' }}
         display='flex'
         alignItems={'center'}
         gap={1}

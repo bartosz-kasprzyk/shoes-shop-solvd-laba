@@ -93,6 +93,11 @@ describe('Shared hooks', () => {
         deleteItem: jest.fn(),
         clearCart: jest.fn(),
         totalItems: 1,
+        cartId: '1',
+        total: 1,
+        setTotal: jest.fn(),
+        resetCartID: jest.fn(),
+        deleteItemById: jest.fn(),
       };
 
       const { result } = renderHook(() => useCart(), {

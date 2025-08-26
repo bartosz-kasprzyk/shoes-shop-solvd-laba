@@ -84,7 +84,7 @@ export default function CartListItem({
             fontSize={'1em'}
             fontWeight={500}
             lineHeight={'normal'}
-            gap={7}
+            gap={4}
             sx={{
               display: 'flex',
               width: '100%',
@@ -115,6 +115,7 @@ export default function CartListItem({
               lineHeight={'inherit'}
               fontSize={'inherit'}
               fontWeight={'inherit'}
+              pr={1}
             >
               {new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -167,7 +168,7 @@ export default function CartListItem({
                 sx={{
                   background: 'color-mix(in srgb, black 10%, transparent)',
                   padding: 0,
-                  fontSize: { xs: '1em', sm: '0.85em' },
+                  fontSize: { xs: '1em', sm: '0.65em' },
                 }}
               >
                 <MinusIcon sx={{ height: '50%', width: '50%' }} />
@@ -176,6 +177,11 @@ export default function CartListItem({
                 fontSize={{ xs: '1em', sm: '0.85em' }}
                 color='#494949'
                 component='p'
+                sx={{
+                  display: 'flex',
+                  width: '1ch',
+                  justifyContent: 'center',
+                }}
               >
                 {cartItem.quantity}
               </Typography>
@@ -184,7 +190,7 @@ export default function CartListItem({
                 sx={{
                   background: '#FFD7D6',
                   padding: 0,
-                  fontSize: { xs: '1em', sm: '0.85em' },
+                  fontSize: { xs: '1em', sm: '0.65em' },
                 }}
               >
                 <PlusIcon sx={{ height: '50%', width: '50%' }} />
@@ -192,7 +198,7 @@ export default function CartListItem({
             </Box>
             <Typography
               fontSize={{ xs: '1em', sm: '0.85em' }}
-              display={{ xs: 'block', sm: 'none', md: 'block' }}
+              display={{ xs: 'none', lg: 'block' }}
               color='#494949'
               component='p'
             >

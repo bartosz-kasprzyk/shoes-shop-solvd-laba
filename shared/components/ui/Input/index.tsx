@@ -36,7 +36,7 @@ export default function Input({
           '& .MuiOutlinedInput-root': {
             height: props.multiline
               ? 'auto'
-              : { xs: '33px', sm: '40px', lg: '48px' },
+              : { xs: '40px', sm: '40px', lg: '48px' },
             borderRadius: '8px',
             overflow: 'hidden',
             '& .MuiOutlinedInput-notchedOutline': {
