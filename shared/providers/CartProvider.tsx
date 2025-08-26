@@ -81,6 +81,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const deleteItemById = (productId: string) => {
+    setCart((prev) => prev.filter((i) => !(i.productId === productId)));
+  };
+
   const clearCart = () => {
     if (typeof window !== 'undefined' && cartId) {
       localStorage.setItem(cartKey, JSON.stringify({ cart: [], cartId: null }));
@@ -99,6 +103,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     addItem,
     updateQuantity,
     deleteItem,
+    deleteItemById,
     clearCart,
     totalItems,
   };

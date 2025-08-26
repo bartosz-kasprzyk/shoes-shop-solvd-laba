@@ -15,6 +15,7 @@ interface CartContextType {
     newQuantity: number,
   ) => void;
   deleteItem: (productId: string, size: string) => void;
+  deleteItemById: (productId: string) => void;
   clearCart: () => void;
   totalItems: number;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import type { CartItemForDisplay, CartItemWithProduct } from './interface';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
@@ -16,6 +16,7 @@ interface CartDetailsContextType {
   ) => void;
   handleDeleteItem: (productId: string, size: string) => void;
   isCartDetailsLoading: boolean;
+  refetchAllProducts: () => void;
 }
 
 const CartDetailsContext = createContext<CartDetailsContextType | null>(null);
@@ -33,7 +34,7 @@ export const CartDetailsProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { cart, updateQuantity, deleteItem } = useCart();
+  const { cart, updateQuantity, deleteItem, deleteItemById } = useCart();
 
   const uniqueProductIds = Array.from(
     new Set(cart.map((item) => item.productId)),
@@ -41,19 +42,30 @@ export const CartDetailsProvider = ({
 
   const productQueries = useQueries({
     queries: uniqueProductIds.map((productId) => ({
-      queryKey: ['product', productId],
+      queryKey: ['product-cart', productId],
       queryFn: () => fetchProductById(productId),
-      staleTime: 5 * 60 * 1000,
+      retry: 1,
     })),
   });
 
-  const isCartDetailsLoading = productQueries.some((q) => q.isLoading)
+  const isCartDetailsLoading = productQueries.some((q) => q.isFetching)
     ? true
     : false;
 
   const products: ProductFromServer[] = productQueries
+    .filter((q) => !q.error)
     .map((q) => q.data?.data)
     .filter((p): p is ProductFromServer => !!p);
+
+  useEffect(() => {
+    if (!isCartDetailsLoading) {
+      const idsToRemove: string[] = uniqueProductIds.filter(
+        (id) => !products.map((p) => p.id + '').includes(id),
+      );
+
+      idsToRemove.forEach((id) => deleteItemById(id));
+    }
+  }, [products, isCartDetailsLoading]);
 
   const cartWithProducts: CartItemWithProduct[] = cart
     .map((item) => {
@@ -82,11 +94,16 @@ export const CartDetailsProvider = ({
     }),
   );
 
+  const refetchAllProducts = () => {
+    productQueries.map((q) => q.refetch());
+  };
+
   const value = {
     cartItems: cartItemsForComponent,
     handleQuantityChange: updateQuantity,
     handleDeleteItem: deleteItem,
     isCartDetailsLoading,
+    refetchAllProducts,
   };
 
   return (

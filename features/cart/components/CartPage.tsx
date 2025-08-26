@@ -6,36 +6,16 @@ import CartSummary from './CartSummary';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/shared/components/ui';
+import { useCartDetails } from './CartDetailsContext';
 
 export default function CartPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
-  const summaryRef = useRef<HTMLDivElement>(null);
-  const [showButton, setShowButton] = useState(false);
-
-  const handleScrollToSummary = () => {
-    summaryRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { refetchAllProducts } = useCartDetails();
 
   useEffect(() => {
-    const element = summaryRef.current;
-    if (!isMobile || !element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowButton(!entry.isIntersecting);
-      },
-      {
-        root: null,
-        threshold: 0.4,
-      },
-    );
-
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, [isMobile]);
+    refetchAllProducts();
+  }, []);
 
   return (
     <Box boxSizing={'border-box'} height={'100%'}>

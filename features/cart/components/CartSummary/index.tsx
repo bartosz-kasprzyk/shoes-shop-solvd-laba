@@ -18,7 +18,7 @@ import { useCheckoutStore } from '@/features/checkout/stores/checkoutStore';
 import { useCart } from '@/shared/hooks/useCart';
 
 export default function CartSummary(props: BoxProps) {
-  const { cartItems } = useCartDetails();
+  const { cartItems, refetchAllProducts } = useCartDetails();
   const { setTotal } = useCart();
   const [promocodes, setPromocodes] = useState<promocode[]>([]);
   const pathname = usePathname();
@@ -47,7 +47,8 @@ export default function CartSummary(props: BoxProps) {
 
   const handleChangeStageButton = () => {
     if (pathname !== '/checkout') {
-      router.push('/checkout');
+      refetchAllProducts();
+      if (cartItems.length > 0) router.push('/checkout');
     } else {
       submit?.();
     }
