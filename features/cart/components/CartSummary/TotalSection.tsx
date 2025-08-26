@@ -4,6 +4,7 @@ export default function TotalSection({ total }: { total: string }) {
   return (
     <Box
       paddingY={2}
+      px={2}
       marginTop='30px'
       display='flex'
       justifyContent='space-between'

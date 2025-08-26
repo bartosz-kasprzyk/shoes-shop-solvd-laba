@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Input } from '@/shared/components/ui';
 import type { PersonalInfo, PersonalInfoSectionProps } from './interface';
 
@@ -16,19 +16,12 @@ export default function PersonalInfoSection({
     };
 
   return (
-    <Box>
+    <Box px={2} py={1}>
       <Typography variant='h6' sx={{ mb: 2, fontWeight: 500 }}>
         Personal info
       </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          gap: '24px',
-          mb: 4,
-        }}
-      >
-        <Box sx={{ flexBasis: '50%' }}>
+      <Grid container columnSpacing={1.5}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <Input
             id='name'
             title='Name'
@@ -39,8 +32,8 @@ export default function PersonalInfoSection({
             helperText={personalErrors.name}
             required
           />
-        </Box>
-        <Box sx={{ flexBasis: '50%' }}>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <Input
             id='surname'
             title='Surname'
@@ -51,17 +44,8 @@ export default function PersonalInfoSection({
             helperText={personalErrors.surname}
             required
           />
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          gap: '24px',
-          mb: 4,
-        }}
-      >
-        <Box sx={{ flexBasis: '50%' }}>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <Input
             id='email'
             title='Email'
@@ -73,8 +57,8 @@ export default function PersonalInfoSection({
             helperText={personalErrors.email}
             required
           />
-        </Box>
-        <Box sx={{ flexBasis: '50%' }}>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <Input
             id='phoneNumber'
             title='Phone number'
@@ -85,8 +69,8 @@ export default function PersonalInfoSection({
             helperText={personalErrors.phoneNumber}
             required
           />
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

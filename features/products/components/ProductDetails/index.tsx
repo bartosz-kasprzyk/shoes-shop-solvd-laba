@@ -57,7 +57,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
         quantity: 1,
       });
 
-      router.push('/cart');
+      router.push('/checkout/cart');
     }
   };
 

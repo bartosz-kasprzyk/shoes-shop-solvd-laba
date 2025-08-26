@@ -11,7 +11,8 @@ export default function TopBarCart() {
   return (
     <Button
       component={Link}
-      href='/cart'
+      replace={false}
+      href='/checkout/cart'
       sx={{
         cursor: 'pointer',
         borderRadius: '50%',

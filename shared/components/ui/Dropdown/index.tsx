@@ -7,6 +7,7 @@ import {
   FormHelperText,
   MenuItem,
   Select,
+  Typography,
 } from '@mui/material';
 import type { DropdownProps } from './interface';
 import Label from '../Label';
@@ -43,6 +44,26 @@ export default function Dropdown({
           id={id}
           value={value}
           onChange={onChange}
+          renderValue={(selected) => (
+            <Typography
+              noWrap
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '100%',
+              }}
+            >
+              {options.find((o) => o.value === selected)?.label}
+            </Typography>
+          )}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                maxHeight: 400,
+              },
+            },
+          }}
           sx={{
             height: { xs: '33px', sm: '40px', lg: '48px' },
             '& .MuiSelect-iconOutlined': {
@@ -67,6 +88,9 @@ export default function Dropdown({
               paddingY: 0,
               display: 'flex',
               alignItems: 'center',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             },
           }}
         >

@@ -14,7 +14,7 @@ const protectedRoutes = [
   // other
   '/cart',
   '/checkout',
-  '/cart',
+  '/checkout/cart',
 ];
 
 // Logged in user cannot go here

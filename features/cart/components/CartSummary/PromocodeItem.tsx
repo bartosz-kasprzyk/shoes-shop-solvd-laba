@@ -14,6 +14,7 @@ export default function PromocodeItem({ promocode, onRemove }: Props) {
       display='flex'
       justifyContent='space-between'
       gap={1}
+      mx={2}
       my={1 / 2}
       alignItems='center'
     >
