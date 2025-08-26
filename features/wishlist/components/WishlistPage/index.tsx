@@ -29,7 +29,7 @@ export default function WishlistPage() {
           const res = await fetchProductById(id.toString());
           results.push(res.data);
         } catch (err) {
-          console.error('Failed to fetch product', id, err);
+          console.warn('Failed to fetch product', id, err);
         }
       }
       setWishlist(results);
