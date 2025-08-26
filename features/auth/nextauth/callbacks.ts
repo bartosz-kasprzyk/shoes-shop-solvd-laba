@@ -4,19 +4,32 @@ import type { Session } from 'next-auth';
 export async function jwtCallback({
   token,
   user,
+  trigger,
+  session,
 }: {
   token: JWT;
   user?: any;
+  trigger?: 'update' | 'signIn' | 'signUp';
+  session?: Session;
 }): Promise<JWT> {
   const now = Math.floor(Date.now() / 1000);
+
+  // On sign-in
   if (user) {
     token.id = user.id;
-    token.name = user.name;
+    token.name = `${user.firstName} ${user.lastName}`;
     token.email = user.email;
     token.accessToken = user.accessToken;
     token.maxAge = user.maxAge;
     token.loginAt = now;
   }
+
+  // On client update()
+  if (trigger === 'update' && session?.user) {
+    if (session.user.name) token.name = session.user.name;
+    if (session.user.image) token.image = session.user.image;
+  }
+
   return token;
 }
 
@@ -31,6 +44,8 @@ export async function sessionCallback({
     session.user.id =
       typeof token.id === 'string' ? parseInt(token.id) : token.id;
     session.user.accessToken = token.accessToken as string;
+    session.user.name = token.name as string;
+    if (token.image) session.user.image = token.image as string;
   }
 
   return session;

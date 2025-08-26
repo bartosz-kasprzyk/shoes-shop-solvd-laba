@@ -47,7 +47,8 @@ export const credentialsProvider = CredentialsProvider({
       credentials?.remember == 'true' ? 30 * 24 * 60 * 60 : 4 * 60 * 60; //30 days or 4 hours
     return {
       id: user.id,
-      name: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       maxAge,
       accessToken: loginData.jwt,

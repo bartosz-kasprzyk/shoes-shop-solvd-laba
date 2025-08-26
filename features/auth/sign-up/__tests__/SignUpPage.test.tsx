@@ -16,7 +16,7 @@ describe('SignUp Page', () => {
   it('validates mismatched passwords', async () => {
     render(<SignUpPage />);
     fireEvent.change(screen.getByLabelText(/name/i), {
-      target: { value: 'User' },
+      target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'user@mail.com' },
@@ -44,7 +44,7 @@ describe('SignUp Page', () => {
 
     render(<SignUpPage />);
     fireEvent.change(screen.getByLabelText(/name/i), {
-      target: { value: 'User' },
+      target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/^password$/i), {
       target: { value: '12345678' },
@@ -72,7 +72,7 @@ describe('SignUp Page', () => {
 
     render(<SignUpPage />);
     fireEvent.change(screen.getByLabelText(/name/i), {
-      target: { value: 'User' },
+      target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'user@mail.com' },
@@ -104,7 +104,7 @@ describe('SignUp Page', () => {
 
     await act(async () => {
       await result.current.registerUser({
-        name: 'Test User',
+        name: 'John Doe',
         email: 'test@example.com',
         password: 'password123',
         confirmPassword: 'password123',

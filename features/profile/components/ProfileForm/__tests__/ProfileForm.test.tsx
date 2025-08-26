@@ -2,8 +2,26 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileForm from '..';
 import useProfile from '../../../hooks/useProfile';
+import { useSession } from 'next-auth/react';
 
 jest.mock('../../../hooks/useProfile');
+jest.mock('next-auth/react');
+
+const mockUpdate = jest.fn();
+
+(useSession as jest.Mock).mockReturnValue({
+  data: {
+    user: {
+      id: 1,
+      accessToken: 'token',
+      name: 'John Doe',
+      email: 'john@example.com',
+      image: null,
+    },
+  },
+  status: 'authenticated',
+  update: mockUpdate,
+});
 
 const mockOnSubmit = jest.fn();
 
