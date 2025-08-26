@@ -47,7 +47,7 @@ function generateOrderNumber(): string {
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { clearCart, cartId, cart, total } = useCart();
+  const { cartId, cart, total, resetCartID } = useCart();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState('');
   const [pIId, setPIId] = useState('');
@@ -81,7 +81,7 @@ export default function CheckoutForm() {
   const { setSubmit } = useCheckoutStore();
 
   useEffect(() => {
-    if (id && total && !loading && !pIId && !isFetching.current) {
+    if (id && total && !loading) {
       isFetching.current = true;
       setLoading(true);
       fetch('/api/create-payment-intent', {
@@ -107,7 +107,7 @@ export default function CheckoutForm() {
           isFetching.current = false;
         });
     }
-  }, [total, id]);
+  }, [total, id, cartId]);
 
   const handlePersonalInfoChange = (
     field: keyof PersonalInfo,
@@ -208,6 +208,12 @@ export default function CheckoutForm() {
         return_url: `http://localhost:3000/thank-you?orderId=${orderId}&cartId=${cartId}`, // to be changed, make dynamic instead of localhost, pass data
       },
     });
+    if (error) {
+      resetCartID();
+      setErrorMessage(error.message);
+      setLoading(false);
+      return;
+    }
   }, [personalInfo, shippingInfo, clientSecret, stripe, elements]);
 
   useEffect(() => {
@@ -295,7 +301,7 @@ export default function CheckoutForm() {
             height={'line'}
             role={errorMessage ? 'alert' : undefined}
           >
-            {errorMessage && errorMessage}
+            {errorMessage && errorMessage + ' Try again.'}
           </Typography>
         </Box>
       </Box>

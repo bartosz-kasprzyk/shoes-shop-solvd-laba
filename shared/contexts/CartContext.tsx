@@ -6,6 +6,7 @@ import { createContext } from 'react';
 interface CartContextType {
   cart: CartAddedItem[];
   cartId: string | null;
+  resetCartID: () => void;
   total: number | null;
   setTotal: (total: number) => void;
   addItem: (item: CartAddedItem) => void;

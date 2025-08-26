@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     const searchResult = await stripe.customers.search({
       query: `metadata["strapiUserId"]:'${strapiUserId}'`,
     });
-    console.log('update', searchResult.data);
 
     let customerId: string;
     if (searchResult.data.length > 0) {

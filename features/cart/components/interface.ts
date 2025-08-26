@@ -1,5 +1,10 @@
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
 
+export interface CartState {
+  cartId: string | null;
+  cart: CartAddedItem[];
+}
+
 export type CartAddedItem = {
   productId: string;
   size: string;
