@@ -24,15 +24,26 @@ export const personalInfoSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   surname: z.string().min(2, 'Surname is required'),
   email: z.email('Invalid email address'),
-  phoneNumber: z.string().min(7, 'Phone number is too short'),
+  phoneNumber: z.e164('Invalid phone number'),
 });
 
 export const shippingInfoSchema = z.object({
   country: z.string().min(2, 'Country is required'),
   city: z.string().min(2, 'City is required'),
   state: z.string().min(2, 'State is required'),
-  zipCode: z.string().min(3, 'Zip code is required'),
-  address: z.string().min(5, 'Address is required'),
+  zipCode: z
+    .string()
+    .nonempty()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return /^\d{2}-\d{3}$/.test(val) || /^\d{5,10}$/.test(val);
+      },
+      {
+        message: 'Invalid zip code',
+      },
+    ),
+  address: z.string().min(2, 'Address is required'),
 });
 
 export const checkoutSchema = z.object({

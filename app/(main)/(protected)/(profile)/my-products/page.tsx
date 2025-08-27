@@ -96,7 +96,11 @@ export default function MyProductsPage() {
                 border: 'solid white',
                 borderWidth: { xs: '2px', lg: '4px' },
               }}
-            />
+            >
+              <Typography fontSize={{ xs: '1.5em', lg: '3.5em' }}>
+                {user?.name ? user.name.charAt(0).toUpperCase() : '?'}
+              </Typography>
+            </Avatar>
             <Box sx={{ color: 'black', size: 20 }}>
               <Typography
                 component='h1'

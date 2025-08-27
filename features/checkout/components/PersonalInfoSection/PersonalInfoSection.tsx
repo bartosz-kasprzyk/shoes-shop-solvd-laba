@@ -62,7 +62,7 @@ export default function PersonalInfoSection({
           <Input
             id='phoneNumber'
             title='Phone number'
-            placeholder='(949) 354-2574'
+            placeholder='949 354 574'
             value={personalInfo.phoneNumber}
             onChange={handleChange('phoneNumber')}
             error={!!personalErrors.phoneNumber}

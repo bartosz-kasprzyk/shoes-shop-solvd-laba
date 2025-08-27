@@ -1,5 +1,6 @@
 import { Button } from '@/shared/components/ui';
-import { Box } from '@mui/material';
+import { useServerSession } from '@/shared/hooks/useServerSession';
+import { Avatar, Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useRef } from 'react';
 
@@ -16,6 +17,9 @@ export default function AvatarUploader({
   onFileChange,
   onDelete,
 }: AvatarUploaderProps) {
+  const session = useServerSession();
+  const userName = session.user.name;
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = () => {
@@ -62,18 +66,20 @@ export default function AvatarUploader({
             border: '1px solid #CCCCCC',
           }}
         >
-          <Image
+          <Avatar
             src={
               avatarFile
                 ? URL.createObjectURL(avatarFile)
-                : avatarUrl || '/no-user.png'
+                : avatarUrl || undefined
             }
-            alt='Avatar'
-            width={150}
-            height={150}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            priority
-          />
+            alt={userName || 'User'}
+            sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          >
+            <Typography fontSize={{ xs: '2.5em', sm: '3.5em' }}>
+              {' '}
+              {userName ? userName.charAt(0).toUpperCase() : '?'}{' '}
+            </Typography>
+          </Avatar>
         </Box>
 
         <Box

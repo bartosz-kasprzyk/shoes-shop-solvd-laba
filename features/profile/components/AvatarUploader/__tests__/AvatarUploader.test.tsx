@@ -2,6 +2,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import AvatarUploader from '..';
 import '@testing-library/jest-dom';
 
+jest.mock('@/shared/hooks/useServerSession', () => ({
+  useServerSession: jest.fn(() => ({ user: { name: 'User' } })),
+}));
+
 describe('AvatarUploader', () => {
   const mockOnFileChange = jest.fn();
   const mockOnDelete = jest.fn();
@@ -21,11 +25,9 @@ describe('AvatarUploader', () => {
       />,
     );
 
-    const img = screen.getByAltText('Avatar') as HTMLImageElement;
+    const img = screen.getByAltText('User') as HTMLImageElement;
     expect(img).toBeInTheDocument();
-
-    const urlParam = new URLSearchParams(img.src.split('?')[1]).get('url');
-    expect(urlParam).toBe(avatarUrl);
+    expect(img).toHaveAttribute('src', avatarUrl);
   });
 
   it('renders with avatarFile when provided', () => {
@@ -39,7 +41,7 @@ describe('AvatarUploader', () => {
       />,
     );
 
-    const img = screen.getByAltText('Avatar') as HTMLImageElement;
+    const img = screen.getByAltText('User') as HTMLImageElement;
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', expect.stringContaining('mock-url'));
   });
@@ -74,9 +76,7 @@ describe('AvatarUploader', () => {
     const file = new File(['dummy'], 'avatar.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('file-input');
 
-    fireEvent.change(fileInput, {
-      target: { files: [file] },
-    });
+    fireEvent.change(fileInput, { target: { files: [file] } });
 
     expect(mockOnFileChange).toHaveBeenCalledWith(file);
   });

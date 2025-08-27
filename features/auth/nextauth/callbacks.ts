@@ -27,7 +27,7 @@ export async function jwtCallback({
   // On client update()
   if (trigger === 'update' && session?.user) {
     if (session.user.name) token.name = session.user.name;
-    if (session.user.image) token.image = session.user.image;
+    token.image = session.user.image;
   }
 
   return token;
