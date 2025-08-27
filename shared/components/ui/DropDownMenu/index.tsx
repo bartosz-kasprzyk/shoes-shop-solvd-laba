@@ -93,7 +93,14 @@ export default function DropDownMenu({ id }: { id: number }) {
         }}
         disableScrollLock
       >
-        <MenuItem onClick={() => router.push(`/product/${id}`)}>View</MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            router.push(`/product/${id}`);
+          }}
+        >
+          View
+        </MenuItem>
         <MenuItem onClick={() => setIsEditModalOpen(true)}>Edit</MenuItem>
         {/* <MenuItem onClick={() => handleAction('Duplicate')}>Duplicate</MenuItem> */}
         <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Delete</MenuItem>
