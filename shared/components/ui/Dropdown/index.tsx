@@ -65,7 +65,7 @@ export default function Dropdown({
             },
           }}
           sx={{
-            height: { xs: '40px', sm: '40px', lg: '48px' },
+            height: { xs: '40px', lg: '48px' },
             '& .MuiSelect-iconOutlined': {
               background: 'none',
               backgroundRepeat: 'no-repeat',
