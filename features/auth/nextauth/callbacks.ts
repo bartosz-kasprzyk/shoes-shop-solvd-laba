@@ -40,9 +40,11 @@ export async function sessionCallback({
   session: Session;
   token: JWT;
 }): Promise<Session> {
-  if (token) {
-    session.user.id =
-      typeof token.id === 'string' ? parseInt(token.id) : token.id;
+  if (token.id !== undefined && token.id !== null && token.id !== 0) {
+    session.user.id = token.id;
+  }
+
+  if (token.accessToken) {
     session.user.accessToken = token.accessToken as string;
     session.user.name = token.name as string;
     if (token.image) session.user.image = token.image as string;

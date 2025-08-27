@@ -7,8 +7,7 @@ import useFilterStore from '../../stores/filterStore';
 
 export default function TilesContainer() {
   const { filters, toggleFilterValue } = useFilterStore();
-  const { filterType, filterValues, filterCountByValue, maxSelections } =
-    useFilterSection();
+  const { filterType, filterValues, filterCountByValue } = useFilterSection();
   const displayedFilterValues = [...filterValues];
   displayedFilterValues.sort((a, b) => {
     const valA = parseInt(a.name ?? '0');

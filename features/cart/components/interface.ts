@@ -29,9 +29,3 @@ export interface CartItemForDisplay {
 export interface CartPageProps {
   cartItems: CartItemForDisplay[];
 }
-
-export interface CartListItemProps {
-  cartItem: CartItemForDisplay;
-  handleDeleteItem: () => void;
-  handleQuantityChange: (newQuantity: number) => void;
-}

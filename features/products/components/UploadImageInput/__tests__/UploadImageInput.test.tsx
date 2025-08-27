@@ -5,7 +5,6 @@ import '@testing-library/jest-dom';
 
 jest.mock('@/shared/icons/ImageDropIcon', () => {
   const MockImageDropIcon = () => <div data-testid='mock-image-drop-icon' />;
-  MockImageDropIcon.displayName = 'MockDropDownMenu';
   return MockImageDropIcon;
 });
 
@@ -56,11 +55,15 @@ describe('UploadeImageInput', () => {
 
     const fileInput = container.querySelector('input[type="file"]');
 
+    if (!fileInput) {
+      throw new Error('File input not found');
+    }
+
     const testFile = new File(['why'], 'why.png', {
       type: 'image/png',
     });
 
-    fireEvent.change(fileInput!, {
+    fireEvent.change(fileInput, {
       target: { files: [testFile] },
     });
 

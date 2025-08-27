@@ -63,9 +63,7 @@ describe('AddProductForm', () => {
   it('toggles sizes correctly', () => {
     render(<AddProductForm {...defaultProps} />);
 
-    const sizeButton =
-      screen.getByRole('button', { name: 'EU-EU-38' }) ||
-      screen.getByText('EU-38');
+    const sizeButton = screen.getByRole('button', { name: 'EU-EU-38' });
 
     fireEvent.click(sizeButton);
     expect(sizeButton).toHaveStyle('background-color: #ffe6e6');

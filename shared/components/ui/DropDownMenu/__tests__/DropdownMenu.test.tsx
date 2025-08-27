@@ -1,8 +1,18 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import DropDownMenu from '..';
 import { useRouter } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type {
+  DeleteModalProps,
+  EditModalProps,
+} from '@/features/products/types';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -15,7 +25,7 @@ jest.mock('@/shared/hooks/useUser', () => ({
 
 jest.mock('@/features/products/components/DeleteConfirmationModal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, onDelete, header, text }: any) =>
+  default: ({ isOpen, onClose, onDelete, header, text }: DeleteModalProps) =>
     isOpen ? (
       <div data-testid='delete-modal'>
         <p>{header}</p>
@@ -28,7 +38,7 @@ jest.mock('@/features/products/components/DeleteConfirmationModal', () => ({
 
 jest.mock('@/features/products/components/EditProductModal', () => ({
   __esModule: true,
-  default: ({ isOpen, onClose, productId }: any) =>
+  default: ({ isOpen, onClose, productId }: EditModalProps) =>
     isOpen ? (
       <div data-testid='edit-modal'>
         <p>Edit Product {productId}</p>
@@ -146,7 +156,9 @@ describe('DropDownMenu', () => {
 
     expect(mockMutate).toHaveBeenCalledWith(1);
 
-    mockUseMutation.mock.calls[0][0].onSuccess();
+    act(() => {
+      mockUseMutation.mock.calls[0][0].onSuccess();
+    });
 
     await waitFor(() => {
       expect(mockInvalidateQueries).toHaveBeenCalledWith({

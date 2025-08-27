@@ -7,7 +7,7 @@ import { updateProductAction } from '@/app/api/updateProducts';
 import useUser from '@/shared/hooks/useUser';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { useProductMutation } from '../useProductMutation';
-import type { ProductSchemaType } from '../../types';
+import type { ImageData, ProductSchemaType } from '../../types';
 
 jest.mock('@/app/api/products');
 jest.mock('@/app/api/updateProducts');
@@ -27,7 +27,7 @@ describe('useProductMutation', () => {
 
   const mockSnackbar = jest.fn();
 
-  const validProduct: ProductSchemaType & { images: any[] } = {
+  const validProduct: ProductSchemaType & { images: ImageData[] | [] } = {
     name: 'Test Product',
     price: 100,
     description: 'Some description',

@@ -113,6 +113,7 @@ const AddProductForm = ({
       <Box display='flex' flexDirection='column' mb={4} gap={4}>
         <Input
           title='Product name'
+          aria-label='Product name'
           id='product-name'
           placeholder='Nike Air Max 90'
           {...register('name')}
@@ -121,6 +122,7 @@ const AddProductForm = ({
         />
         <Input
           title='Price'
+          aria-label='Price'
           id='price'
           type='number'
           onKeyDown={(e) => {
@@ -147,6 +149,7 @@ const AddProductForm = ({
           <Dropdown
             id='color'
             title='Color'
+            aria-label='Color'
             value={watch('color')}
             onChange={(e) => setValue('color', e.target.value)}
             options={colors || []}
@@ -156,6 +159,7 @@ const AddProductForm = ({
           <Dropdown
             id='category'
             title='Category'
+            aria-label='Category'
             value={watch('categories')}
             onChange={(e) => setValue('categories', e.target.value)}
             options={categories || []}
@@ -167,6 +171,7 @@ const AddProductForm = ({
           <Dropdown
             id='gender'
             title='Gender'
+            aria-label='Gender'
             value={watch('gender')}
             onChange={(e) => setValue('gender', e.target.value)}
             options={genders || []}
@@ -176,6 +181,7 @@ const AddProductForm = ({
           <Dropdown
             id='brand'
             title='Brand'
+            aria-label='Brand'
             value={watch('brand')}
             onChange={(e) => setValue('brand', e.target.value)}
             options={brands || []}
@@ -185,6 +191,7 @@ const AddProductForm = ({
         </Box>
         <Input
           title='Description'
+          aria-label='Description'
           id='product-description'
           placeholder='Your description of the product...'
           multiline

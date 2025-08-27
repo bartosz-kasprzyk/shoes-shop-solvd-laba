@@ -14,10 +14,6 @@ import {
 import { CloseIcon, FiltersIcon } from '@/shared/icons';
 import { useState } from 'react';
 import useFilterStore from '../../stores/filterStore';
-import { useQueries } from '@tanstack/react-query';
-import { filtersSections } from '../../consts/filtersSections';
-import { filterTypeToUrlSegmentMap } from '../../mappings';
-import { fetchFilterValuesByFilterType } from '../../api/fetchFilterValuesByFilterType';
 import { useFiltersSlugsFromPath } from '../../hooks/useFiltersSlugsFromPath';
 import { useRouter } from 'next/navigation';
 import type { FilterType, FilterValue } from '../../types';

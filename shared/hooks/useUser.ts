@@ -1,14 +1,7 @@
 import { useSession } from 'next-auth/react';
-import type { SessionContextValue } from 'next-auth/react';
-import type { Session } from 'next-auth';
+import type { UseUserProps } from '../types';
 
-export default function useUser(): {
-  session: Session | null;
-  status: string;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  update: SessionContextValue['update'];
-} {
+export default function useUser(): UseUserProps {
   const { data: session, status, update } = useSession();
 
   return {

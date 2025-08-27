@@ -13,7 +13,6 @@ jest.mock('@/shared/components/ui', () => {
       {children} <button onClick={onDelete}>Delete</button>
     </div>
   );
-  MockImageOverlay.displayName = 'MockImageOverlay';
   return { ImageOverlay: MockImageOverlay };
 });
 

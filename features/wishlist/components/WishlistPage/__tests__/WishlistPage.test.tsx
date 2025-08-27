@@ -36,8 +36,6 @@ jest.mock('@/features/products/components/ProductCard', () => {
       <button onClick={onClick}>remove-{card.id}</button>
     </div>
   );
-
-  MockProductCard.displayName = 'MockProductCard';
   return MockProductCard;
 });
 

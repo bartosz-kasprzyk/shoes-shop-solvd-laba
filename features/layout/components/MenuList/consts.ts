@@ -1,5 +1,4 @@
 import {
-  LogoutIcon,
   MyProductsIcon,
   MyWishlistIcon,
   OrderHistoryIcon,
@@ -20,7 +19,7 @@ export const menuItems: MenuItem[] = [
     href: '/order-history',
   },
   {
-    label: 'My Wishlist',
+    label: 'My wishlist',
     icon: MyWishlistIcon,
     href: '/my-wishlist',
   },
@@ -33,13 +32,5 @@ export const menuItems: MenuItem[] = [
     label: 'Settings',
     icon: SettingsIcon,
     href: '/settings',
-  },
-];
-
-export const unauthorizedMenuItems: MenuItem[] = [
-  {
-    label: 'Sign in',
-    icon: LogoutIcon,
-    href: '/sign-in',
   },
 ];

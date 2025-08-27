@@ -104,6 +104,7 @@ export default function EditProductModal({
             <Button
               form='edit-product-form'
               type='submit'
+              aria-label='Save'
               disabled={loading}
               sx={{
                 width: '152px',

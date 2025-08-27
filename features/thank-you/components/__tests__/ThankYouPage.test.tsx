@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThankYouPage } from '..';
+import type { TestImageProps } from '@/shared/interfaces/Tests';
 
 jest.mock('@/features/checkout/components/CartCleanerer', () => ({
   CartClearer: () => <div data-testid='cart-clearer' />,
@@ -8,7 +9,9 @@ jest.mock('@/features/checkout/components/CartCleanerer', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: ({ priority: _priority, ...rest }: TestImageProps) => (
+    <img {...rest} alt={rest.alt || 'fallback'} />
+  ),
 }));
 
 describe('ThankYouPage', () => {

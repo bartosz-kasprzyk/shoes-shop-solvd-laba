@@ -3,7 +3,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import convertToSubcurrency from '@/features/shop/lib/convertToSubcurrency';
 import { CartDetailsProvider } from '@/features/cart/components/CartDetailsContext';
-import { color } from 'framer-motion';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
