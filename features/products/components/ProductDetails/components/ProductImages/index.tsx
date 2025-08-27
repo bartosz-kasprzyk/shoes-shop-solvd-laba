@@ -92,7 +92,12 @@ export default function ProductImages({ images }: ProductImagesProps) {
               alt={`Thumbnail ${index}`}
               width={76}
               height={76}
-              style={{ display: 'block', maxWidth: '100%', maxHeight: '100%' }}
+              style={{
+                display: 'block',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'cover',
+              }}
             />
           </Box>
         ))}

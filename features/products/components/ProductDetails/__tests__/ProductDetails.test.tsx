@@ -6,6 +6,7 @@ const showSnackbarMock = jest.fn();
 const addItemMock = jest.fn();
 
 jest.mock('next/navigation', () => ({
+  usePathname: jest.fn(),
   useRouter: () => ({
     push: jest.fn(),
     refresh: jest.fn(),
