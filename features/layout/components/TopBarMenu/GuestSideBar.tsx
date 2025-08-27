@@ -11,7 +11,10 @@ export default function GuestSideBar() {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        paddingTop: 1,
+        px: 4,
+        py: 2,
+        minWidth: '200px',
+        // border: '1px solid red',
       }}
     >
       <Typography
