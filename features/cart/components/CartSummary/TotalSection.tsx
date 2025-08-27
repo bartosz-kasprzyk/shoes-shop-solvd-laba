@@ -13,8 +13,12 @@ export default function TotalSection({ total }: { total: string }) {
         borderBottom: '1px color-mix(in srgb, black 10%, transparent) solid',
       }}
     >
-      <Typography fontWeight={600}>Total</Typography>
-      <Typography fontWeight={600}>${total}</Typography>
+      <Typography fontSize={{ xs: '0.8em' }} fontWeight={600}>
+        Total
+      </Typography>
+      <Typography fontSize={{ xs: '0.8em' }} fontWeight={600}>
+        ${total}
+      </Typography>
     </Box>
   );
 }

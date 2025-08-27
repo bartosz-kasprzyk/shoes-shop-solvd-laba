@@ -1,52 +1,89 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import ArrowIcon from '@/shared/icons/HorizontalArrowIcon';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { motion, AnimatePresence } from 'framer-motion';
 import type { ProductImagesProps } from '@/features/products/types/components.interface';
 import { RoundButton } from '../RoundButton';
 
 export default function ProductImages({ images }: ProductImagesProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? (isMobile ? 400 : 700) : isMobile ? -400 : -700,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction > 0 ? (isMobile ? -400 : -700) : isMobile ? 400 : 700,
-      opacity: 0,
-    }),
-  };
+  useEffect(() => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => document.removeEventListener('touchmove', handleTouchMove);
+  }, [isDragging]);
 
   const handlePrev = () => {
     if (selectedIndex > 0) {
-      setDirection(-1);
       setSelectedIndex(selectedIndex - 1);
     }
   };
 
   const handleNext = () => {
-    if (selectedIndex < images?.length - 1) {
-      setDirection(1);
+    if (selectedIndex < images.length - 1) {
       setSelectedIndex(selectedIndex + 1);
     }
   };
 
   const handleClick = (index: number) => {
     if (index === selectedIndex) return;
-
-    setDirection(index > selectedIndex ? 1 : -1);
     setSelectedIndex(index);
+  };
+
+  const handleStart = (clientX: number) => {
+    if (!isMobile) return;
+    setIsDragging(true);
+    setStartX(clientX);
+    setDragOffset(0);
+  };
+
+  const handleMove = (clientX: number) => {
+    if (!isDragging || !isMobile) return;
+    const offset = clientX - startX;
+    setDragOffset(offset);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging || !isMobile) return;
+    setIsDragging(false);
+
+    const threshold = 50;
+    if (dragOffset > threshold && selectedIndex > 0) {
+      handlePrev();
+    } else if (dragOffset < -threshold && selectedIndex < images.length - 1) {
+      handleNext();
+    }
+
+    setDragOffset(0);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    handleStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    handleMove(e.touches[0].clientX);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    handleStart(e.clientX);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    handleMove(e.clientX);
   };
 
   return (
@@ -59,7 +96,6 @@ export default function ProductImages({ images }: ProductImagesProps) {
         marginRight: { xs: 0, lg: '10px', xl: '102px' },
       }}
     >
-      {/* Thumbnails (left side, vertical list) */}
       <Box
         sx={{
           display: { xs: 'none', sm: 'flex' },
@@ -67,7 +103,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           gap: { sm: '12px', md: '10px', lg: '12px', xl: '16px' },
         }}
       >
-        {images?.map((img, index) => (
+        {images.map((img, index) => (
           <Box
             key={index}
             onClick={() => handleClick(index)}
@@ -102,59 +138,56 @@ export default function ProductImages({ images }: ProductImagesProps) {
           </Box>
         ))}
       </Box>
-
-      {/* Main image */}
       <Box
+        ref={containerRef}
         sx={{
           position: 'relative',
           width: { xs: '100%', sm: 487, md: 397, lg: 487, xl: 588 },
           height: { sm: 520, md: 424, lg: 520, xl: 628 },
           aspectRatio: '588 / 628',
           overflow: 'hidden',
+          cursor:
+            isMobile && isDragging ? 'grabbing' : isMobile ? 'grab' : 'default',
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleEnd}
+        onMouseLeave={handleEnd}
       >
-        {images ? (
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.div
-              key={images[selectedIndex].attributes.url}
-              custom={direction}
-              variants={variants}
-              initial='enter'
-              animate='center'
-              exit='exit'
-              transition={{ duration: 0.3 }}
-              {...(isMobile && {
-                drag: 'x',
-                dragConstraints: { left: 0, right: 0 },
-                onDragEnd: (_, info) => {
-                  if (info.offset.x < -50) handleNext();
-                  else if (info.offset.x > 50) handlePrev();
-                },
-                whileTap: { cursor: 'grabbing' },
-              })}
-              style={
-                {
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                } as React.CSSProperties
-              }
+        <Box
+          sx={{
+            display: 'flex',
+            width: `${images.length * 100}%`,
+            height: '100%',
+            transform: `translateX(calc(-${selectedIndex * 100}% / ${images.length} + ${isDragging ? dragOffset : 0}px))`,
+            transition: isDragging ? 'none' : 'transform 0.3s ease-out',
+          }}
+        >
+          {images.map((img, index) => (
+            <Box
+              key={img.attributes.url}
+              sx={{
+                width: `${100 / images.length}%`,
+                height: '100%',
+                position: 'relative',
+                flexShrink: 0,
+              }}
             >
               <Image
-                src={images[selectedIndex].attributes.url}
-                alt='Main product image'
+                src={img.attributes.url}
+                alt={`Product image ${index + 1}`}
                 fill
                 sizes='(max-width: 600px) 100vw, 588px'
                 style={{ objectFit: 'cover', pointerEvents: 'none' }}
-                priority
+                priority={index === 0}
               />
-            </motion.div>
-          </AnimatePresence>
-        ) : null}
-        {/* Desktop arrows bottom-right */}
-        {images?.length > 1 ? (
+            </Box>
+          ))}
+        </Box>
+        {images.length > 1 ? (
           <Box
             sx={{
               display: { xs: 'none', sm: 'flex' },
@@ -174,14 +207,13 @@ export default function ProductImages({ images }: ProductImagesProps) {
             <RoundButton
               size='small'
               onClick={handleNext}
-              disabled={selectedIndex === images?.length - 1}
+              disabled={selectedIndex === images.length - 1}
             >
               <ArrowIcon />
             </RoundButton>
           </Box>
         ) : null}
       </Box>
-      {/* Mobile dot indicators below image */}
       <Box
         sx={{
           display: { xs: 'flex', sm: 'none' },
@@ -190,7 +222,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
           gap: '8px',
         }}
       >
-        {images?.map((_, index) => (
+        {images.map((_, index) => (
           <Box
             key={index}
             onClick={() => handleClick(index)}

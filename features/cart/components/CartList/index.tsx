@@ -16,7 +16,7 @@ export default function CartList() {
   } = useCartDetails();
   const { totalItems } = useCart();
 
-  const cartContent = cartItems.map((item, id) => (
+  const cartContent = cartItems.map((item) => (
     <ListItem key={`${item.id}-${item.size}`} sx={{ padding: 0 }}>
       <CartListItem
         cartItem={item}
@@ -48,12 +48,8 @@ export default function CartList() {
           marginBottom='20px'
           fontSize={{ xs: '24px', md: '32px' }}
           fontWeight={500}
-          px={2}
+          px={{ xs: 2, sm: 0 }}
           py={1}
-          borderTop={{
-            xs: '1px color-mix(in srgb, black 10%, transparent) solid',
-            sm: 'none',
-          }}
           borderBottom={{
             xs: '1px color-mix(in srgb, black 10%, transparent) solid',
             sm: 'none',
@@ -63,7 +59,7 @@ export default function CartList() {
         </Typography>
       </Box>
       <Box
-        px={{ xs: 2, md: 0 }}
+        px={{ xs: 2, sm: 0 }}
         sx={{
           pb: 1,
           flexGrow: 1,

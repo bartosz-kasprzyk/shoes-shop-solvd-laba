@@ -13,6 +13,17 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
   useSnackbar: jest.fn(),
 }));
 
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+};
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
+
 describe('useSignOut', () => {
   const mockShowSnackbar = jest.fn();
   const mockSignOut = signOut as jest.MockedFunction<typeof signOut>;
@@ -26,15 +37,23 @@ describe('useSignOut', () => {
     });
   });
 
-  it('calls signOut with correct callbackUrl when sign out succeeds', async () => {
+  it('should store pending snackbar message and call signOut when sign out succeeds', async () => {
     mockSignOut.mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useSignOut());
 
     await result.current.handleSignOut();
 
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'pendingSnackbar',
+      JSON.stringify({
+        message: 'Successfully signed out',
+        severity: 'success',
+        duration: 3000,
+      }),
+    );
     expect(mockSignOut).toHaveBeenCalledWith({
-      callbackUrl: '/?signedOut=true',
+      callbackUrl: '/',
     });
     expect(mockShowSnackbar).not.toHaveBeenCalled();
   });
@@ -47,8 +66,16 @@ describe('useSignOut', () => {
 
     await result.current.handleSignOut();
 
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'pendingSnackbar',
+      JSON.stringify({
+        message: 'Successfully signed out',
+        severity: 'success',
+        duration: 3000,
+      }),
+    );
     expect(mockSignOut).toHaveBeenCalledWith({
-      callbackUrl: '/?signedOut=true',
+      callbackUrl: '/',
     });
     expect(mockShowSnackbar).toHaveBeenCalledWith(
       'Error signing out. Please try again.',

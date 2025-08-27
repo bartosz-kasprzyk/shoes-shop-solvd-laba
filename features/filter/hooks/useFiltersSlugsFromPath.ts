@@ -1,5 +1,4 @@
 import { usePathname } from 'next/navigation';
-import type { FiltersState } from '../types/FiltersState';
 import type { Filter, FilterType } from '../types';
 
 export function useFiltersSlugsFromPath(): Filter {

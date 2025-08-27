@@ -3,15 +3,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import UploadedImagesContainer from '..';
 import '@testing-library/jest-dom';
 import imageCompression from 'browser-image-compression';
+import type { UploadeImageInputProps } from '@/features/products/types';
 
 jest.mock('browser-image-compression', () => jest.fn());
 
 jest.mock('../../UploadImageInput', () => {
-  const MockUploadImageInput = ({
-    handleAddImage,
-  }: {
-    handleAddImage: any;
-  }) => (
+  const MockUploadImageInput = ({ handleAddImage }: UploadeImageInputProps) => (
     <div>
       <input
         type='file'
@@ -22,7 +19,6 @@ jest.mock('../../UploadImageInput', () => {
       <button>Mock Upload Input</button>
     </div>
   );
-  MockUploadImageInput.displayName = 'MockUploadImageInput';
   return MockUploadImageInput;
 });
 
@@ -36,12 +32,11 @@ jest.mock('../../UploadedImageCard', () => {
     preview: string;
     deleteImage: (idx: number) => void;
   }) => (
-    <div data-testid={`image-${idx}`}>
+    <div key={`image-card-${idx}`} data-testid={`image-${idx}`}>
       <img src={preview} alt={`Image ${idx}`} />
       <button onClick={() => deleteImage(idx)}>Delete</button>
     </div>
   );
-  MockUploadedImageCard.displayName = 'MockUploadedImageCard';
   return MockUploadedImageCard;
 });
 
@@ -50,9 +45,11 @@ describe('UploadedImagesContainer', () => {
   const mockSetImagesError = jest.fn();
 
   beforeAll(() => {
-    global.URL.createObjectURL = jest.fn(() => 'mock-url');
-    (imageCompression as unknown as jest.Mock).mockImplementation(
-      async (file) => file,
+    global.URL.createObjectURL = jest.fn(
+      (file: File) => `mock-url-${file.name}`,
+    );
+    (imageCompression as unknown as jest.Mock).mockImplementation((file) =>
+      Promise.resolve(file),
     );
   });
 
@@ -110,10 +107,10 @@ describe('UploadedImagesContainer', () => {
   it('shows error if max images exceeded', async () => {
     render(
       <UploadedImagesContainer
-        images={Array(6).fill({
-          preview: 'img',
-          file: new File([], 'img.png'),
-        })}
+        images={Array.from({ length: 6 }, (_, i) => ({
+          preview: `img-${i}`,
+          file: new File([], `img-${i}.png`),
+        }))}
         setImages={mockSetImages}
         setImagesError={mockSetImagesError}
         imagesError=''
@@ -137,10 +134,10 @@ describe('UploadedImagesContainer', () => {
   it('hides the upload input when the max number of images is reached', () => {
     render(
       <UploadedImagesContainer
-        images={Array(7).fill({
-          preview: 'mock-url',
-          file: new File([], 'img.png'),
-        })}
+        images={Array.from({ length: 7 }, (_, i) => ({
+          preview: `mock-url-${i}`,
+          file: new File([], `img-${i}.png`),
+        }))}
         setImages={mockSetImages}
         setImagesError={mockSetImagesError}
         imagesError=''

@@ -1,8 +1,17 @@
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { Box, Typography } from '@mui/material';
 import OrderHistoryList from '../OrderHistoryList';
+import { getUserTransactions } from '../../actions/getTransactions';
+import { mapTransactionToOrder } from '../../utils/mapTransactionToOrder';
+import type { Transaction } from '../../types';
 
-export default function OrderHistoryPage() {
+export default async function OrderHistoryPage() {
+  const receivedTransactions = await getUserTransactions();
+
+  const transactions = receivedTransactions.map((transaction) =>
+    mapTransactionToOrder(transaction as Transaction),
+  );
+
   return (
     <ScrollableContainer>
       <Box
@@ -27,7 +36,7 @@ export default function OrderHistoryPage() {
           Order history
         </Typography>
 
-        <OrderHistoryList />
+        <OrderHistoryList transactions={transactions} />
       </Box>
     </ScrollableContainer>
   );

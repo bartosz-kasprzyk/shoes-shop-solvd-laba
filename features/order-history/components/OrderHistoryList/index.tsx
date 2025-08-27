@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import OrderHistoryCard from '../OrderHistoryCard';
 import { ShippedIcon } from '@/shared/icons';
 import OrderStatus from '../OrderStatus';
+import type { Order } from '../../types';
 
 const orderStatus = (
   <OrderStatus
@@ -11,16 +12,21 @@ const orderStatus = (
   />
 );
 
-export default function OrderHistoryList() {
-  const orders = [
-    { id: '1', title: 'order1' },
-    { id: '2', title: 'order2' },
-    { id: '3', title: 'order3' },
-  ];
+interface OrderHistoryListProps {
+  transactions: Order[];
+}
+
+export default function OrderHistoryList({
+  transactions,
+}: OrderHistoryListProps) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      {orders.map((order) => (
-        <OrderHistoryCard key={order.id} orderStatus={orderStatus} />
+      {transactions.map((transaction) => (
+        <OrderHistoryCard
+          key={transaction.orderId}
+          transaction={transaction}
+          orderStatus={orderStatus}
+        />
       ))}
     </Box>
   );

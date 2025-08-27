@@ -2,8 +2,8 @@
 
 import { SearchIcon } from '@/shared/icons';
 import type { BoxProps } from '@mui/material';
-import { Box, Fade, IconButton, TextField, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { Box, Fade, IconButton, TextField } from '@mui/material';
+import SearchSuggestions from './SearchSuggestions';
 
 export default function TopBarSearch({
   value,
@@ -12,7 +12,6 @@ export default function TopBarSearch({
   onKeyDown,
   isExpanded,
   inputRef,
-  ...props
 }: BoxProps & {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -42,7 +41,6 @@ export default function TopBarSearch({
       {/* Main wrapper for search field */}
       <Box
         // {...props}
-        onClick={() => handleExpand(true)}
         sx={{
           overflowY: 'visible',
           height: '95%',
@@ -58,6 +56,7 @@ export default function TopBarSearch({
         <TextField
           value={value}
           onChange={onChange}
+          onClick={() => handleExpand(true)}
           onKeyDown={onKeyDown}
           inputRef={inputRef}
           placeholder='Search'
@@ -142,9 +141,13 @@ export default function TopBarSearch({
               opacity: { xs: isExpanded ? 1 : 0, md: 1 },
             },
             '& .MuiInputBase-input': {
-              px: 0,
+              pl: 0,
+              pr: 1,
               mx: 0,
               color: '#5C5C5C',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
               opacity: { xs: isExpanded ? 1 : 0, md: 1 },
             },
           }}
@@ -164,7 +167,12 @@ export default function TopBarSearch({
                 overflowY: 'visible',
               }}
             >
-              <Box position='relative' height='auto' zIndex={1111101}>
+              <Box
+                position='relative'
+                height='auto'
+                minHeight={'20vh'}
+                zIndex={1111101}
+              >
                 <Box
                   display='flex'
                   overflow={'clip'}
@@ -173,12 +181,7 @@ export default function TopBarSearch({
                   pt='2em'
                   pb='4em'
                 >
-                  <Typography color='#5C5C5C' variant='body1' fontSize='0.9em'>
-                    Popular Search Terms
-                  </Typography>
-                  <Typography>Nike Air Force 1 LV8</Typography>
-                  <Typography>Nike Air Force 1</Typography>
-                  <Typography>Nike Air Force 1&apos;High</Typography>
+                  <SearchSuggestions term={value} />
                 </Box>
 
                 <Box

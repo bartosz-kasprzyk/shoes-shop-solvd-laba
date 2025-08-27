@@ -2,8 +2,8 @@ import z from 'zod';
 
 export const profileSchema = z
   .object({
-    firstName: z.string('Invalid name').nullable(),
-    lastName: z.string('Invalid surname').nullable(),
+    firstName: z.string('Invalid name').nonempty('Name cannot be empty'),
+    lastName: z.string('Invalid surname').nonempty('Surname cannot be empty'),
     email: z.email('Invalid email'),
     phoneNumber: z
       .string()

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { renderWithProviders } from '@/shared/tests/test-utils';
 import type { Product } from '@/shared/interfaces/Product';
 import RecentlyViewedPage from '../RecentlyViewedPage';
@@ -30,12 +30,43 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
 
 describe('RecentlyViewedPageClient', () => {
   it('renders products from localStorage', () => {
-    const products: Product[] = [
-      { id: 1, attributes: { name: 'Test product' } } as any,
-    ];
-    localStorage.setItem('recentlyViewed', JSON.stringify(products));
+    const mockProduct: Product = {
+      id: 1,
+      attributes: {
+        name: 'Test product',
+        description: 'Mock description',
+        brand: 'Mock brand',
+        categories: [],
+        color: 'blue',
+        gender: {
+          data: {
+            id: 1,
+            attributes: {
+              name: 'men',
+            },
+          },
+        },
+        sizes: [],
+        price: 100,
+        userID: 'user123',
+        teamName: 'Mock Team',
+        images: {
+          data: [
+            {
+              attributes: {
+                url: '/mock-image-url.png',
+              },
+            },
+          ],
+        },
+      },
+    };
 
-    renderWithProviders(<RecentlyViewedPage />);
+    localStorage.setItem('recentlyViewed', JSON.stringify([mockProduct]));
+
+    act(() => {
+      renderWithProviders(<RecentlyViewedPage />);
+    });
 
     expect(screen.getByText('Test product')).toBeInTheDocument();
   });
@@ -43,7 +74,9 @@ describe('RecentlyViewedPageClient', () => {
   it('shows empty state when no products', () => {
     localStorage.clear();
 
-    renderWithProviders(<RecentlyViewedPage />);
+    act(() => {
+      renderWithProviders(<RecentlyViewedPage />);
+    });
 
     expect(
       screen.getByText(/You haven't viewed any products yet/i),

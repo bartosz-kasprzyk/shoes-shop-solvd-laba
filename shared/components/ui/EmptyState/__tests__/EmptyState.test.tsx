@@ -9,13 +9,11 @@ jest.mock('next/link', () => {
     children: React.ReactNode;
     href: string;
   }) => <a href={href}>{children}</a>;
-  Link.displayName = 'Link';
   return Link;
 });
 
 jest.mock('@/shared/icons', () => {
   const BagIcon = () => <svg data-testid='bag-icon' />;
-  BagIcon.displayName = 'BagIcon';
   return { BagIcon };
 });
 

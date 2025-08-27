@@ -60,7 +60,7 @@ export default function ProfileForm() {
   function deleteAvatar() {
     setAvatarFile(undefined);
     setAvatarOperation('delete');
-    setValue('avatarUrl', '');
+    setValue('avatarUrl', undefined);
   }
 
   async function handleFormSubmit(profile: Profile) {
@@ -73,6 +73,7 @@ export default function ProfileForm() {
       ...rest,
       firstName,
       lastName,
+      avatar: avatarOperation === 'delete' ? null : rest.avatar,
     };
 
     await onSubmit({
@@ -86,7 +87,7 @@ export default function ProfileForm() {
       user: {
         ...session?.user,
         name: `${firstName} ${lastName}`,
-        image: avatarUrl,
+        image: avatarUrl || undefined,
       },
     });
   }

@@ -8,8 +8,10 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import OrderHistoryProduct from '../OrderHistoryProduct';
+import type { Order } from '../../types';
 
 interface OrderHistoryCardProps {
+  transaction: Order;
   orderStatus: React.ReactNode;
 }
 
@@ -20,7 +22,7 @@ function Text({
   flex,
 }: {
   title?: string;
-  value?: string;
+  value?: React.ReactNode;
   hidden?: boolean;
   flex?: number;
 }) {
@@ -32,6 +34,8 @@ function Text({
         color: '#8C9196',
         display: hidden ? { xs: 'none', sm: 'block' } : 'block',
         flex: flex ? flex : 'none',
+        flexBasis: 'auto',
+        minWidth: '12ch',
       }}
     >
       {title}
@@ -41,6 +45,7 @@ function Text({
 }
 
 export default function OrderHistoryCard({
+  transaction,
   orderStatus,
 }: OrderHistoryCardProps) {
   return (
@@ -59,7 +64,7 @@ export default function OrderHistoryCard({
       <AccordionSummary
         expandIcon={<DropdownArrowIcon />}
         sx={{
-          height: '56px',
+          // height: '56px',
           mr: 3,
           '& .MuiAccordionSummary-content': {
             display: 'flex',
@@ -76,25 +81,21 @@ export default function OrderHistoryCard({
             display: 'flex',
             justifyContent: 'space-between',
             gap: 3,
-            // border: '1px solid red',
           }}
         >
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Text value='#987654' />
-            <Text
-              title={new Intl.DateTimeFormat('de-DE').format(new Date())}
-              hidden
-            />{' '}
+            <Text value={`#${transaction.orderId}`} />
+            <Text title={transaction.date} hidden />
           </Box>
 
-          <Text title='Products ' value='1' hidden />
+          <Text title='Products ' value={transaction.productsQuantity} hidden />
 
           <Text
             title='Summary: '
             value={new Intl.NumberFormat('en-US', {
               style: 'currency',
               currency: 'USD',
-            }).format(117)}
+            }).format(transaction.amount !== 0 ? transaction.amount / 100 : 0)}
           />
         </Box>
 
@@ -108,52 +109,50 @@ export default function OrderHistoryCard({
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             gap: { xs: 2, md: 5 },
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             borderTop: '1px solid #E7EBEF',
-            // border: '1px solid red',
             py: '20px',
           }}
         >
-          <Text title='Delivery: ' value='Meest, #134-45 London' flex={1} />
+          <Text title='Delivery: ' value={transaction.delivery} flex={1} />
 
-          <Text
-            title='Contacts: '
-            value='Angelina Jones, +38 (095) 12 34 567, angelina@gmail.com'
-            flex={2}
-          />
+          <Text title='Contacts: ' value={transaction.contacts} flex={1} />
 
-          <Text title='Payment: ' value='After payment' flex={1} />
+          <Text title='Payment: ' value={transaction.payment} flex={1} />
         </Box>
 
         {/*   middle element   */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 2, md: 5 },
-            justifyContent: 'space-between',
-            alignItems: {
-              xs: 'stretch',
-              md: 'center',
-            },
-            borderTop: '1px solid #E7EBEF',
-            // border: '1px solid red',
-            py: '20px',
-          }}
-        >
-          <OrderHistoryProduct />
+        {transaction.products.map((product) => (
+          <Box
+            key={product.id}
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: { xs: 2, md: 5 },
+              justifyContent: 'space-between',
+              alignItems: {
+                xs: 'stretch',
+                md: 'center',
+              },
+              borderTop: '1px solid #E7EBEF',
+              py: '20px',
+            }}
+          >
+            <OrderHistoryProduct product={product} />
 
-          <Text title='Quality: ' value='1' />
+            <Text title='Quantity: ' value={product.quantity} />
 
-          <Text
-            title='Price: '
-            value={new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-            }).format(117)}
-          />
-        </Box>
+            <Text
+              title='Price: '
+              value={new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(product.price !== 0 ? product.price : 0)}
+            />
+          </Box>
+        ))}
 
+        {/*   bottom element   */}
         <Box
           sx={{
             display: 'flex',
@@ -177,22 +176,6 @@ export default function OrderHistoryCard({
             <PdfIcon />
             Pdf invoice download
           </Link>
-
-          <Typography
-            sx={{
-              fontWeight: 700,
-              fontSize: '14px',
-              color: '#8C9196',
-            }}
-          >
-            Discount:
-            <span style={{ color: '#EB5656' }}>
-              {new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              }).format(14245.32)}
-            </span>
-          </Typography>
         </Box>
       </AccordionDetails>
     </Accordion>

@@ -3,7 +3,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import convertToSubcurrency from '@/features/shop/lib/convertToSubcurrency';
 import { CartDetailsProvider } from '@/features/cart/components/CartDetailsContext';
-import { color } from 'framer-motion';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
@@ -27,18 +26,23 @@ export default function ShopLayout({
           appearance: {
             // theme: 'flat',
             variables: {
-              fontFamily: 'Inter, sans-serif',
-              colorText: '#666666',
+              colorText: 'var(--color-text-primary)',
               colorBackground: '#ffffff',
               colorPrimary: '#FE645E',
               spacingUnit: '4px',
             },
             rules: {
+              '.Label': {
+                marginBottom: '12px',
+                fontWeight: '500',
+                fontSize: '15px',
+              },
               '.Tab': {
                 borderRadius: '8px',
                 border: '2px solid #E1E1E1',
                 padding: '12px 16px',
                 marginRight: '8px',
+                marginBottom: '20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -60,7 +64,7 @@ export default function ShopLayout({
               '.Input': {
                 borderRadius: '8px',
                 border: '1px solid #000000',
-                padding: '12px',
+                padding: '14px',
                 marginBottom: '12px',
                 fontSize: '14px',
               },

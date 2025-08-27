@@ -9,6 +9,12 @@ jest.mock('next-auth/react');
 
 const mockUpdate = jest.fn();
 
+jest.mock('@/shared/hooks/useServerSession', () => ({
+  useServerSession: jest.fn(() => ({
+    user: { name: 'John Doe', email: 'john@example.com', image: null },
+  })),
+}));
+
 (useSession as jest.Mock).mockReturnValue({
   data: {
     user: {
@@ -124,7 +130,7 @@ describe('ProfileForm', () => {
           lastName: 'surname',
           email: 'john@example.com',
           phoneNumber: '987654321',
-          avatar: { url: 'https://example.com/avatar.png', id: 1 },
+          avatar: null,
         },
         avatarOperation: 'delete',
         avatarFile: undefined,

@@ -25,12 +25,6 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
   useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
 }));
 
-jest.mock('@/app/not-found', () => {
-  const NotFound = () => <div>Error 404</div>;
-  NotFound.displayName = 'NotFound';
-  return NotFound;
-});
-
 jest.mock('@/shared/hooks/useCart', () => ({
   useCart: () => ({ addItem: addItemMock }),
 }));
@@ -40,30 +34,39 @@ const productData = {
     id: 123,
     attributes: {
       name: 'Nike Air',
-      price: 149,
-      description: 'Desc',
+      description: 'Some product description',
       brand: { data: { id: 1, attributes: { name: 'Nike' } } },
-      categories: { data: [{ id: 1, attributes: { name: 'Shoes' } }] },
+      categories: { data: [] },
       color: { data: { id: 1, attributes: { name: 'White' } } },
       gender: { data: { id: 1, attributes: { name: 'Men' } } },
-      sizes: { data: [{ id: 1, attributes: { value: 38 } }] },
-      images: {
-        data: [{ id: 101, attributes: { url: '/mock-image.jpg' } }],
+      sizes: {
+        data: [
+          { id: 10, attributes: { value: 38 } },
+          { id: 11, attributes: { value: 40 } },
+        ],
       },
-      userID: '123',
-      teamName: 'team5',
+      price: 149,
+      userID: '1',
+      teamName: 'Test Team',
+      images: { data: [{ id: 1, attributes: { url: '/image1.jpg' } }] },
     },
   },
 };
 
 describe('ProductDetails', () => {
+  beforeEach(() => {
+    showSnackbarMock.mockClear();
+    window.alert = jest.fn();
+    localStorage.clear();
+  });
+
   it('renders product info', () => {
     render(<ProductDetails initialData={productData} />);
 
     expect(screen.getByText('Nike Air')).toBeInTheDocument();
     expect(screen.getByText(/149/)).toBeInTheDocument();
     expect(screen.getByText('White')).toBeInTheDocument();
-    expect(screen.getByText('Desc')).toBeInTheDocument();
+    expect(screen.getByText('Some product description')).toBeInTheDocument();
   });
 
   it('adds product to wishlist when authenticated', () => {
@@ -84,7 +87,7 @@ describe('ProductDetails', () => {
     expect(screen.getByText(/please choose your size/i)).toBeInTheDocument();
   });
 
-  it('shows alert when Add to Cart clicked with size selected', () => {
+  it('shows alert when Add to Bag clicked with size selected', () => {
     render(<ProductDetails initialData={productData} />);
 
     fireEvent.click(screen.getByText('EU-38'));

@@ -4,6 +4,7 @@ import {
   fireEvent,
   act,
   renderHook,
+  waitFor,
 } from '@testing-library/react';
 import SignInPage from '../SignInPage';
 import '@testing-library/jest-dom';
@@ -163,5 +164,77 @@ describe('SignIn Page', () => {
     });
 
     expect(pushMock).toHaveBeenCalledWith('/products');
+  });
+
+  it('calls signIn with remember: false when checkbox is unchecked', async () => {
+    (signIn as jest.Mock).mockResolvedValue({
+      error: null,
+      url: '/products',
+      status: 200,
+      ok: true,
+    });
+
+    render(<SignInPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password123' },
+    });
+
+    const rememberMeCheckbox = screen.getByLabelText(
+      /remember me/i,
+    ) as HTMLInputElement;
+    if (rememberMeCheckbox.checked) {
+      fireEvent.click(rememberMeCheckbox);
+    }
+
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(signIn).toHaveBeenCalledWith('credentials', {
+        redirect: false,
+        identifier: 'test@example.com',
+        password: 'password123',
+        remember: false,
+        callbackUrl: '/products',
+      });
+    });
+    expect(mockPush).toHaveBeenCalledWith('/products');
+  });
+
+  it('calls signIn with remember: true when checkbox is checked', async () => {
+    (signIn as jest.Mock).mockResolvedValue({
+      error: null,
+      url: '/products',
+      status: 200,
+      ok: true,
+    });
+
+    render(<SignInPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password123' },
+    });
+
+    fireEvent.click(screen.getByLabelText(/remember me/i));
+    expect(screen.getByLabelText(/remember me/i)).toBeChecked();
+
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(signIn).toHaveBeenCalledWith('credentials', {
+        redirect: false,
+        identifier: 'test@example.com',
+        password: 'password123',
+        remember: true,
+        callbackUrl: '/products',
+      });
+    });
+    expect(mockPush).toHaveBeenCalledWith('/products');
   });
 });

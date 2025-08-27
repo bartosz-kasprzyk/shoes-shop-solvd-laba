@@ -1,12 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Box, CircularProgress, Collapse, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import ShippingInfoSection from '../ShippingInfoSection';
 import type { PersonalInfo } from '../PersonalInfoSection/interface';
 import type { ShippingInfo } from '../ShippingInfoSection/interface';
 import PersonalInfoSection from '../PersonalInfoSection';
-import type { CheckoutFormProps } from './interface';
 import {
   PaymentElement,
   useElements,
@@ -18,21 +17,33 @@ import useUser from '@/shared/hooks/useUser';
 import { z } from 'zod';
 import { useCheckoutStore } from '../../stores/checkoutStore';
 import { useCart } from '@/shared/hooks/useCart';
+import { useCartDetails } from '@/features/cart/components/CartDetailsContext';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const personalInfoSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   surname: z.string().min(2, 'Surname is required'),
   email: z.email('Invalid email address'),
-  phoneNumber: z.string().min(7, 'Phone number is too short'),
+  phoneNumber: z.e164('Invalid phone number'),
 });
 
 export const shippingInfoSchema = z.object({
   country: z.string().min(2, 'Country is required'),
   city: z.string().min(2, 'City is required'),
   state: z.string().min(2, 'State is required'),
-  zipCode: z.string().min(3, 'Zip code is required'),
-  address: z.string().min(5, 'Address is required'),
+  zipCode: z
+    .string()
+    .nonempty()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        return /^\d{2}-\d{3}$/.test(val) || /^\d{5,10}$/.test(val);
+      },
+      {
+        message: 'Invalid zip code',
+      },
+    ),
+  address: z.string().min(2, 'Address is required'),
 });
 
 export const checkoutSchema = z.object({
@@ -47,7 +58,8 @@ function generateOrderNumber(): string {
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { cartId, cart, total, resetCartID } = useCart();
+  const { cartId, total, resetCartID } = useCart();
+  const { cartItems } = useCartDetails();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState('');
   const [pIId, setPIId] = useState('');
@@ -179,7 +191,7 @@ export default function CheckoutForm() {
       body: JSON.stringify({
         strapiUserId: id,
         orderId,
-        cart: JSON.stringify(cart),
+        cart: JSON.stringify(cartItems),
         personalInfo,
         shippingInfo,
         paymentIntentId: pIId,
@@ -254,12 +266,8 @@ export default function CheckoutForm() {
             marginBottom='5px'
             fontSize={{ xs: '24px', md: '32px' }}
             fontWeight={500}
-            px={2}
             py={1}
-            borderTop={{
-              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
-              sm: 'none',
-            }}
+            px={{ xs: 2, sm: 0 }}
             borderBottom={{
               xs: '1px color-mix(in srgb, black 10%, transparent) solid',
               sm: 'none',
@@ -280,7 +288,7 @@ export default function CheckoutForm() {
           />
 
           {clientSecret && (
-            <Box px={2} py={1}>
+            <Box px={{ xs: 2, sm: 0 }} py={1}>
               <Typography variant='h6' sx={{ my: 3, fontWeight: 500 }}>
                 Payment info
               </Typography>

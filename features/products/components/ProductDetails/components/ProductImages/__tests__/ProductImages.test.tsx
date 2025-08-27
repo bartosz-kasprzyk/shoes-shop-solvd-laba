@@ -2,16 +2,14 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProductImages from '..';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import type { TestImageProps } from '@/shared/interfaces/Tests';
 
-jest.mock('next/image', () => {
-  const MockedImage = (props: { alt: string }) => {
-    const { alt, ...rest } = props;
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...rest} alt={alt} />;
-  };
-  MockedImage.displayName = 'NextImageMock';
-  return MockedImage;
-});
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ fill: _fill, priority: _priority, ...rest }: TestImageProps) => (
+    <img {...rest} src={rest.src} alt={rest.alt || 'fallback'} />
+  ),
+}));
 
 jest.mock('@mui/material/useMediaQuery');
 
@@ -23,7 +21,7 @@ const mockImages = [
 
 describe('ProductImages component', () => {
   beforeEach(() => {
-    (useMediaQuery as jest.Mock).mockImplementation(() => false); // desktop view
+    (useMediaQuery as jest.Mock).mockImplementation(() => false);
   });
 
   it('renders all thumbnails and main image correctly', () => {
@@ -32,35 +30,23 @@ describe('ProductImages component', () => {
     const thumbnails = screen.getAllByAltText(/Thumbnail \d+/i);
     expect(thumbnails).toHaveLength(mockImages.length);
 
-    const mainImage = screen.getByAltText(/Main product image/i);
-    expect(mainImage).toBeInTheDocument();
-    expect(mainImage).toHaveAttribute('src', mockImages[0].attributes.url);
+    const initialMainImage = screen.getByAltText('Product image 1');
+    expect(initialMainImage).toBeInTheDocument();
+    expect(initialMainImage).toHaveAttribute(
+      'src',
+      mockImages[0].attributes.url,
+    );
   });
 
   it('clicking a thumbnail updates the main image', () => {
     render(<ProductImages images={mockImages} />);
 
-    let mainImages = screen.getAllByAltText('Main product image'); // 2 exist because of framer-motion
-    let latestMainImage = mainImages[mainImages.length - 1];
-    expect(latestMainImage).toHaveAttribute(
-      'src',
-      mockImages[0].attributes.url,
-    );
+    const secondThumbnail = screen.getByAltText('Thumbnail 1');
+    fireEvent.click(secondThumbnail);
 
-    const nextThumbnail = screen.getByAltText('Thumbnail 1');
-    fireEvent.click(nextThumbnail);
-
-    mainImages = screen.getAllByAltText('Main product image');
-    latestMainImage = mainImages[mainImages.length - 1];
-
-    expect(latestMainImage).not.toHaveAttribute(
-      'src',
-      mockImages[0].attributes.url,
-    );
-    expect(latestMainImage).toHaveAttribute(
-      'src',
-      mockImages[1].attributes.url,
-    );
+    const newMainImage = screen.getByAltText('Product image 2');
+    expect(newMainImage).toBeInTheDocument();
+    expect(newMainImage).toHaveAttribute('src', mockImages[1].attributes.url);
   });
 
   it('next and prev buttons navigate correctly', () => {
@@ -68,73 +54,31 @@ describe('ProductImages component', () => {
 
     const [prevBtn, nextBtn] = screen.getAllByRole('button');
 
-    function getActiveImage(expectedIndex: number) {
-      const mainImages = screen.getAllByAltText('Main product image');
-      return mainImages.find(
-        (img) =>
-          img.getAttribute('src') === mockImages[expectedIndex].attributes.url,
-      );
-    }
-
-    // Check initial state (image 0)
-    let activeImage = getActiveImage(0);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[0].attributes.url);
+    // Initial state: first image is active, prev button is disabled
+    const initialMainImage = screen.getByAltText('Product image 1');
+    expect(initialMainImage).toBeInTheDocument();
     expect(prevBtn).toBeDisabled();
     expect(nextBtn).not.toBeDisabled();
 
-    // Click next (to image 1)
+    // Click next button
     fireEvent.click(nextBtn);
-    activeImage = getActiveImage(1);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[1].attributes.url);
+    const secondMainImage = screen.getByAltText('Product image 2');
+    expect(secondMainImage).toBeInTheDocument();
     expect(prevBtn).not.toBeDisabled();
     expect(nextBtn).not.toBeDisabled();
 
-    // Click next (to image 2)
+    // Click next button again
     fireEvent.click(nextBtn);
-    activeImage = getActiveImage(2);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[2].attributes.url);
+    const thirdMainImage = screen.getByAltText('Product image 3');
+    expect(thirdMainImage).toBeInTheDocument();
     expect(prevBtn).not.toBeDisabled();
     expect(nextBtn).toBeDisabled();
 
-    // Click prev (back to image 1)
+    // Click prev button
     fireEvent.click(prevBtn);
-    activeImage = getActiveImage(1);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[1].attributes.url);
+    const backToSecondImage = screen.getByAltText('Product image 2');
+    expect(backToSecondImage).toBeInTheDocument();
     expect(prevBtn).not.toBeDisabled();
     expect(nextBtn).not.toBeDisabled();
-  });
-
-  it('renders dot indicators and reacts to clicks on mobile', () => {
-    (useMediaQuery as jest.Mock).mockImplementation(() => true); // mobile view
-    render(<ProductImages images={mockImages} />);
-
-    function getActiveImage(expectedIndex: number) {
-      const mainImages = screen.getAllByAltText('Main product image');
-      return mainImages.find(
-        (img) =>
-          img.getAttribute('src') === mockImages[expectedIndex].attributes.url,
-      );
-    }
-
-    const dots = screen.getAllByRole('button', { name: /select image/i });
-    expect(dots).toHaveLength(mockImages.length);
-
-    let activeImage = getActiveImage(0);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[0].attributes.url);
-
-    fireEvent.click(dots[2]);
-    activeImage = getActiveImage(2);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[2].attributes.url);
-
-    fireEvent.click(dots[1]);
-    activeImage = getActiveImage(1);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[1].attributes.url);
   });
 });

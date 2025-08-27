@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import type { ProductCardProps } from '../../../types/index';
 import ProductCard from '..';
 import { useSession } from 'next-auth/react';
+import type { WishlistButtonProps } from '@/shared/components/ui/WishlistButton/interface';
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
@@ -13,7 +14,6 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('@/shared/components/ui/DropDownMenu', () => {
   const MockDropDownMenu = () => <div data-testid='dropdown-menu' />;
-  MockDropDownMenu.displayName = 'MockDropDownMenu';
   return MockDropDownMenu;
 });
 
@@ -21,12 +21,11 @@ const mockOnAdd = jest.fn();
 const mockOnRemove = jest.fn();
 
 jest.mock('@/shared/components/ui/WishlistButton', () => {
-  const MockWishlistButton = ({ onClick }: any) => (
+  const MockWishlistButton = ({ onClick }: WishlistButtonProps) => (
     <button data-testid='wishlist-button' onClick={onClick}>
       Wishlist button
     </button>
   );
-  MockWishlistButton.displayName = 'MockWishlistButton';
   return MockWishlistButton;
 });
 

@@ -1,17 +1,10 @@
 'use client';
 import CartPageEmpty from '@/features/cart/components/CartPageEmpty';
-import CartSummary from '@/features/cart/components/CartSummary';
 import { useCheckoutStore } from '@/features/checkout/stores/checkoutStore';
-import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { Button } from '@/shared/components/ui';
 import { useCart } from '@/shared/hooks/useCart';
 import { Box, Link, useMediaQuery, useTheme } from '@mui/material';
-import {
-  usePathname,
-  useRouter,
-  useSelectedLayoutSegment,
-} from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ShopLayout({
   order,
@@ -24,8 +17,6 @@ export default function ShopLayout({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { totalItems } = useCart();
   const router = useRouter();
-  // const segment = useSelectedLayoutSegment('order')
-  const segment = useSelectedLayoutSegment('summary');
   const pathname = usePathname();
   const buttonText = pathname === '/checkout' ? 'Pay' : 'Go to checkout';
   const { submit, loading, setLoading } = useCheckoutStore();
@@ -39,8 +30,6 @@ export default function ShopLayout({
       case '/checkout':
         setLoading(true);
         submit?.();
-        // console.log(submit?.().then(a => a))
-        // setLoading(false);
         break;
       default:
         router.replace('/checkout');
@@ -54,12 +43,13 @@ export default function ShopLayout({
       flexDirection={'column'}
       height={'100%'}
       overflow={'hidden'}
+      pt={{ xs: 0, sm: 3 }}
     >
       {totalItems > 0 ? (
         <>
           {!isMobile && (
             <Box
-              px={{ xs: 0, sm: 4, xl: 20 }}
+              px={{ xs: 0, sm: 4, xl: 15 }}
               py={!isMobile ? 2 : 0}
               maxWidth={'1500px'}
               width='100%'
@@ -67,13 +57,13 @@ export default function ShopLayout({
             >
               <Link
                 onClick={() => router.back()}
-                style={{
-                  margin: 5,
+                sx={{
                   textDecoration: 'underline',
                   textTransform: 'none',
                   color: '#666',
                   fontSize: '14px',
                   fontWeight: 400,
+                  cursor: 'pointer',
                 }}
               >
                 Back
@@ -110,7 +100,9 @@ export default function ShopLayout({
               gap={{ xs: 4, xl: 15 }}
             >
               <Box width={'100%'} flex={10} minWidth={0}>
-                {isMobile && segment === 'summary' ? summary : order}
+                {/* important - do not use a ? b : c because it will reset the state in dom */}
+                {!(isMobile && pathname === '/checkout/summary') && order}
+                {isMobile && pathname === '/checkout/summary' && summary}
               </Box>
               {!isMobile && (
                 <Box flexGrow={1} width={'auto'}>
@@ -123,7 +115,7 @@ export default function ShopLayout({
                       mt: '100px',
                       position: 'sticky',
                       bottom: 10,
-                      m: 'auto',
+                      mx: 'auto',
                       mb: 1,
                     }}
                   >
@@ -141,18 +133,17 @@ export default function ShopLayout({
                   mt: '30px',
                   position: 'sticky',
                   display: 'flex',
-                  bottom: 0,
-                  mx: 'auto',
+                  bottom: { xs: 0, sm: 30 },
                 }}
               >
                 <Button
                   onClick={handleNavigate}
                   disabled={loading}
                   sx={{
-                    width: '90%',
+                    width: '100%',
                     position: 'sticky',
                     bottom: 10,
-                    mx: 'auto',
+                    mx: { xs: '16px', sm: '32px' },
                     my: 1,
                   }}
                 >

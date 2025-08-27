@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
       personalInfo,
       shippingInfo,
       orderId,
+      cartId,
       cart,
       paymentIntentId,
     } = await request.json();
@@ -19,7 +20,8 @@ export async function POST(request: NextRequest) {
     const searchResult = await stripe.customers.search({
       query: `metadata["strapiUserId"]:'${strapiUserId}'`,
     });
-
+    const idempotencyUserKey = `${strapiUserId}`;
+    const idempotencyIntentKey = `${strapiUserId}-${amount}-${cartId}`;
     let customerId: string;
     if (searchResult.data.length > 0) {
       customerId = searchResult.data[0].id;
@@ -37,19 +39,24 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      const newCustomer = await stripe.customers.create({
-        email: personalInfo?.email,
-        name: `${personalInfo?.name ?? ''} ${personalInfo?.surname ?? ''}`.trim(),
-        phone: personalInfo?.phoneNumber,
-        address: {
-          line1: shippingInfo?.address,
-          city: shippingInfo?.city,
-          postal_code: shippingInfo?.zipCode,
-          state: shippingInfo?.state,
-          country: shippingInfo?.country,
+      const newCustomer = await stripe.customers.create(
+        {
+          email: personalInfo?.email,
+          name: `${personalInfo?.name ?? ''} ${personalInfo?.surname ?? ''}`.trim(),
+          phone: personalInfo?.phoneNumber,
+          address: {
+            line1: shippingInfo?.address,
+            city: shippingInfo?.city,
+            postal_code: shippingInfo?.zipCode,
+            state: shippingInfo?.state,
+            country: shippingInfo?.country,
+          },
+          metadata: { strapiUserId },
         },
-        metadata: { strapiUserId },
-      });
+        {
+          idempotencyKey: idempotencyUserKey,
+        },
+      );
       customerId = newCustomer.id;
     }
 
@@ -86,36 +93,41 @@ export async function POST(request: NextRequest) {
         },
       });
     } else {
-      paymentIntent = await stripe.paymentIntents.create({
-        amount,
-        currency: 'usd',
-        customer: customerId,
-        metadata: {
-          strapiUserId,
-          orderId,
-          cart,
-          name: personalInfo?.name,
-          surname: personalInfo?.surname,
-          email: personalInfo?.email,
-          phone: personalInfo?.phoneNumber,
-          address: shippingInfo?.address,
-          city: shippingInfo?.city,
-          zip: shippingInfo?.zipCode,
-          state: shippingInfo?.state,
-          country: shippingInfo?.country,
-        },
-        shipping: {
-          name: `${personalInfo?.name ?? ''} ${personalInfo?.surname ?? ''}`.trim(),
-          phone: personalInfo?.phoneNumber,
-          address: {
-            line1: shippingInfo?.address,
+      paymentIntent = await stripe.paymentIntents.create(
+        {
+          amount,
+          currency: 'usd',
+          customer: customerId,
+          metadata: {
+            strapiUserId,
+            orderId,
+            cart,
+            name: personalInfo?.name,
+            surname: personalInfo?.surname,
+            email: personalInfo?.email,
+            phone: personalInfo?.phoneNumber,
+            address: shippingInfo?.address,
             city: shippingInfo?.city,
-            postal_code: shippingInfo?.zipCode,
+            zip: shippingInfo?.zipCode,
             state: shippingInfo?.state,
             country: shippingInfo?.country,
           },
+          shipping: {
+            name: `${personalInfo?.name ?? ''} ${personalInfo?.surname ?? ''}`.trim(),
+            phone: personalInfo?.phoneNumber,
+            address: {
+              line1: shippingInfo?.address,
+              city: shippingInfo?.city,
+              postal_code: shippingInfo?.zipCode,
+              state: shippingInfo?.state,
+              country: shippingInfo?.country,
+            },
+          },
         },
-      });
+        {
+          idempotencyKey: idempotencyIntentKey,
+        },
+      );
     }
 
     return NextResponse.json({

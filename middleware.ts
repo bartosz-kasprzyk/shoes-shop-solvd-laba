@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequestWithAuth } from 'next-auth/middleware';
 
-const protectedRoutes = [
+export const protectedRoutes = [
   // profile
   '/my-products',
   '/add-product',
@@ -18,7 +18,7 @@ const protectedRoutes = [
 ];
 
 // Logged in user cannot go here
-const authRoutes = [
+export const authRoutes = [
   '/sign-in',
   '/sign-up',
   '/forgot-password',

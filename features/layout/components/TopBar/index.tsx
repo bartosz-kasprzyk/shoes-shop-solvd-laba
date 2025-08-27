@@ -12,13 +12,14 @@ import { XIcon } from '@/shared/icons/XIcon';
 import useUser from '@/shared/hooks/useUser';
 import TopBarMenu from '../TopBarMenu';
 import useFilterStore from '@/features/filter/stores/filterStore';
+import { useSearchStore } from '../../stores/searchStore';
 
 export default function TopBar() {
-  const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const { isSearchBarOpen, setIsSearchBarOpen, searchValue, setSearchValue } =
+    useSearchStore();
+
   const router = useRouter();
   const { setFilterValues } = useFilterStore();
-  // Ref for direct access to input element
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleExpand = (isOpen: boolean) => {
@@ -30,7 +31,6 @@ export default function TopBar() {
       }
     }, 300);
   };
-
   // Handle Enter key press on search input to navigate to search results
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchValue.trim() !== '') {

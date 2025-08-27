@@ -1,6 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DeleteConfirmationModal from '..';
+import type { CustomButtonProps } from '@/shared/components/ui/Button/interface';
 
 jest.mock('@/shared/icons/CloseIcon', () => ({
   __esModule: true,
@@ -11,7 +12,7 @@ jest.mock('@/shared/icons/CloseIcon', () => ({
 
 jest.mock('@/shared/components/ui/Button', () => ({
   __esModule: true,
-  default: ({ children, onClick, variant, ...props }: any) => (
+  default: ({ children, onClick, variant, ...props }: CustomButtonProps) => (
     <button onClick={onClick} {...props} data-variant={variant}>
       {children}
     </button>

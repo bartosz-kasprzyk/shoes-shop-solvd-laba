@@ -1,22 +1,29 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import type { OrderProduct } from '../../types';
 
-export default function OrderHistoryProduct() {
+interface OrderHistoryProductProps {
+  product: OrderProduct;
+}
+
+export default function OrderHistoryProduct({
+  product,
+}: OrderHistoryProductProps) {
   return (
     <Box
       sx={{
         display: 'flex',
+        flex: 1,
         gap: '20px',
         maxWidth: '550px',
-        // border: '1px solid red',
       }}
     >
       <Image
         width={104}
         height={104}
         style={{ borderRadius: '4px' }}
-        src='/shoe-welcome.png'
-        alt='img'
+        src={product.imageUrl}
+        alt={product.name}
       />
       <Box>
         <Typography
@@ -26,9 +33,11 @@ export default function OrderHistoryProduct() {
               sm: '24px',
             },
             fontWeight: '500',
+            transition:
+              'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
           }}
         >
-          Nike Air Max 270
+          {product.name}
         </Typography>
 
         <Typography
@@ -38,9 +47,11 @@ export default function OrderHistoryProduct() {
               sm: '16px',
             },
             fontWeight: '500',
+            transition:
+              'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
           }}
         >
-          Women&apos;s Shoes
+          {`${product.gender.charAt(0).toUpperCase() + product.gender.slice(1).toLowerCase()}'s Shoes`}
         </Typography>
 
         <Typography
@@ -50,9 +61,11 @@ export default function OrderHistoryProduct() {
               sm: '14px',
             },
             fontWeight: '700',
+            transition:
+              'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
           }}
         >
-          Size: 8 UK
+          {`Size: ${product.size} UK`}
         </Typography>
       </Box>
     </Box>
