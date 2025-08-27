@@ -1,4 +1,9 @@
-import type { ProductData } from '@/features/products/types/shared.interface';
+import type { ProductFromServer } from '@/features/products/types/shared.interface';
+
+export interface CartState {
+  cartId: string | null;
+  cart: CartAddedItem[];
+}
 
 export type CartAddedItem = {
   productId: string;
@@ -7,7 +12,7 @@ export type CartAddedItem = {
 };
 
 export type CartItemWithProduct = CartAddedItem & {
-  product: ProductData;
+  product: ProductFromServer;
 };
 
 export interface CartItemForDisplay {

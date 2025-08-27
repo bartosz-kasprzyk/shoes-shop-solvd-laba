@@ -92,7 +92,7 @@ const AddProductForm = ({
     }
   };
 
-  const selectedSizes = watch('sizes');
+  const selectedSizes = watch('sizes') || [];
 
   const toggleSize = (sizeValue: string) => {
     const updatedSizes = selectedSizes.includes(sizeValue)
@@ -127,6 +127,9 @@ const AddProductForm = ({
             if (['-', 'e', '+'].includes(e.key)) {
               e.preventDefault();
             }
+          }}
+          onWheel={(e) => {
+            (e.target as HTMLElement).blur();
           }}
           slotProps={{
             input: {

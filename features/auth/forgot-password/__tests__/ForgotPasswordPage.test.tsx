@@ -27,7 +27,7 @@ describe('Forgot Password Page', () => {
     expect(await screen.findByText(/user not found/i)).toBeInTheDocument();
   });
 
-  it('should show confirmation message on success', async () => {
+  it('shows confirmation message on success', async () => {
     global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => ({}) });
 
     render(<ForgotPasswordPage />);

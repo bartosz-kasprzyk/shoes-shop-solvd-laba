@@ -55,7 +55,7 @@ export default function Input({
             },
             '& .MuiOutlinedInput-input': {
               fontWeight: 500,
-              fontSize: { xs: '10px', sm: '12px', lg: '15px' },
+              fontSize: '16px',
               color: error ? 'var(--color-primary)' : 'inherit',
               '&::placeholder': {
                 fontWeight: 300,

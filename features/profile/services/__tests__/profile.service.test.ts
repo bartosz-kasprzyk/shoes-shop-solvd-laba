@@ -1,5 +1,4 @@
 import * as profileClient from '../../client/profile.api';
-import { Profile } from '../../types';
 import { handleProfileUpdate } from '../profile.service';
 
 jest.mock('../../client/profile.api');
@@ -20,10 +19,6 @@ const profile = {
 };
 
 describe('handleProfileUpdate', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('updates avatar and profile when avatarOperation is "update"', async () => {
     const avatarFile = new File(['test file'], 'avatar.png', {
       type: 'image/png',

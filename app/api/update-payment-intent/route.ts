@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     const searchResult = await stripe.customers.search({
       query: `metadata["strapiUserId"]:'${strapiUserId}'`,
     });
-    console.log('update', searchResult.data);
 
     let customerId: string;
     if (searchResult.data.length > 0) {
@@ -125,9 +124,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Internal Error:', error);
-    return NextResponse.json(
-      { error: `Internal Server Error: ${error}` },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: `${error}` }, { status: 500 });
   }
 }

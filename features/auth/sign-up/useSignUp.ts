@@ -11,13 +11,19 @@ export const useSignUp = () => {
 
   const registerUser = async (data: SignUpFormData) => {
     setServerError(null);
+
+    const [firstName, ...rest] = data.name.trim().split(/\s+/);
+    const lastName = rest.join(' ');
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local/register`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: data.name,
+          firstName,
+          lastName,
+          username: data.email,
           email: data.email,
           password: data.password,
         }),

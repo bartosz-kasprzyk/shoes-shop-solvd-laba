@@ -33,7 +33,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
 
   const { handleAddToWishlist } = useAddToWishlist();
   const { data: session } = useSession();
-  const isAuthenticated = !!session?.user?.accessToken;
+  const isAuthenticated = !!session?.user.accessToken;
 
   const { setAllFilterValues } = useFilterStore();
   const { setValue } = useProductsCountStore();
@@ -63,7 +63,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
         </Typography>
       </>
     );
-  if (!data?.pages[0]?.total)
+  if (!data.pages[0]?.total)
     return (
       <>
         <EmptyState

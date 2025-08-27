@@ -40,7 +40,6 @@ describe('useProductMutation', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
     (useUser as jest.Mock).mockReturnValue({ session });
     (useSnackbar as jest.Mock).mockReturnValue({ showSnackbar: mockSnackbar });
   });

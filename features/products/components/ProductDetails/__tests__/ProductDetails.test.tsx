@@ -40,39 +40,30 @@ const productData = {
     id: 123,
     attributes: {
       name: 'Nike Air',
-      description: 'Some product description',
+      price: 149,
+      description: 'Desc',
       brand: { data: { id: 1, attributes: { name: 'Nike' } } },
-      categories: { data: [] },
+      categories: { data: [{ id: 1, attributes: { name: 'Shoes' } }] },
       color: { data: { id: 1, attributes: { name: 'White' } } },
       gender: { data: { id: 1, attributes: { name: 'Men' } } },
-      sizes: {
-        data: [
-          { id: 10, attributes: { value: 38 } },
-          { id: 11, attributes: { value: 40 } },
-        ],
+      sizes: { data: [{ id: 1, attributes: { value: 38 } }] },
+      images: {
+        data: [{ id: 101, attributes: { url: '/mock-image.jpg' } }],
       },
-      price: 149,
-      userID: '1',
-      teamName: 'Test Team',
-      images: { data: [{ id: 1, attributes: { url: '/image1.jpg' } }] },
+      userID: '123',
+      teamName: 'team5',
     },
   },
 };
 
 describe('ProductDetails', () => {
-  beforeEach(() => {
-    showSnackbarMock.mockClear();
-    window.alert = jest.fn();
-    localStorage.clear();
-  });
-
   it('renders product info', () => {
     render(<ProductDetails initialData={productData} />);
 
     expect(screen.getByText('Nike Air')).toBeInTheDocument();
     expect(screen.getByText(/149/)).toBeInTheDocument();
     expect(screen.getByText('White')).toBeInTheDocument();
-    expect(screen.getByText('Some product description')).toBeInTheDocument();
+    expect(screen.getByText('Desc')).toBeInTheDocument();
   });
 
   it('adds product to wishlist when authenticated', () => {
@@ -94,7 +85,7 @@ describe('ProductDetails', () => {
     expect(screen.getByText(/please choose your size/i)).toBeInTheDocument();
   });
 
-  it('shows alert when Add to Bag clicked with size selected', () => {
+  it('shows alert when Add to Cart clicked with size selected', () => {
     render(<ProductDetails initialData={productData} />);
 
     fireEvent.click(screen.getByText('EU-38'));
@@ -106,12 +97,6 @@ describe('ProductDetails', () => {
       quantity: 1,
     });
   });
-
-  // it('renders NotFound if no product data', () => {
-  //   render(<ProductDetails initialData={null} />);
-
-  //   expect(screen.getByText(/error 404/i)).toBeInTheDocument();
-  // });
 
   it('renders color name if color data is present', () => {
     render(<ProductDetails initialData={productData} />);

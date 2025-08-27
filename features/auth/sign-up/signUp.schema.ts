@@ -10,6 +10,10 @@ export const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
     message: 'Passwords do not match',
+  })
+  .refine((data) => data.name.trim().split(/\s+/).length >= 2, {
+    path: ['name'],
+    message: 'Enter your full name',
   });
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;

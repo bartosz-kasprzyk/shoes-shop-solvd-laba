@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useCartContext } from './CartContext';
 import CartPage from './CartPage';
 import CartPageEmpty from './CartPageEmpty';
+import { useCartDetails } from './CartDetailsContext';
 
 export default function CartContent() {
-  const { cartItems } = useCartContext();
+  const { cartItems } = useCartDetails();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

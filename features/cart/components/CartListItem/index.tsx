@@ -50,7 +50,7 @@ export default function CartListItem({
         boxShadow: 'none',
         display: 'flex',
         flexDirection: 'row',
-        gap: { xs: '15px', sm: '45px' },
+        gap: { xs: '15px', sm: '30px' },
         position: 'relative',
         borderRadius: '0px',
       }}
@@ -116,7 +116,10 @@ export default function CartListItem({
               fontSize={'inherit'}
               fontWeight={'inherit'}
             >
-              ${cartItem.price}
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(cartItem.quantity * cartItem.price)}
             </Typography>
           </Box>
           <Typography
@@ -140,18 +143,24 @@ export default function CartListItem({
         <Box
           alignSelf={'end'}
           justifyContent={'space-between'}
-          width={{ xs: '100%', sm: 'auto' }}
+          width={'100%'}
           flexWrap={'nowrap'}
           alignItems={'center'}
           display={'flex'}
         >
-          <Box display={'flex'} gap={{ xs: 1, sm: 2 }} alignItems={'center'}>
+          <Box
+            display={'flex'}
+            gap={{ xs: 1, sm: 2 }}
+            minWidth={0}
+            alignItems={'center'}
+          >
             <Box
               display='flex'
               gap={{ xs: 1, sm: 2 }}
               alignItems='center'
+              flex={10}
               justifyContent='space-between'
-              minWidth={{ xs: 75, sm: 120, lg: 160 }}
+              minWidth={0}
             >
               <CustomIconButton
                 onClick={handleMinusClick}
@@ -183,22 +192,13 @@ export default function CartListItem({
             </Box>
             <Typography
               fontSize={{ xs: '1em', sm: '0.85em' }}
+              display={{ xs: 'block', sm: 'none', md: 'block' }}
               color='#494949'
               component='p'
             >
               Quantity
             </Typography>
           </Box>
-          <Box
-            bgcolor={'#8B8E93'}
-            width={2}
-            display={{ xs: 'none', sm: 'flex' }}
-            flexDirection={'column'}
-            flexWrap={'nowrap'}
-            marginX={'15px'}
-            marginY={'auto'}
-            height={'24.5px'}
-          ></Box>
 
           <Button
             onClick={() => setIsModalOpen(true)}

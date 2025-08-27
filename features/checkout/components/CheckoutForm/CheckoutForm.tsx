@@ -18,6 +18,7 @@ import useUser from '@/shared/hooks/useUser';
 import { z } from 'zod';
 import { useCheckoutStore } from '../../stores/checkoutStore';
 import { useCart } from '@/shared/hooks/useCart';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const personalInfoSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -43,10 +44,10 @@ function generateOrderNumber(): string {
   return Math.floor(1000000 + Math.random() * 9000000).toString();
 }
 
-export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
+export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { clearCart, cartId, cart, total } = useCart();
+  const { cartId, cart, total, resetCartID } = useCart();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState('');
   const [pIId, setPIId] = useState('');
@@ -54,6 +55,8 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   const { session } = useUser();
   const id = session?.user.id as number;
   const isFetching = useRef(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     name: '',
@@ -66,7 +69,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   );
 
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
-    country: '',
+    country: 'US',
     city: '',
     state: '',
     zipCode: '',
@@ -75,10 +78,10 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   const [shippingErrors, setShippingErrors] = useState<Record<string, string>>(
     {},
   );
-  const { setSubmit } = useCheckoutStore();
+  const { setSubmit, setLoading: setButtonLoading } = useCheckoutStore();
 
   useEffect(() => {
-    if (id && total && !loading && !pIId && !isFetching.current) {
+    if (id && total && !loading) {
       isFetching.current = true;
       setLoading(true);
       fetch('/api/create-payment-intent', {
@@ -101,10 +104,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
         })
         .finally(() => {
           setLoading(false);
+          setButtonLoading(false);
           isFetching.current = false;
         });
     }
-  }, [total, id]);
+  }, [total, id, cartId]);
 
   const handlePersonalInfoChange = (
     field: keyof PersonalInfo,
@@ -151,6 +155,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             .map(([key, value]) => [key.replace('shippingInfo.', ''), value]),
         ),
       );
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -163,6 +168,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     const { error: submitError } = await elements.submit();
     if (submitError) {
       setErrorMessage(submitError.message);
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -182,6 +188,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     if (!res.ok) {
       const data = await res.json();
       setErrorMessage(data.error);
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -205,6 +212,13 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
         return_url: `http://localhost:3000/thank-you?orderId=${orderId}&cartId=${cartId}`, // to be changed, make dynamic instead of localhost, pass data
       },
     });
+    if (error) {
+      resetCartID();
+      setErrorMessage(error.message);
+      setButtonLoading(false);
+      setLoading(false);
+      return;
+    }
   }, [personalInfo, shippingInfo, clientSecret, stripe, elements]);
 
   useEffect(() => {
@@ -214,23 +228,41 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
     return <CircularProgress />;
   }
 
+  if (pathname === '/checkout/summary') {
+    router.replace('/checkout/cart');
+    return null;
+  }
+
+  if (pathname !== '/checkout') {
+    router.replace('/checkout');
+  }
+
   return (
     <Box height={'100%'}>
       <Box
         sx={{
+          overflow: 'hidden',
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: 'space-between',
           gap: 1,
         }}
       >
-        <Box sx={{ flexBasis: '800px' }}>
+        <Box>
           <Typography
             variant='h4'
-            sx={{
-              mb: 4,
-              fontWeight: 500,
-              fontSize: { xs: '24px', md: '32px' },
+            marginBottom='5px'
+            fontSize={{ xs: '24px', md: '32px' }}
+            fontWeight={500}
+            px={2}
+            py={1}
+            borderTop={{
+              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
+              sm: 'none',
+            }}
+            borderBottom={{
+              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
+              sm: 'none',
             }}
           >
             Checkout
@@ -248,7 +280,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           />
 
           {clientSecret && (
-            <Box>
+            <Box px={2} py={1}>
               <Typography variant='h6' sx={{ my: 3, fontWeight: 500 }}>
                 Payment info
               </Typography>
@@ -274,7 +306,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             height={'line'}
             role={errorMessage ? 'alert' : undefined}
           >
-            {errorMessage && errorMessage}
+            {errorMessage && errorMessage + ' Try again.'}
           </Typography>
         </Box>
       </Box>

@@ -30,13 +30,12 @@ export default function PromocodeSection({
 
   const handleAddPromocode = () => {
     const exists = validPromocodes.find((p) => p.code === inputPromocode);
-    const alreadyUsed = promocodes.some((p) => p.code === inputPromocode);
 
-    if (alreadyUsed) {
+    if (promocodes.length > 0) {
       setIsInputError(true);
-      setInputErrorText('This promocode was applied before');
+      setInputErrorText('You can only apply one promocode at a time');
     } else if (exists) {
-      setPromocodes((prev) => [...prev, exists]);
+      setPromocodes([exists]);
       setInputPromocode('');
       setIsInputError(false);
     } else {
@@ -55,43 +54,67 @@ export default function PromocodeSection({
         alignItems={'center'}
         gap={1}
       >
-        <Typography noWrap fontSize={{ xs: '0.8em', sm: '0.67em' }}>
+        <Typography noWrap px={2} fontSize={{ xs: '0.8em', sm: '0.67em' }}>
           Do you have a promocode?
         </Typography>
-        <DropdownArrowIcon />
+        <DropdownArrowIcon rotated={arePromocodesOpened} />
       </Box>
 
       <Collapse in={arePromocodesOpened}>
-        <Box display='flex' gap={1}>
+        <Box display='flex' gap={1} px={1}>
           <Input
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: 'var(--color-text-primary)',
-                borderRadius: '8px',
+              position: 'relative',
+              '& .MuiInputBase-root': {
+                p: 0,
+                m: 0,
               },
-              '& .MuiOutlinedInput-input': { fontSize: '0.9em' },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: '0px',
+                p: 0,
+                m: 0,
+              },
+              '& .MuiInput-inputAdornedEnd': {
+                p: 0,
+                m: 0,
+              },
+              '& .MuiOutlinedInput-input': {
+                pr: 2,
+                borderRadius: '8px',
+                border: '1px solid lightgray',
+                fontSize: '0.9em',
+                mr: 0,
+              },
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <Button
+                    onClick={handleAddPromocode}
+                    sx={{
+                      // position: 'absolute',
+                      zIndex: 10,
+                      width: '10ch',
+                      right: 0,
+                      ml: 1,
+                      mr: 0,
+                      height: '100%',
+                    }}
+                  >
+                    Apply
+                  </Button>
+                ),
+              },
             }}
             title=''
             id='promocode'
             placeholder=''
             error={isInputError}
             value={inputPromocode}
+            helperText={inputErrorText}
             onChange={(e) => setInputPromocode(e.target.value)}
           />
-          <Button
-            onClick={handleAddPromocode}
-            sx={{ mt: { xs: 0.5, sm: 1 }, width: '0.2' }}
-          >
-            Apply
-          </Button>
         </Box>
-
-        <Collapse sx={{ my: 1 }} in={isInputError}>
-          <Typography variant='caption' color='red'>
-            {inputErrorText}
-          </Typography>
-        </Collapse>
-
         <TransitionGroup>
           {promocodes.map((promo) => (
             <Collapse key={promo.code}>

@@ -1,58 +1,78 @@
-import type { CartAddedItem } from '@/features/cart/components/interface';
+import type {
+  CartAddedItem,
+  CartState,
+} from '@/features/cart/components/interface';
 import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 import { CartContext } from '../contexts/CartContext';
 import useUser from '../hooks/useUser';
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartAddedItem[]>([]);
-  const [cartId, setCartId] = useState<string | null>(null);
+  const [cartState, setCartState] = useState<CartState>({
+    cartId: null,
+    cart: [],
+  });
   const { session } = useUser();
   const [total, setTotal] = useState<number | null>(null);
 
-  const userId = session?.user.id?.toString() || 'guest';
+  const userId = session?.user.id.toString() || 'guest';
   const cartKey = `cart_${userId}`;
-
   const generateId = () =>
     typeof crypto !== 'undefined' && crypto.randomUUID
       ? crypto.randomUUID()
       : Math.random().toString(36).substring(2, 15);
+
+  const resetCartID = () => {
+    setCartState((prev) => ({
+      ...prev,
+      cartId: generateId(),
+    }));
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(cartKey);
       if (stored) {
         const parsed = JSON.parse(stored);
-        setCart(parsed.cart || []);
-        setCartId(parsed.cart.length > 0 ? parsed.cartId : generateId());
+        setCartState({
+          cartId: parsed.cart.length > 0 ? parsed.cartId : generateId(),
+          cart: parsed.cart || [],
+        });
       } else {
-        setCart([]);
-        setCartId(generateId());
+        setCartState({
+          cartId: generateId(),
+          cart: [],
+        });
       }
     }
   }, [cartKey]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && cartId) {
-      localStorage.setItem(cartKey, JSON.stringify({ cart, cartId }));
+    if (typeof window !== 'undefined' && cartState.cartId) {
+      localStorage.setItem(cartKey, JSON.stringify(cartState));
+    } else if (!cartState.cartId) {
+      localStorage.removeItem(cartKey);
     }
-  }, [cart, cartId, cartKey]);
+  }, [cartState]);
 
   const addItem = (item: CartAddedItem) => {
-    setCart((prev) => {
-      const existing = prev.find(
+    setCartState((prev) => {
+      const existing = prev.cart.find(
         (i) => i.productId === item.productId && i.size === item.size,
       );
 
+      let updatedCart: CartAddedItem[];
       if (existing) {
-        return prev.map((i) =>
+        updatedCart = prev.cart.map((i) =>
           i.productId === item.productId && i.size === item.size
             ? { ...i, quantity: i.quantity + item.quantity }
             : i,
         );
+      } else {
+        updatedCart = [...prev.cart, item];
       }
 
-      return [...prev, item];
+      return { ...prev, cart: updatedCart };
     });
   };
 
@@ -61,44 +81,58 @@ export function CartProvider({ children }: { children: ReactNode }) {
     size: string,
     newQuantity: number,
   ) => {
-    setCart((prev) => {
+    setCartState((prev) => {
+      let updatedCart: CartAddedItem[];
       if (newQuantity <= 0) {
-        return prev.filter(
+        updatedCart = prev.cart.filter(
           (i) => !(i.productId === productId && i.size === size),
         );
+      } else {
+        updatedCart = prev.cart.map((i) =>
+          i.productId === productId && i.size === size
+            ? { ...i, quantity: newQuantity }
+            : i,
+        );
       }
-      return prev.map((i) =>
-        i.productId === productId && i.size === size
-          ? { ...i, quantity: newQuantity }
-          : i,
-      );
+      return { ...prev, cart: updatedCart };
     });
   };
 
   const deleteItem = (productId: string, size: string) => {
-    setCart((prev) =>
-      prev.filter((i) => !(i.productId === productId && i.size === size)),
-    );
+    setCartState((prev) => ({
+      ...prev,
+      cart: prev.cart.filter(
+        (i) => !(i.productId === productId && i.size === size),
+      ),
+    }));
+  };
+
+  const deleteItemById = (productId: string) => {
+    setCartState((prev) => ({
+      ...prev,
+      cart: prev.cart.filter((i) => !(i.productId === productId)),
+    }));
   };
 
   const clearCart = () => {
-    if (typeof window !== 'undefined' && cartId) {
-      localStorage.setItem(cartKey, JSON.stringify({ cart: [], cartId: null }));
+    if (typeof window !== 'undefined' && cartState.cartId) {
+      localStorage.removeItem(cartKey);
     }
-    setCart([]);
-    setCartId(null);
+    setCartState({ cart: [], cartId: null });
   };
 
-  const totalItems = cart.length;
+  const totalItems = cartState.cart.length;
 
   const value = {
-    cart,
-    cartId,
+    cart: cartState.cart,
+    cartId: cartState.cartId,
+    resetCartID,
     total,
     setTotal,
     addItem,
     updateQuantity,
     deleteItem,
+    deleteItemById,
     clearCart,
     totalItems,
   };

@@ -87,7 +87,7 @@ const useFilterStore = create<FiltersState>((set, get) => ({
     })),
 
   setAllFilterValues: (filter) =>
-    set((state) => ({
+    set(() => ({
       filters: {
         ...filter,
       },
@@ -95,14 +95,20 @@ const useFilterStore = create<FiltersState>((set, get) => ({
 
   applyFilters: () => {
     const { filters } = get();
-    const segments: string[] = Object.entries(filters)
-      .map(([filterType, filterValues]) =>
-        filterValues.length > 0
-          ? `${filterType}:${filterValues.map((f) => f.slug).join('-')}`
-          : '',
-      )
-      .filter((s) => s !== '');
 
+    const segments: string[] = (Object.keys(filters) as FilterType[])
+      .sort((a, b) => a.localeCompare(b))
+      .map((key) => {
+        const values = filters[key] || [];
+        if (values.length === 0) return '';
+
+        const sortedSlugs = values
+          .map((f) => f.slug)
+          .sort((a, b) => a.localeCompare(b));
+
+        return `${key}:${sortedSlugs.join('-')}`;
+      })
+      .filter((s) => s !== '');
     return `/products/${segments.join('/')}`;
   },
 

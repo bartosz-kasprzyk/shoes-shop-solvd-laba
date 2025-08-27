@@ -18,7 +18,6 @@ export default function AddProductsPage() {
       <Box
         width='100%'
         p={{ xs: '20px', md: '50px' }}
-        // maxWidth='1400px'
         sx={{
           boxSizing: 'border-box',
           display: 'flex',

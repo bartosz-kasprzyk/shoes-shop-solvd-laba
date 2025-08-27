@@ -5,7 +5,13 @@ import { ScrollableContainer } from '@/features/layout/components/ScrollableCont
 export default function CartPageEmpty() {
   return (
     <ScrollableContainer>
-      <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+      <Box
+        px={{ xs: 0, sm: 4, xl: 20 }}
+        py={{ xs: 0, md: 2 }}
+        maxWidth={'1500px'}
+        mx='auto'
+        sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+      >
         <Box
           sx={{
             flex: 1,
@@ -19,12 +25,18 @@ export default function CartPageEmpty() {
         >
           <Typography
             variant='h4'
-            component='h2'
-            sx={{
-              fontWeight: 600,
-              marginBottom: { xs: 4, sm: 5, md: 6 },
-              color: '#1f2937',
-              fontSize: { xs: 28, sm: 35, lg: 42 },
+            marginBottom='20px'
+            fontSize={{ xs: '24px', md: '32px' }}
+            fontWeight={500}
+            px={2}
+            py={1}
+            borderTop={{
+              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
+              sm: 'none',
+            }}
+            borderBottom={{
+              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
+              sm: 'none',
             }}
           >
             Cart

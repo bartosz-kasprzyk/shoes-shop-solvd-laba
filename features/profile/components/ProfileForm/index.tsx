@@ -9,9 +9,12 @@ import useProfile from '../../hooks/useProfile';
 import { useEffect, useState } from 'react';
 import type { AvatarOperation, Profile } from '../../types';
 import AvatarUploader from '../AvatarUploader';
+import useUser from '@/shared/hooks/useUser';
+import { normalizeName } from '@/shared/utils/normalizeName';
 
 export default function ProfileForm() {
   const { profile, onSubmit, isSubmitting } = useProfile();
+  const { session, update } = useUser();
 
   const profileForm = useForm<Profile>({
     resolver: zodResolver(profileSchema),
@@ -50,6 +53,8 @@ export default function ProfileForm() {
   function changeAvatar(file: File) {
     setAvatarFile(file);
     setAvatarOperation('update');
+    const newAvatarUrl = URL.createObjectURL(file);
+    setValue('avatarUrl', newAvatarUrl);
   }
 
   function deleteAvatar() {
@@ -58,13 +63,31 @@ export default function ProfileForm() {
     setValue('avatarUrl', '');
   }
 
-  function handleFormSubmit(profile: Profile) {
-    const { avatarUrl, ...cleanedProfile } = profile;
+  async function handleFormSubmit(profile: Profile) {
+    const { avatarUrl, ...rest } = profile;
 
-    onSubmit({
+    const firstName = normalizeName(profile.firstName || '');
+    const lastName = normalizeName(profile.lastName || '');
+
+    const cleanedProfile = {
+      ...rest,
+      firstName,
+      lastName,
+    };
+
+    await onSubmit({
       profile: cleanedProfile,
       avatarOperation,
       avatarFile,
+    });
+
+    await update({
+      ...session,
+      user: {
+        ...session?.user,
+        name: `${firstName} ${lastName}`,
+        image: avatarUrl,
+      },
     });
   }
 

@@ -1,6 +1,6 @@
-import NotFound from '@/app/not-found';
 import ProductDetails from '@/features/products/components/ProductDetails';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
+import { notFound } from 'next/navigation';
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -23,6 +23,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     return <ProductDetails initialData={productData} />;
   } catch {
-    return <NotFound />;
+    notFound();
   }
 }
