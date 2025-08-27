@@ -12,7 +12,6 @@ export default function TopBarSearch({
   onKeyDown,
   isExpanded,
   inputRef,
-  ...props
 }: BoxProps & {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

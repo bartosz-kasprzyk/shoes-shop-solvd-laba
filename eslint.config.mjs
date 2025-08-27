@@ -80,6 +80,12 @@ const eslintConfig = [
           '@typescript-eslint/explicit-module-boundary-types': 'warn',
         },
       },
+      {
+        files: ['**/__tests__/**/*.ts', '**/__tests__/**/*.tsx'],
+        rules: {
+          '@next/next/no-img-element': 'off',
+        },
+      },
     ],
   }),
 ];

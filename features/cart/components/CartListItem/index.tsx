@@ -1,46 +1,15 @@
-'use client';
-
-import type { CartListItemProps } from '../interface';
-import {
-  Button,
-  Typography,
-  Box,
-  IconButton,
-  styled,
-  Link,
-} from '@mui/material';
-import { useState } from 'react';
+import { Box, Link } from '@mui/material';
 import NextLink from 'next/link';
-import { MinusIcon, PlusIcon, TrashIcon } from '@/shared/icons';
-import DeleteConfirmationModal from '@/features/products/components/DeleteConfirmationModal';
-
-const CustomIconButton = styled(IconButton)(() => ({
-  borderRadius: '100%',
-  width: '1.8em',
-  height: '1.8em',
-  display: 'flex',
-}));
+import React from 'react';
+import CartItemDetails from './CartItemDetails';
+import CartItemControls from './CartItemControls';
+import type { CartListItemProps } from './interface';
 
 export default function CartListItem({
   cartItem,
   handleDeleteItem,
   handleQuantityChange,
 }: CartListItemProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleConfirmDelete = () => {
-    handleDeleteItem();
-    setIsModalOpen(false);
-  };
-
-  const handleMinusClick = () => {
-    if (cartItem.quantity === 1) {
-      setIsModalOpen(true);
-    } else {
-      handleQuantityChange(cartItem.quantity - 1);
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -79,178 +48,14 @@ export default function CartListItem({
         justifyContent={'space-between'}
         overflow='hidden'
       >
-        <Box>
-          <Box
-            fontSize={'1em'}
-            fontWeight={500}
-            lineHeight={'normal'}
-            gap={4}
-            sx={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography
-              lineHeight={'inherit'}
-              padding={0}
-              whiteSpace={'nowrap'}
-              overflow='hidden'
-              textOverflow='ellipsis'
-              fontSize={'inherit'}
-              fontWeight={'inherit'}
-            >
-              <Link
-                component={NextLink}
-                lineHeight='normal'
-                mb={0}
-                color='inherit'
-                href={`/product/${cartItem.id}`}
-                underline='hover'
-              >
-                {cartItem.name}
-              </Link>
-            </Typography>
-            <Typography
-              lineHeight={'inherit'}
-              fontSize={'inherit'}
-              fontWeight={'inherit'}
-              pr={1}
-            >
-              {new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              }).format(cartItem.quantity * cartItem.price)}
-            </Typography>
-          </Box>
-          <Typography
-            fontSize={{ xs: '1em', sm: '0.7em' }}
-            fontWeight={500}
-            color='color-mix(in srgb, black 60%, transparent)'
-            component='p'
-          >
-            {cartItem.gender}&apos;s Shoes | Size {cartItem.size}
-          </Typography>
-          <Typography
-            display={{ xs: 'none', sm: 'block' }}
-            fontSize='0.85em'
-            fontWeight={'600'}
-            color='var(--color-primary)'
-            component='p'
-          >
-            {cartItem.available ? 'In Stock' : 'Out of Stock'}
-          </Typography>
-        </Box>
-        <Box
-          alignSelf={'end'}
-          justifyContent={'space-between'}
-          width={'100%'}
-          flexWrap={'nowrap'}
-          alignItems={'center'}
-          display={'flex'}
-        >
-          <Box
-            display={'flex'}
-            gap={{ xs: 1, sm: 2 }}
-            minWidth={0}
-            alignItems={'center'}
-          >
-            <Box
-              display='flex'
-              gap={{ xs: 1, sm: 2 }}
-              alignItems='center'
-              flex={10}
-              justifyContent='space-between'
-              minWidth={0}
-            >
-              <CustomIconButton
-                onClick={handleMinusClick}
-                sx={{
-                  background: 'color-mix(in srgb, black 10%, transparent)',
-                  padding: 0,
-                  fontSize: { xs: '1em', sm: '0.65em' },
-                }}
-              >
-                <MinusIcon sx={{ height: '50%', width: '50%' }} />
-              </CustomIconButton>
-              <Typography
-                fontSize={{ xs: '1em', sm: '0.85em' }}
-                color='#494949'
-                component='p'
-                sx={{
-                  display: 'flex',
-                  width: '1ch',
-                  justifyContent: 'center',
-                }}
-              >
-                {cartItem.quantity}
-              </Typography>
-              <CustomIconButton
-                onClick={() => handleQuantityChange(cartItem.quantity + 1)}
-                sx={{
-                  background: '#FFD7D6',
-                  padding: 0,
-                  fontSize: { xs: '1em', sm: '0.65em' },
-                }}
-              >
-                <PlusIcon sx={{ height: '50%', width: '50%' }} />
-              </CustomIconButton>
-            </Box>
-            <Typography
-              fontSize={{ xs: '1em', sm: '0.85em' }}
-              display={{ xs: 'none', lg: 'block' }}
-              color='#494949'
-              component='p'
-            >
-              Quantity
-            </Typography>
-          </Box>
-
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            sx={{
-              textTransform: 'none',
-              fontWeight: 500,
-              fontSize: '1em',
-              borderRadius: '8px',
-              paddingX: 1,
-              transition:
-                'background-color 0.2s ease-in-out, transform 0.2s ease-in-out, color 0.2s ease-in-out',
-              backgroundColor: 'transparent',
-              color: 'var(--color-primary)',
-
-              '&:hover': {
-                backgroundColor:
-                  'color-mix(in srgb, var(--color-primary) 10%, transparent)',
-                transform: 'translateY(-1px)',
-              },
-              '&:active': {
-                transform: 'translateY(0)',
-              },
-            }}
-          >
-            <Box
-              fontSize={{ xs: '1em', sm: '0.85em' }}
-              display={'flex'}
-              gap={1}
-              alignItems={'center'}
-            >
-              <TrashIcon sx={{ fontSize: '1em' }} />
-              <Typography fontSize='1em' color='#6E7278' component='p'>
-                Delete
-              </Typography>
-            </Box>
-          </Button>
-        </Box>
+        <CartItemDetails cartItem={cartItem} />
+        <CartItemControls
+          quantity={cartItem.quantity}
+          name={cartItem.name}
+          handleQuantityChange={handleQuantityChange}
+          handleDeleteItem={handleDeleteItem}
+        />
       </Box>
-
-      <DeleteConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onDelete={handleConfirmDelete}
-        header='Remove from Cart'
-        text={`Are you sure you want to remove ${cartItem.name} from your cart?`}
-      />
     </Box>
   );
 }

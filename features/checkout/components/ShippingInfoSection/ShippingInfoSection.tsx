@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  Box,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Dropdown, Input } from '@/shared/components/ui';
 import type { ShippingInfo, ShippingInfoSectionProps } from './interface';
 import countries from '../../consts/countries.json';

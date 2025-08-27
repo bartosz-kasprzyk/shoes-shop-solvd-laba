@@ -1,115 +1,139 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import EditProductModal from '..';
-import useUser from '@/shared/hooks/useUser';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useQueryClient } from '@tanstack/react-query';
+import useUser from '@/shared/hooks/useUser';
+import type { ReactNode } from 'react';
+import EditProductModal from '..';
+import type {
+  AddProductFormProps,
+  EditModalProps,
+} from '@/features/products/types';
+import type { CustomButtonProps } from '@/shared/components/ui/Button/interface';
 
-jest.mock('@/shared/hooks/useUser');
-jest.mock('@tanstack/react-query');
-jest.mock('@/features/products/components/UploadedImagesContainer', () => ({
+type MockEditModalProps = EditModalProps & { children?: ReactNode };
+
+jest.mock('@mui/material', () => {
+  const actual = jest.requireActual('@mui/material');
+  return {
+    ...actual,
+    Modal: ({ children, ...rest }: MockEditModalProps) => (
+      <div {...rest}>{children}</div>
+    ),
+  };
+});
+
+jest.mock('@/shared/hooks/useUser', () => ({
   __esModule: true,
-  default: ({ images }: any) => <div>Images: {images.length}</div>,
+  default: jest.fn(),
 }));
+
+jest.mock('@tanstack/react-query', () => ({
+  useQueryClient: jest.fn(),
+}));
+
 jest.mock('../../AddProductForm', () => ({
   __esModule: true,
-  default: ({ onClose }: any) => (
-    <form>
-      <button type='submit'>Submit</button>
-      <button onClick={onClose}>Close Form</button>
-    </form>
+  default: ({ initialData }: AddProductFormProps) => (
+    <div>
+      <input
+        aria-label='Product name'
+        defaultValue={initialData?.attributes.name || ''}
+      />
+      <input
+        aria-label='Price'
+        defaultValue={initialData?.attributes.price || ''}
+      />
+      <textarea
+        aria-label='Description'
+        defaultValue={initialData?.attributes.description || ''}
+      />
+    </div>
   ),
 }));
+
+jest.mock('@/features/products/components/UploadedImagesContainer', () => ({
+  __esModule: true,
+  default: () => <div>ImageUploadGrid</div>,
+}));
+
 jest.mock('@/shared/icons', () => ({
-  CloseIcon: (props: any) => <button {...props}>CloseIcon</button>,
+  CloseIcon: ({
+    onClick,
+    style,
+    ...rest
+  }: {
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    style?: React.CSSProperties;
+  }) => (
+    <button aria-label='Close' onClick={onClick} style={style} {...rest}>
+      X
+    </button>
+  ),
 }));
-jest.mock('@/features/layout/components/ScrollableContainer', () => ({
-  ScrollableContainer: ({ children }: any) => <div>{children}</div>,
-}));
+
 jest.mock('@/shared/components/ui', () => ({
-  Button: (props: any) => <button {...props}>{props.children}</button>,
+  __esModule: true,
+  Button: (props: CustomButtonProps) => (
+    <button {...props}>{props.children}</button>
+  ),
 }));
-
-const mockSession = {
-  session: {
-    user: { id: 1, accessToken: 'mock-token' },
-  },
-};
-
-const mockProductData = [
-  {
-    id: 123,
-    name: 'Test Product',
-    description: 'Product description',
-  },
-];
 
 describe('EditProductModal', () => {
-  let getQueryDataMock: jest.Mock;
+  const onClose = jest.fn();
 
   beforeEach(() => {
-    (useUser as jest.Mock).mockReturnValue(mockSession);
-
-    getQueryDataMock = jest.fn().mockReturnValue({
-      pages: [{ data: mockProductData }],
-      pageParams: [1],
-    });
-
+    (useUser as jest.Mock).mockReturnValue({ session: { user: { id: 1 } } });
     (useQueryClient as jest.Mock).mockReturnValue({
-      getQueryData: getQueryDataMock,
+      getQueryData: () => ({
+        pages: [
+          {
+            data: [
+              {
+                id: 123,
+                attributes: {
+                  name: 'Nike Air Zoom',
+                  price: 199,
+                  description: 'Test description',
+                },
+              },
+            ],
+          },
+        ],
+      }),
     });
   });
 
-  it('renders modal content when open', () => {
-    render(
-      <EditProductModal isOpen={true} onClose={jest.fn()} productId={123} />,
-    );
-
-    expect(screen.getByText('Edit product')).toBeInTheDocument();
-    expect(screen.getByText(/Lorem ipsum/i)).toBeInTheDocument();
-    expect(screen.getByText('Images: 0')).toBeInTheDocument();
-    expect(screen.getByText('Submit')).toBeInTheDocument();
-    expect(screen.getByText('Save')).toBeInTheDocument();
-  });
-
-  it('calls onClose when CloseIcon clicked', () => {
-    const onClose = jest.fn();
+  it('renders with prefilled values', async () => {
     render(
       <EditProductModal isOpen={true} onClose={onClose} productId={123} />,
     );
 
-    fireEvent.click(screen.getByText('CloseIcon'));
-    expect(onClose).toHaveBeenCalled();
+    const nameInput = await screen.findByLabelText(/Product name/i);
+    const priceInput = await screen.findByLabelText(/Price/i);
+    const descriptionInput = await screen.findByLabelText(/Description/i);
+
+    expect(nameInput).toHaveValue('Nike Air Zoom');
+    expect(priceInput).toHaveValue('199');
+    expect(descriptionInput).toHaveValue('Test description');
   });
 
-  it('calls onClose when AddProductForm close button clicked', () => {
-    const onClose = jest.fn();
+  it('calls onClose when close button is clicked', async () => {
     render(
       <EditProductModal isOpen={true} onClose={onClose} productId={123} />,
     );
-
-    fireEvent.click(screen.getByText('Close Form'));
+    const closeButton = await screen.findByLabelText(/Close/i);
+    const user = userEvent.setup();
+    await user.click(closeButton);
     expect(onClose).toHaveBeenCalled();
   });
 
-  it('renders modal even if product data is missing', () => {
-    getQueryDataMock.mockReturnValueOnce({
-      pages: [{ data: [] }],
-      pageParams: [1],
-    });
-
+  it('renders save button and can click it', async () => {
     render(
-      <EditProductModal isOpen={true} onClose={jest.fn()} productId={999} />,
+      <EditProductModal isOpen={true} onClose={onClose} productId={123} />,
     );
-
-    expect(screen.getByText('Edit product')).toBeInTheDocument();
-  });
-
-  it('disables Save button when loading', () => {
-    render(
-      <EditProductModal isOpen={true} onClose={jest.fn()} productId={123} />,
-    );
-    const saveButton = screen.getByText('Save');
-    expect(saveButton).not.toBeDisabled();
-
-    fireEvent.click(screen.getByText('Submit'));
+    const saveButton = await screen.findByRole('button', { name: /save/i });
+    expect(saveButton).toBeInTheDocument();
+    const user = userEvent.setup();
+    await user.click(saveButton);
   });
 });

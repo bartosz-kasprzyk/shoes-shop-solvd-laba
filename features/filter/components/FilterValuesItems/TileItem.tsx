@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Checkbox, Grid, TextField, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import type { FilterItemProps } from './interface';
 
 export default function TileItem({

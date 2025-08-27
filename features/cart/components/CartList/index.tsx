@@ -16,7 +16,7 @@ export default function CartList() {
   } = useCartDetails();
   const { totalItems } = useCart();
 
-  const cartContent = cartItems.map((item, id) => (
+  const cartContent = cartItems.map((item) => (
     <ListItem key={`${item.id}-${item.size}`} sx={{ padding: 0 }}>
       <CartListItem
         cartItem={item}

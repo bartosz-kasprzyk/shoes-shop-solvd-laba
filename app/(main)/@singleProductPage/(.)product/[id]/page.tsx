@@ -1,4 +1,3 @@
-import NotFound from '@/app/not-found';
 import ProductDetails from '@/features/products/components/ProductDetails';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 import { notFound } from 'next/navigation';

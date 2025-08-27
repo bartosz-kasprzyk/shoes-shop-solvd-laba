@@ -491,5 +491,83 @@ describe('Products API Functions', () => {
         'Failed to add product',
       );
     });
+
+    it('returns nextPage as null when on the last page', async () => {
+      const mockToken = 'test-user-token';
+      const mockId = 123;
+      const mockPage = 2;
+
+      const mockApiResponse = {
+        data: [
+          {
+            id: 2,
+            attributes: {
+              name: 'User Product 2',
+              price: 50,
+              description: 'A product by the user.',
+              teamName: 'Team B',
+              userID: { data: { id: mockId } },
+            },
+          },
+        ],
+        meta: {
+          pagination: {
+            page: mockPage,
+            pageCount: 2,
+            total: 5,
+          },
+        },
+      };
+
+      (fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: () => mockApiResponse,
+      });
+
+      const result = await fetchMyProducts(mockToken, mockId, mockPage);
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(result).toEqual({
+        data: mockApiResponse.data,
+        currentPage: mockPage,
+        nextPage: null,
+        total: 5,
+      });
+    });
+
+    it('handles null or undefined pagination meta gracefully', async () => {
+      const mockToken = 'test-user-token';
+      const mockId = 123;
+      const mockPage = 1;
+      const mockApiResponse = {
+        data: [
+          {
+            id: 1,
+            attributes: {
+              name: 'Graceful Product',
+              price: 100,
+              description: 'A product with incomplete meta.',
+              teamName: 'Team X',
+              userID: { data: { id: mockId } },
+            },
+          },
+        ],
+        meta: {
+          pagination: {
+            page: mockPage,
+            pageCount: null,
+            total: null,
+          },
+        },
+      };
+
+      (fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: () => mockApiResponse,
+      });
+      const result = await fetchMyProducts(mockToken, mockId, mockPage);
+      expect(result.nextPage).toBeNull();
+      expect(result.total).toBe(0);
+    });
   });
 });

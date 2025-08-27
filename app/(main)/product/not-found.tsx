@@ -6,11 +6,9 @@ import { removeFromWishlist } from '@/features/wishlist/utils/wishlist';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function Error() {
-  const router = useRouter();
-  // delete from local storage wishlist and recently viewed
   const id = usePathname().split('/').slice(-1)[0];
   try {
     const parsedId = parseInt(id);

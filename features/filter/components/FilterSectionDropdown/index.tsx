@@ -5,7 +5,6 @@ import { DropdownArrowIcon } from '@/shared/icons';
 import { useState } from 'react';
 import type { FilterSectionDropdownProps } from './interface';
 import capitalizeFirst from '@/shared/utils/capitalizeFirst';
-import Link from 'next/link';
 
 export default function FilterSectionDropdown({
   children,

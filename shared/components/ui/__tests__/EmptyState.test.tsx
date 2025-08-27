@@ -2,11 +2,16 @@ import { render, screen } from '@testing-library/react';
 
 import React from 'react';
 import EmptyState from '../EmptyState';
+import type { CustomButtonProps } from '../Button/interface';
 
 jest.mock('@/shared/components/ui', () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
+  Button: ({
+    children,
+    ...props
+  }: {
+    children: React.ReactNode;
+    props: CustomButtonProps;
+  }) => <button {...props}>{children}</button>,
 }));
 
 describe('EmptyState', () => {

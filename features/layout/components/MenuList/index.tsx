@@ -24,7 +24,7 @@ export default function MenuList() {
         {menuItems.map((item) => {
           return (
             <MenuItem
-              key={item.href || item.label}
+              key={item.label}
               item={item}
               isActive={item.href ? pathname.includes(item.href) : false}
             />

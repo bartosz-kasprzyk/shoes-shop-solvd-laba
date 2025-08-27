@@ -7,7 +7,7 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('../../MenuItem', () => ({
   __esModule: true,
-  default: (props: any) => (
+  default: (props: MenuItemProps) => (
     <div
       data-testid='menu-item'
       data-active={props.isActive ? 'true' : 'false'}
@@ -37,6 +37,7 @@ jest.mock('@/shared/icons', () => ({
 
 import { usePathname } from 'next/navigation';
 import MenuList from '../../MenuList';
+import type { MenuItemProps } from '../../MenuItem/interface';
 
 describe('MenuList', () => {
   it('renders menu items with correct active state based on pathname', () => {

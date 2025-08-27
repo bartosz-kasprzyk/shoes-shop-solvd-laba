@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Skeleton, Typography } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 
 export default function CartListItemSkeleton() {
   return (

@@ -14,8 +14,7 @@ import useProductsCountStore from '../../stores/productCount';
 
 export default function FilterSideBar() {
   const router = useRouter();
-  const { filters, resetFilters, setFilterValues, applyFilters } =
-    useFilterStore();
+  const { filters, resetFilters, applyFilters } = useFilterStore();
 
   const slugs = useFiltersSlugsFromPath();
   const { value: productsCount } = useProductsCountStore();
