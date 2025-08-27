@@ -132,7 +132,7 @@ export default function ProfileForm() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '24px',
+          gap: '6px',
         }}
       >
         <Input
