@@ -254,12 +254,8 @@ export default function CheckoutForm() {
             marginBottom='5px'
             fontSize={{ xs: '24px', md: '32px' }}
             fontWeight={500}
-            px={2}
             py={1}
-            borderTop={{
-              xs: '1px color-mix(in srgb, black 10%, transparent) solid',
-              sm: 'none',
-            }}
+            px={{ xs: 2, sm: 0 }}
             borderBottom={{
               xs: '1px color-mix(in srgb, black 10%, transparent) solid',
               sm: 'none',
@@ -280,7 +276,7 @@ export default function CheckoutForm() {
           />
 
           {clientSecret && (
-            <Box px={2} py={1}>
+            <Box px={{ xs: 2, sm: 0 }} py={1}>
               <Typography variant='h6' sx={{ my: 3, fontWeight: 500 }}>
                 Payment info
               </Typography>

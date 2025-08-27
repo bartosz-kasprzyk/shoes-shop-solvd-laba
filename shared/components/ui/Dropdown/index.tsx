@@ -17,7 +17,7 @@ export default function Dropdown({
   id,
   title,
   error,
-  helperText,
+  helperText = ' ',
   value,
   onChange,
   options,
@@ -65,7 +65,7 @@ export default function Dropdown({
             },
           }}
           sx={{
-            height: { xs: '33px', sm: '40px', lg: '48px' },
+            height: { xs: '40px', lg: '48px' },
             '& .MuiSelect-iconOutlined': {
               background: 'none',
               backgroundRepeat: 'no-repeat',
@@ -118,7 +118,7 @@ export default function Dropdown({
           ))}
         </Select>
       </Box>
-      {error && <FormHelperText>{helperText}</FormHelperText>}
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   );
 }

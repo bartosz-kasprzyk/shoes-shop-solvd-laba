@@ -16,7 +16,7 @@ export default function PersonalInfoSection({
     };
 
   return (
-    <Box px={2} py={1}>
+    <Box px={{ xs: 2, sm: 0 }} py={1}>
       <Typography variant='h6' sx={{ mb: 2, fontWeight: 500 }}>
         Personal info
       </Typography>
