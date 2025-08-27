@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Work_Sans } from 'next/font/google';
 import { Providers } from './providers';
+import Chatbot from '@/features/ai/components/Chatbot';
 
 export const workSans = Work_Sans({
   variable: '--font-work-sans',
@@ -22,7 +23,10 @@ export default function RootLayout({
   return (
     <html lang='en' className={workSans.className}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Chatbot />
+        </Providers>
       </body>
     </html>
   );
