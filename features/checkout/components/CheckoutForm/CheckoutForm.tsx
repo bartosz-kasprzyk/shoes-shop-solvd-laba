@@ -78,7 +78,7 @@ export default function CheckoutForm() {
   const [shippingErrors, setShippingErrors] = useState<Record<string, string>>(
     {},
   );
-  const { setSubmit } = useCheckoutStore();
+  const { setSubmit, setLoading: setButtonLoading } = useCheckoutStore();
 
   useEffect(() => {
     if (id && total && !loading) {
@@ -104,6 +104,7 @@ export default function CheckoutForm() {
         })
         .finally(() => {
           setLoading(false);
+          setButtonLoading(false);
           isFetching.current = false;
         });
     }
@@ -154,6 +155,7 @@ export default function CheckoutForm() {
             .map(([key, value]) => [key.replace('shippingInfo.', ''), value]),
         ),
       );
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -166,6 +168,7 @@ export default function CheckoutForm() {
     const { error: submitError } = await elements.submit();
     if (submitError) {
       setErrorMessage(submitError.message);
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -185,6 +188,7 @@ export default function CheckoutForm() {
     if (!res.ok) {
       const data = await res.json();
       setErrorMessage(data.error);
+      setButtonLoading(false);
       setLoading(false);
       return;
     }
@@ -211,6 +215,7 @@ export default function CheckoutForm() {
     if (error) {
       resetCartID();
       setErrorMessage(error.message);
+      setButtonLoading(false);
       setLoading(false);
       return;
     }

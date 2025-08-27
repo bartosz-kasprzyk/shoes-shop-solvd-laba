@@ -11,6 +11,7 @@ import {
   useRouter,
   useSelectedLayoutSegment,
 } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ShopLayout({
   order,
@@ -27,8 +28,7 @@ export default function ShopLayout({
   const segment = useSelectedLayoutSegment('summary');
   const pathname = usePathname();
   const buttonText = pathname === '/checkout' ? 'Pay' : 'Go to checkout';
-
-  const { submit } = useCheckoutStore();
+  const { submit, loading, setLoading } = useCheckoutStore();
 
   const handleNavigate = () => {
     switch (pathname) {
@@ -37,7 +37,10 @@ export default function ShopLayout({
         else router.push('/checkout');
         break;
       case '/checkout':
+        setLoading(true);
         submit?.();
+        // console.log(submit?.().then(a => a))
+        // setLoading(false);
         break;
       default:
         router.replace('/checkout');
@@ -114,6 +117,7 @@ export default function ShopLayout({
                   {summary}
                   <Button
                     onClick={handleNavigate}
+                    disabled={loading}
                     sx={{
                       width: '100%',
                       mt: '100px',
@@ -123,7 +127,7 @@ export default function ShopLayout({
                       mb: 1,
                     }}
                   >
-                    {buttonText}
+                    {loading ? 'Loading...' : buttonText}
                   </Button>
                 </Box>
               )}
@@ -143,6 +147,7 @@ export default function ShopLayout({
               >
                 <Button
                   onClick={handleNavigate}
+                  disabled={loading}
                   sx={{
                     width: '90%',
                     position: 'sticky',
@@ -151,7 +156,7 @@ export default function ShopLayout({
                     my: 1,
                   }}
                 >
-                  {buttonText}
+                  {loading ? 'Loading...' : buttonText}
                 </Button>
               </Box>
             )}
