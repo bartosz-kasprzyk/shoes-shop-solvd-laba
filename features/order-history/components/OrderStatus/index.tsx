@@ -13,7 +13,6 @@ export default function OrderStatus({ title, icon, color }: OrderStatusProps) {
         display: 'flex',
         gap: 1,
         color: `${color}`,
-        // border: '1px solid red',
       }}
     >
       {icon}

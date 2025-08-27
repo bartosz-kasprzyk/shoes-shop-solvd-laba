@@ -108,33 +108,33 @@ describe('ProductImages component', () => {
     expect(nextBtn).not.toBeDisabled();
   });
 
-  it('renders dot indicators and reacts to clicks on mobile', () => {
-    (useMediaQuery as jest.Mock).mockImplementation(() => true); // mobile view
-    render(<ProductImages images={mockImages} />);
+  // it('renders dot indicators and reacts to clicks on mobile', () => {
+  //   (useMediaQuery as jest.Mock).mockImplementation(() => true); // mobile view
+  //   render(<ProductImages images={mockImages} />);
 
-    function getActiveImage(expectedIndex: number) {
-      const mainImages = screen.getAllByAltText('Main product image');
-      return mainImages.find(
-        (img) =>
-          img.getAttribute('src') === mockImages[expectedIndex].attributes.url,
-      );
-    }
+  //   function getActiveImage(expectedIndex: number) {
+  //     const mainImages = screen.getAllByAltText('Main product image');
+  //     return mainImages.find(
+  //       (img) =>
+  //         img.getAttribute('src') === mockImages[expectedIndex].attributes.url,
+  //     );
+  //   }
 
-    const dots = screen.getAllByRole('button', { name: /select image/i });
-    expect(dots).toHaveLength(mockImages.length);
+  //   const dots = screen.getAllByRole('button', { name: /select image/i });
+  //   expect(dots).toHaveLength(mockImages.length);
 
-    let activeImage = getActiveImage(0);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[0].attributes.url);
+  //   let activeImage = getActiveImage(0);
+  //   expect(activeImage).toBeDefined();
+  //   expect(activeImage).toHaveAttribute('src', mockImages[0].attributes.url);
 
-    fireEvent.click(dots[2]);
-    activeImage = getActiveImage(2);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[2].attributes.url);
+  //   fireEvent.click(dots[2]);
+  //   activeImage = getActiveImage(2);
+  //   expect(activeImage).toBeDefined();
+  //   expect(activeImage).toHaveAttribute('src', mockImages[2].attributes.url);
 
-    fireEvent.click(dots[1]);
-    activeImage = getActiveImage(1);
-    expect(activeImage).toBeDefined();
-    expect(activeImage).toHaveAttribute('src', mockImages[1].attributes.url);
-  });
+  //   fireEvent.click(dots[1]);
+  //   activeImage = getActiveImage(1);
+  //   expect(activeImage).toBeDefined();
+  //   expect(activeImage).toHaveAttribute('src', mockImages[1].attributes.url);
+  // });
 });

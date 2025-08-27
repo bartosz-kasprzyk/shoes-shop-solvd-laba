@@ -1,12 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Box, CircularProgress, Collapse, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import ShippingInfoSection from '../ShippingInfoSection';
 import type { PersonalInfo } from '../PersonalInfoSection/interface';
 import type { ShippingInfo } from '../ShippingInfoSection/interface';
 import PersonalInfoSection from '../PersonalInfoSection';
-import type { CheckoutFormProps } from './interface';
 import {
   PaymentElement,
   useElements,
@@ -18,6 +17,7 @@ import useUser from '@/shared/hooks/useUser';
 import { z } from 'zod';
 import { useCheckoutStore } from '../../stores/checkoutStore';
 import { useCart } from '@/shared/hooks/useCart';
+import { useCartDetails } from '@/features/cart/components/CartDetailsContext';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const personalInfoSchema = z.object({
@@ -58,7 +58,8 @@ function generateOrderNumber(): string {
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const { cartId, cart, total, resetCartID } = useCart();
+  const { cartId, total, resetCartID } = useCart();
+  const { cartItems } = useCartDetails();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState('');
   const [pIId, setPIId] = useState('');
@@ -190,7 +191,7 @@ export default function CheckoutForm() {
       body: JSON.stringify({
         strapiUserId: id,
         orderId,
-        cart: JSON.stringify(cart),
+        cart: JSON.stringify(cartItems),
         personalInfo,
         shippingInfo,
         paymentIntentId: pIId,

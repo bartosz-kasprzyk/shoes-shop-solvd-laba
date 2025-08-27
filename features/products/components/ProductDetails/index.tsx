@@ -184,12 +184,12 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
               <Button onClick={handleAddToCart}>Add to Cart</Button>
             </Box>
 
-          <SignInModal
-            isOpen={showSignInModal}
-            onClose={() => setShowSignInModal(false)}
-            callbackUrl={pathname}
-          />
-        
+            <SignInModal
+              isOpen={showSignInModal}
+              onClose={() => setShowSignInModal(false)}
+              callbackUrl={pathname}
+            />
+
             <Box
               sx={{
                 display: 'flex',
