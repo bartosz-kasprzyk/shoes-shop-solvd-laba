@@ -3,16 +3,16 @@ import { Box, CircularProgress, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
-import { useSession } from 'next-auth/react';
 import EmptyState from '../EmptyState';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
+import useUser from '@/shared/hooks/useUser';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -36,12 +36,13 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     useWishlistStore();
   const { showSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    setInitialWishlist();
-  }, [setInitialWishlist]);
+  const { session } = useUser();
+  const userId = session?.user?.id?.toString();
+  const isAuthenticated = !!session?.user?.accessToken;
 
-  const { data: session } = useSession();
-  const isAuthenticated = !!session?.user.accessToken;
+  useEffect(() => {
+    setInitialWishlist(userId);
+  }, [userId, setInitialWishlist]);
 
   const { setAllFilterValues } = useFilterStore();
   const { setValue } = useProductsCountStore();
@@ -86,7 +87,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
         variant='toggleWishlist'
         onProductAction={
           isAuthenticated
-            ? (id: number) => toggleWishlist(id, showSnackbar)
+            ? (id: number) => toggleWishlist(id, userId, showSnackbar)
             : undefined
         }
         pages={data.pages}

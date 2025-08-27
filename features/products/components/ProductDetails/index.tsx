@@ -9,24 +9,29 @@ import type { ProductDetailsProps } from '@/features/products/types/components.i
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
-import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/shared/hooks/useCart';
 import { SignInModal } from '../SignInToContinueModal';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
+import useUser from '@/shared/hooks/useUser';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [showSizeWarning, setShowSizeWarning] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const pathname = usePathname();
-  const { showSnackbar } = useSnackbar();
-  const { data: session } = useSession();
-  const isAuthenticated = !!session?.user.accessToken;
-
   const router = useRouter();
   const { addItem } = useCart();
-  const { wishlistIds, toggleWishlist } = useWishlistStore();
+  const { wishlistIds, toggleWishlist, setInitialWishlist } =
+    useWishlistStore();
+  const { showSnackbar } = useSnackbar();
+  const { session } = useUser();
+  const userId = session?.user?.id?.toString();
+  const isAuthenticated = !!session?.user?.accessToken;
+
+  useEffect(() => {
+    setInitialWishlist(userId);
+  }, [userId, setInitialWishlist]);
 
   const product = initialData.data.attributes;
 
@@ -49,7 +54,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
       return;
     }
 
-    toggleWishlist(initialData.data.id, showSnackbar);
+    toggleWishlist(initialData.data.id, userId, showSnackbar);
   };
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
