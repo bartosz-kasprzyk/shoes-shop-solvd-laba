@@ -1,17 +1,10 @@
 'use client';
 import CartPageEmpty from '@/features/cart/components/CartPageEmpty';
-import CartSummary from '@/features/cart/components/CartSummary';
 import { useCheckoutStore } from '@/features/checkout/stores/checkoutStore';
-import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { Button } from '@/shared/components/ui';
 import { useCart } from '@/shared/hooks/useCart';
 import { Box, Link, useMediaQuery, useTheme } from '@mui/material';
-import {
-  usePathname,
-  useRouter,
-  useSelectedLayoutSegment,
-} from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ShopLayout({
   order,
@@ -24,8 +17,6 @@ export default function ShopLayout({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { totalItems } = useCart();
   const router = useRouter();
-  // const segment = useSelectedLayoutSegment('order')
-  const segment = useSelectedLayoutSegment('summary');
   const pathname = usePathname();
   const buttonText = pathname === '/checkout' ? 'Pay' : 'Go to checkout';
   const { submit, loading, setLoading } = useCheckoutStore();
@@ -39,8 +30,6 @@ export default function ShopLayout({
       case '/checkout':
         setLoading(true);
         submit?.();
-        // console.log(submit?.().then(a => a))
-        // setLoading(false);
         break;
       default:
         router.replace('/checkout');
@@ -111,7 +100,9 @@ export default function ShopLayout({
               gap={{ xs: 4, xl: 15 }}
             >
               <Box width={'100%'} flex={10} minWidth={0}>
-                {isMobile && segment === 'summary' ? summary : order}
+                {/* important - do not use a ? b : c because it will reset the state in dom */}
+                {!(isMobile && pathname === '/checkout/summary') && order}
+                {isMobile && pathname === '/checkout/summary' && summary}
               </Box>
               {!isMobile && (
                 <Box flexGrow={1} width={'auto'}>

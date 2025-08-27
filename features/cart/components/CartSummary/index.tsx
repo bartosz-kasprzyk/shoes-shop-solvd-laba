@@ -14,7 +14,7 @@ import { useCartDetails } from '../CartDetailsContext';
 import { useCart } from '@/shared/hooks/useCart';
 
 export default function CartSummary(props: BoxProps) {
-  const { cartItems, refetchAllProducts } = useCartDetails();
+  const { cartItems } = useCartDetails();
   const { setTotal } = useCart();
   const [promocodes, setPromocodes] = useState<promocode[]>([]);
 
