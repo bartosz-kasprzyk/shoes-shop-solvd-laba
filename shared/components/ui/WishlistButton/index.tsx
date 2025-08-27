@@ -3,12 +3,24 @@
 import { IconButton } from '@mui/material';
 import RemoveFromWishlistIcon from '@/shared/icons/RemoveFromWishlistIcon';
 import AddToWishlistIcon from '@/shared/icons/AddToWishlistIcon';
+import AddedToWishlistIcon from '@/shared/icons/AddedToWishlistIcon';
 import type { WishlistButtonProps } from './interface';
 
 export default function WishlistButton({
   onClick,
   operation,
+  filled,
 }: WishlistButtonProps) {
+  let icon;
+
+  if (operation === 'remove') {
+    icon = <RemoveFromWishlistIcon />;
+  } else if (operation === 'toggle') {
+    icon = filled ? <AddedToWishlistIcon /> : <AddToWishlistIcon />;
+  } else {
+    icon = <AddToWishlistIcon />;
+  }
+
   return (
     <IconButton
       onClick={onClick}
@@ -34,11 +46,7 @@ export default function WishlistButton({
         },
       }}
     >
-      {operation === 'remove' ? (
-        <RemoveFromWishlistIcon />
-      ) : (
-        <AddToWishlistIcon />
-      )}
+      {icon}
     </IconButton>
   );
 }

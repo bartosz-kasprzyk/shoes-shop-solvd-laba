@@ -8,12 +8,12 @@ import SizeSelector from './components/SizeSelector';
 import type { ProductDetailsProps } from '@/features/products/types/components.interface';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import { updateRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
-import { addToWishlist } from '@/features/wishlist/utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/shared/hooks/useCart';
 import { SignInModal } from '../SignInToContinueModal';
+import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 
 export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
@@ -26,6 +26,7 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
 
   const router = useRouter();
   const { addItem } = useCart();
+  const { wishlistIds, toggleWishlist } = useWishlistStore();
 
   const product = initialData.data.attributes;
 
@@ -39,15 +40,16 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
       : [],
   );
 
-  const handleAddToWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const isInWishlist = wishlistIds.has(initialData.data.id);
+
+  const handleToggleWishlist = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!isAuthenticated) {
       setShowSignInModal(true);
       (e.currentTarget as HTMLButtonElement).blur();
       return;
     }
 
-    const result = addToWishlist(initialData.data.id);
-    showSnackbar(result.message, result.success ? 'success' : 'info', 5000);
+    toggleWishlist(initialData.data.id, showSnackbar);
   };
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -178,18 +180,18 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
                 height: '61px',
               }}
             >
-              <Button variant='outline' onClick={handleAddToWishlist}>
-                Add to Wishlist
+              <Button variant='outline' onClick={handleToggleWishlist}>
+                {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
               </Button>
               <Button onClick={handleAddToCart}>Add to Cart</Button>
             </Box>
 
-          <SignInModal
-            isOpen={showSignInModal}
-            onClose={() => setShowSignInModal(false)}
-            callbackUrl={pathname}
-          />
-        
+            <SignInModal
+              isOpen={showSignInModal}
+              onClose={() => setShowSignInModal(false)}
+              callbackUrl={pathname}
+            />
+
             <Box
               sx={{
                 display: 'flex',

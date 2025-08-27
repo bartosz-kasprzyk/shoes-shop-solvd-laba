@@ -23,12 +23,13 @@ export interface ProductDetailsProps {
 
 export type ProductActionVariant =
   | 'dropdown'
-  | 'addToWishlist'
+  | 'toggleWishlist'
   | 'removeFromWishlist';
 
 interface CommonProps {
   variant?: ProductActionVariant;
   onProductAction?: (productId: number) => void;
+  wishlistIds?: Set<number>;
 }
 
 type ProductsOnly = {
