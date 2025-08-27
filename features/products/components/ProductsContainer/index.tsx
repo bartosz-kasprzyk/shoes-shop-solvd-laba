@@ -2,14 +2,12 @@ import { Grid } from '@mui/material';
 import ProductCard from '../ProductCard';
 import { adaptProductToCard } from '@/features/products/components/ProductCard/ProductCard.adapter';
 import type { ProductsContainerProps } from '../../types/components.interface';
-import type { Card } from '@/features/products/types';
 
 export function ProductsContainer({
   products,
   pages,
   variant,
   onProductAction,
-  isCard = false,
 }: ProductsContainerProps) {
   const items = products ? products : pages.flatMap((page) => page.data);
   return (
@@ -17,14 +15,10 @@ export function ProductsContainer({
       {items.map((product) => (
         <Grid key={product.id} size={{ xs: 6, md: 4, lg: 3, xl: 3 }}>
           <ProductCard
-            card={
-              isCard
-                ? (product as unknown as Card)
-                : adaptProductToCard(product)
-            }
+            card={adaptProductToCard(product)}
             variant={variant}
             onClick={
-              onProductAction ? () => onProductAction(product) : undefined
+              onProductAction ? () => onProductAction(product.id) : undefined
             }
           />
         </Grid>

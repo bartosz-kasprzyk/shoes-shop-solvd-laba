@@ -1,27 +1,25 @@
-import type { Card } from '@/features/products/types';
-
-function getWishlist(): Card[] {
+export function getWishlist(): number[] {
   return JSON.parse(localStorage.getItem('wishlist') || '[]');
 }
 
-export function addToWishlist(product: Card): {
+export function addToWishlist(productId: number): {
   success: boolean;
   message: string;
 } {
   const wishlist = getWishlist();
-  const exists = wishlist.some((p) => p.id === product.id);
+  const exists = wishlist.includes(productId);
 
   if (exists) {
     return { success: false, message: 'Product already in wishlist' };
   }
 
-  wishlist.push(product);
+  wishlist.push(productId);
   localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
   return { success: true, message: 'Product added to wishlist' };
 }
 
 export function removeFromWishlist(productId: number): void {
-  const wishlist = getWishlist().filter((p) => p.id !== productId);
+  const wishlist = getWishlist().filter((id) => id !== productId);
   localStorage.setItem('wishlist', JSON.stringify(wishlist));
 }

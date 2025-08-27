@@ -2,36 +2,46 @@
 
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { removeFromWishlist } from '../../utils/wishlist';
+import { getWishlist, removeFromWishlist } from '../../utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { MyWishlistIcon } from '@/shared/icons';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
-import type { Product } from '@/shared/interfaces/Product';
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
+import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 
 export default function WishlistPage() {
-  const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [wishlist, setWishlist] = useState<ProductFromServer[]>([]);
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const saved = localStorage.getItem('wishlist');
-    if (saved) {
-      setWishlist(JSON.parse(saved));
-    }
+    const ids = getWishlist();
+
+    if (ids.length === 0) return;
+
+    const fetchAllWishlistProducts = async () => {
+      const results: ProductFromServer[] = [];
+
+      for (const id of ids) {
+        try {
+          const res = await fetchProductById(id.toString());
+          results.push(res.data);
+        } catch (err) {
+          console.warn('Failed to fetch product', id, err);
+        }
+      }
+      setWishlist(results);
+    };
+
+    fetchAllWishlistProducts();
   }, []);
 
-  const handleRemoveFromWishlist = (product: Product | ProductFromServer) => {
-    removeFromWishlist(product.id);
+  const handleRemoveFromWishlist = (productId: number) => {
+    removeFromWishlist(productId);
 
-    const saved = localStorage.getItem('wishlist');
-    if (saved) {
-      setWishlist(JSON.parse(saved));
-    } else {
-      setWishlist([]);
-    }
+    setWishlist((prev) => prev.filter((p) => p.id !== productId));
 
     showSnackbar('Product removed from wishlist', 'warning', 5000);
   };
@@ -116,7 +126,6 @@ export default function WishlistPage() {
           products={wishlist}
           variant='removeFromWishlist'
           onProductAction={handleRemoveFromWishlist}
-          isCard={true}
         />
       </Box>
     </ScrollableContainer>
