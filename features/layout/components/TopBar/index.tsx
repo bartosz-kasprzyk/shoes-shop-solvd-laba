@@ -175,16 +175,6 @@ export default function TopBar() {
                 boxSizing='border-box'
                 justifyContent='flex-end'
               >
-                {/* Cart icon on mobile when search bar closed */}
-                <Box
-                  display={{
-                    xs: isSearchBarOpen ? 'none' : 'flex',
-                    sm: 'none',
-                  }}
-                >
-                  <TopBarCart />
-                </Box>
-
                 {/* Search input */}
                 <TopBarSearch
                   isExpanded={isSearchBarOpen}
@@ -225,7 +215,7 @@ export default function TopBar() {
                         aspectRatio: '1 / 1',
                         height: '100%',
                         width: 'auto',
-                        display: { xs: 'none', sm: 'block' },
+                        display: 'block',
                       }}
                     >
                       <TopBarCart />
