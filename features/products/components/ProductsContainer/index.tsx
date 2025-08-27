@@ -8,6 +8,7 @@ export function ProductsContainer({
   pages,
   variant,
   onProductAction,
+  wishlistIds,
 }: ProductsContainerProps) {
   const items = products ? products : pages.flatMap((page) => page.data);
   return (
@@ -20,6 +21,7 @@ export function ProductsContainer({
             onClick={
               onProductAction ? () => onProductAction(product.id) : undefined
             }
+            filled={wishlistIds?.has(product.id)}
           />
         </Grid>
       ))}

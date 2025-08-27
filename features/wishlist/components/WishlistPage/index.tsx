@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { getWishlist, removeFromWishlist } from '../../utils/wishlist';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { MyWishlistIcon } from '@/shared/icons';
 import Link from 'next/link';
@@ -11,20 +10,17 @@ import { ScrollableContainer } from '@/features/layout/components/ScrollableCont
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
+import { useWishlistStore } from '../../stores/wishlistStore';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<ProductFromServer[]>([]);
+  const { wishlistIds, removeFromWishlist } = useWishlistStore();
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const ids = getWishlist();
-
-    if (ids.length === 0) return;
-
-    const fetchAllWishlistProducts = async () => {
+    const fetchWishlistProducts = async () => {
       const results: ProductFromServer[] = [];
-
-      for (const id of ids) {
+      for (const id of Array.from(wishlistIds)) {
         try {
           const res = await fetchProductById(id.toString());
           results.push(res.data);
@@ -35,8 +31,8 @@ export default function WishlistPage() {
       setWishlist(results);
     };
 
-    fetchAllWishlistProducts();
-  }, []);
+    if (wishlistIds.size > 0) fetchWishlistProducts();
+  }, [wishlistIds]);
 
   const handleRemoveFromWishlist = (productId: number) => {
     removeFromWishlist(productId);

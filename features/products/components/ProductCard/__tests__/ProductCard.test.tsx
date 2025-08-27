@@ -63,27 +63,41 @@ describe('ProductCard', () => {
     expect(screen.getByTestId('dropdown-menu')).toBeInTheDocument();
   });
 
-  it('renders wishlist button if variant is addToWishlist and user is authenticated', () => {
+  it('renders wishlist button if variant is toggleWishlist and user is authenticated', () => {
     render(
       <ProductCard
         card={mockCard}
-        variant='addToWishlist'
+        variant='toggleWishlist'
         onClick={mockOnAdd}
       />,
     );
     expect(screen.getByTestId('wishlist-button')).toBeInTheDocument();
   });
 
-  it('calls addToWishlist when addToWishlist button is pressed', () => {
+  it('calls addToWishlist when toggleWishlist with filled={false} button is pressed', () => {
     render(
       <ProductCard
         card={mockCard}
-        variant='addToWishlist'
+        variant='toggleWishlist'
         onClick={mockOnAdd}
+        filled={false}
       />,
     );
     fireEvent.click(screen.getByTestId('wishlist-button'));
     expect(mockOnAdd).toHaveBeenCalled();
+  });
+
+  it('calls removeFromWishlist when toggleWishlist with filled={true} button is pressed', () => {
+    render(
+      <ProductCard
+        card={mockCard}
+        variant='toggleWishlist'
+        onClick={mockOnRemove}
+        filled={true}
+      />,
+    );
+    fireEvent.click(screen.getByTestId('wishlist-button'));
+    expect(mockOnRemove).toHaveBeenCalled();
   });
 
   it('renders wishlist button if variant is removeFromWishlist', () => {

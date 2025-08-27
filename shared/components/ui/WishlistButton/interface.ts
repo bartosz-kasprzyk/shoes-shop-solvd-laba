@@ -1,4 +1,5 @@
 export type WishlistButtonProps = {
   onClick?: () => void;
-  operation: 'add' | 'remove';
+  operation: 'toggle' | 'remove';
+  filled?: boolean;
 };

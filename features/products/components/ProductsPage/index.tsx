@@ -3,15 +3,16 @@ import { Box, CircularProgress, Slide, Typography } from '@mui/material';
 import LoadingProductsSkeleton from '../LoadingProductsSkeleton/LoadingProductsSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchProducts } from '@/shared/api/fetchProducts';
 import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
-import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
 import { useSession } from 'next-auth/react';
 import EmptyState from '../EmptyState';
+import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -31,7 +32,14 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     rootMargin: '1000px',
   });
 
-  const { handleAddToWishlist } = useAddToWishlist();
+  const { wishlistIds, toggleWishlist, setInitialWishlist } =
+    useWishlistStore();
+  const { showSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    setInitialWishlist();
+  }, [setInitialWishlist]);
+
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user.accessToken;
 
@@ -75,9 +83,14 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
   return (
     <Box px={2}>
       <ProductsContainer
-        variant='addToWishlist'
-        onProductAction={isAuthenticated ? handleAddToWishlist : undefined}
+        variant='toggleWishlist'
+        onProductAction={
+          isAuthenticated
+            ? (id: number) => toggleWishlist(id, showSnackbar)
+            : undefined
+        }
         pages={data.pages}
+        wishlistIds={wishlistIds}
       />
       <div ref={ref}></div>
       <Slide direction='up' in={isFetchingNextPage}>
