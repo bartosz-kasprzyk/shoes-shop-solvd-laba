@@ -2,6 +2,7 @@ import { CartClearer } from '@/features/checkout/components/CartCleanerer';
 import Button from '@/shared/components/ui/Button';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 interface ThankYouPageProps {
@@ -78,12 +79,18 @@ export function ThankYouPage({ orderNumber }: ThankYouPageProps) {
 
           <Box sx={{ display: 'flex', gap: { xs: '15px', md: '30px' } }}>
             <Button
+              component={Link}
+              href='/order-history'
               variant='outline'
               sx={{ flex: 1, maxWidth: 280, height: 62 }}
             >
               View Order
             </Button>
-            <Button sx={{ flex: 1, maxWidth: 280, height: 62 }}>
+            <Button
+              component={Link}
+              href='/products'
+              sx={{ flex: 1, maxWidth: 280, height: 62 }}
+            >
               Continue Shopping
             </Button>
           </Box>
