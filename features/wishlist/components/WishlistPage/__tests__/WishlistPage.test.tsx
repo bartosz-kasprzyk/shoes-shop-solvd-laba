@@ -1,58 +1,41 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import WishlistPage from '..';
-import type { Card } from '@/features/products/types';
+import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 
-const mockWishlist: Card[] = [
-  {
-    id: 1,
-    name: 'Product 1',
-    img: { src: '/image1.jpg' },
-    price: 100,
-    gender: 'Men',
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    price: 200,
-    img: { src: '/image2.jpg' },
-    gender: 'Women',
-  },
-];
-
-const getWishlistMock = jest.fn();
+const showSnackbarMock = jest.fn();
 const removeFromWishlistMock = jest.fn();
 
-jest.mock('@/features/products/components/ProductCard', () => {
-  const MockProductCard = ({
-    card,
-    onClick,
-  }: {
-    card: Card;
-    onClick: () => void;
-  }) => (
+jest.mock('@/features/wishlist/stores/wishlistStore', () => ({
+  useWishlistStore: jest.fn(),
+}));
+
+jest.mock('@/shared/hooks/useSnackbar', () => ({
+  useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
+}));
+
+jest.mock('@/features/products/components/ProductCard', () => ({
+  __esModule: true,
+  default: ({ card, onClick }: any) => (
     <div>
       <span>{card.name}</span>
       <button onClick={onClick}>remove-{card.id}</button>
     </div>
-  );
-
-  MockProductCard.displayName = 'MockProductCard';
-  return MockProductCard;
-});
+  ),
+}));
 
 jest.mock(
   '@/features/products/components/ProductDetails/api/productApi',
   () => ({
-    fetchProductById: jest.fn((id) =>
+    fetchProductById: jest.fn((id: string) =>
       Promise.resolve({
         data: {
           id: Number(id),
           attributes: {
             name: `Product ${id}`,
-            price: 100,
-            gender: 'Men',
-            images: { data: [{ id: 1, attributes: { url: '/image.jpg' } }] },
+            images: { data: [{ attributes: { url: `/image${id}.jpg` } }] },
+            price: id === '1' ? 100 : 200,
+            gender: id === '1' ? 'Men' : 'Women',
           },
         },
       }),
@@ -60,26 +43,17 @@ jest.mock(
   }),
 );
 
-jest.mock('../../../utils/wishlist', () => ({
-  getWishlist: () => getWishlistMock(),
-  removeFromWishlist: (id: number) => removeFromWishlistMock(id),
-}));
-
-const showSnackbarMock = jest.fn();
-
-jest.mock('@/shared/hooks/useSnackbar', () => ({
-  useSnackbar: () => ({ showSnackbar: showSnackbarMock }),
-}));
-
 beforeEach(() => {
-  getWishlistMock.mockReset();
-  removeFromWishlistMock.mockReset();
-  showSnackbarMock.mockReset();
+  jest.clearAllMocks();
 });
 
 describe('WishlistPage', () => {
   it('renders empty wishlist message with Browse products button when no items', async () => {
-    getWishlistMock.mockReturnValue([]);
+    (useWishlistStore as unknown as jest.Mock).mockReturnValue({
+      wishlistIds: new Set(),
+      removeFromWishlist: removeFromWishlistMock,
+    });
+
     render(<WishlistPage />);
 
     expect(
@@ -87,22 +61,29 @@ describe('WishlistPage', () => {
         /You don't have any products in your wishlist yet/i,
       ),
     ).toBeInTheDocument();
+
     expect(
       screen.getByRole('button', { name: /Browse products/i }),
     ).toBeInTheDocument();
   });
 
-  it('renders wishlist items', async () => {
-    getWishlistMock.mockReturnValue(mockWishlist.map((p) => p.id));
+  it('renders all wishlist items', async () => {
+    (useWishlistStore as unknown as jest.Mock).mockReturnValue({
+      wishlistIds: new Set([1, 2]),
+      removeFromWishlist: removeFromWishlistMock,
+    });
+
     render(<WishlistPage />);
 
-    for (const item of mockWishlist) {
-      expect(await screen.findByText(item.name)).toBeInTheDocument();
-    }
+    await waitFor(() =>
+      expect(screen.getByText('Product 1')).toBeInTheDocument(),
+    );
+    await waitFor(() =>
+      expect(screen.getByText('Product 2')).toBeInTheDocument(),
+    );
   });
 
-  it('removes item from wishlist and shows snackbar alert', async () => {
-    getWishlistMock.mockReturnValue([1]);
+  it('removes an item from wishlist and shows snackbar alert', async () => {
     render(<WishlistPage />);
 
     const removeBtn = await screen.findByRole('button', { name: 'remove-1' });
