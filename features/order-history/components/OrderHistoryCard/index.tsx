@@ -1,14 +1,17 @@
+'use client';
+
 import { DropdownArrowIcon, PdfIcon } from '@/shared/icons';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Typography,
 } from '@mui/material';
-import Link from 'next/link';
 import OrderHistoryProduct from '../OrderHistoryProduct';
 import type { Order } from '../../types';
+import { generateInvoicePdf } from '../../utils/generateInvoicePdf';
 
 interface OrderHistoryCardProps {
   transaction: Order;
@@ -162,20 +165,28 @@ export default function OrderHistoryCard({
             pt: '20px',
           }}
         >
-          <Link
-            href='#'
-            style={{
+          <Button
+            onClick={() => generateInvoicePdf(transaction)}
+            sx={{
               fontWeight: 700,
               fontSize: '12px',
               color: '#1E2832',
               display: 'flex',
               gap: '8px',
               alignItems: 'center',
+              padding: 0,
+              minWidth: 'auto',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: 'transparent',
+                color: '#1E2832',
+                textDecoration: 'underline',
+              },
             }}
           >
             <PdfIcon />
             Pdf invoice download
-          </Link>
+          </Button>
         </Box>
       </AccordionDetails>
     </Accordion>
