@@ -3,9 +3,9 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import Button from '../shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import { Button } from '@/shared/components/ui';
 
 interface NotFoundProps {
   title?: string;

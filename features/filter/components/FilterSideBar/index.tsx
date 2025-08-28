@@ -11,6 +11,7 @@ import { withSearch } from '../SearchWrapper/SearchWrapper';
 import useFilterStore from '../../stores/filterStore';
 import { useFiltersSlugsFromPath } from '../../hooks/useFiltersSlugsFromPath';
 import useProductsCountStore from '../../stores/productCount';
+import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
 
 export default function FilterSideBar() {
   const router = useRouter();
@@ -49,39 +50,41 @@ export default function FilterSideBar() {
             overflowX: 'hidden',
           }}
         >
-          <Box p={2} pt={6} display={{ xs: 'none', md: 'block' }}>
-            <Typography
-              fontWeight='light'
-              color='color-mix(in srgb, transparent, #000000ff 50%)'
-              variant='body1'
-            >
-              {filters.category?.[0]?.name ?? 'Shoes'}
-              {slugs?.search?.[0].slug && '/' + slugs?.search?.[0].slug}
-            </Typography>
-            <Typography noWrap variant='h5'>
-              {slugs?.search?.[0].slug ?? 'Products'}
-              {productsCount ? ` (${productsCount})` : ''}
-            </Typography>
-          </Box>
-          <Divider />
+          <ScrollableContainer>
+            <Box p={2} pt={6} display={{ xs: 'none', md: 'block' }}>
+              <Typography
+                fontWeight='light'
+                color='color-mix(in srgb, transparent, #000000ff 50%)'
+                variant='body1'
+              >
+                {filters.category?.[0]?.name ?? 'Shoes'}
+                {slugs?.search?.[0].slug && '/' + slugs?.search?.[0].slug}
+              </Typography>
+              <Typography noWrap variant='h5'>
+                {slugs?.search?.[0].slug ?? 'Products'}
+                {productsCount ? ` (${productsCount})` : ''}
+              </Typography>
+            </Box>
+            <Divider />
 
-          <FilterSection
-            maxSelections={1}
-            filterType='gender'
-            Container={CheckboxContainer}
-          />
-          <FilterSection
-            filterType='brand'
-            Container={withSearch(CheckboxContainer)}
-          />
-          <FilterSection filterType='color' Container={CheckboxContainer} />
-          <PriceFilterSection />
-          <FilterSection filterType='size' Container={TilesContainer} />
-          <FilterSection
-            maxSelections={1}
-            filterType='category'
-            Container={CheckboxContainer}
-          />
+            <FilterSection
+              maxSelections={1}
+              filterType='gender'
+              Container={CheckboxContainer}
+            />
+            <FilterSection
+              filterType='brand'
+              Container={withSearch(CheckboxContainer)}
+            />
+            <FilterSection filterType='color' Container={CheckboxContainer} />
+            <PriceFilterSection />
+            <FilterSection filterType='size' Container={TilesContainer} />
+            <FilterSection
+              maxSelections={1}
+              filterType='category'
+              Container={CheckboxContainer}
+            />
+          </ScrollableContainer>
         </Box>
 
         <Box display='flex' p={2} boxSizing={'border-box'} gap={1} width='100%'>
