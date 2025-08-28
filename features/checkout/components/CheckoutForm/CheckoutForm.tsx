@@ -24,7 +24,12 @@ export const personalInfoSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   surname: z.string().min(2, 'Surname is required'),
   email: z.email('Invalid email address'),
-  phoneNumber: z.e164('Invalid phone number'),
+  phoneNumber: z
+    .string()
+    .transform((val) => val.replace(/[\s-]/g, '').replace(/[()]/g, ''))
+    .refine((val) => /^\+?[1-9]\d{7,14}$/.test(val), {
+      message: 'Invalid phone number',
+    }),
 });
 
 export const shippingInfoSchema = z.object({
