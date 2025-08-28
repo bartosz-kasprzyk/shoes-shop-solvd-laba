@@ -221,7 +221,7 @@ export default function CheckoutForm() {
             },
           },
         },
-        return_url: `http://localhost:3000/thank-you?orderId=${orderId}&cartId=${cartId}`, // to be changed, make dynamic instead of localhost, pass data
+        return_url: `${process.env.NEXT_PUBLIC_STRIPE_URL}/thank-you?orderId=${orderId}&cartId=${cartId}`, // to be changed, make dynamic instead of localhost, pass data
       },
     });
     if (error) {
