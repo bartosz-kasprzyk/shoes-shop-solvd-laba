@@ -12,6 +12,12 @@ jest.mock('next-auth/react', () => ({
   data: { user: { accessToken: 'fake' } },
 });
 
+jest.mock('next/image', () => {
+  return function MockNextImage(props: any) {
+    return <img {...props} />;
+  };
+});
+
 jest.mock('@/shared/components/ui/DropDownMenu', () => {
   const MockDropDownMenu = () => <div data-testid='dropdown-menu' />;
   return MockDropDownMenu;
@@ -41,7 +47,7 @@ describe('ProductCard', () => {
   it('renders image, name, price, gender, and link', () => {
     render(<ProductCard card={mockCard} />);
 
-    const img = screen.getByRole('img');
+    const img = screen.getByRole('img', { hidden: true });
     const decodedSrc = decodeURIComponent(img.getAttribute('src') || '');
     expect(decodedSrc).toContain('http://example.com/test-image.png');
     // expect(img).toHaveAttribute(

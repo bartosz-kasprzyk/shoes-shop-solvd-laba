@@ -1,10 +1,11 @@
 import { Box } from '@mui/material';
-import Image from 'next/image';
+// import Image from 'next/image';
 import ArrowIcon from '@/shared/icons/HorizontalArrowIcon';
 import { useState, useRef, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import type { ProductImagesProps } from '@/features/products/types/components.interface';
 import { RoundButton } from '../RoundButton';
+import { ImageWithLoading as Image } from '@/shared/components/ui/ImageWithLoading';
 
 export default function ProductImages({ images }: ProductImagesProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -128,8 +129,9 @@ export default function ProductImages({ images }: ProductImagesProps) {
               alt={`Thumbnail ${index}`}
               width={76}
               height={76}
-              style={{
-                display: 'block',
+              sx={{
+                // display: 'block',
+                height: '100%',
                 maxWidth: '100%',
                 maxHeight: '100%',
                 objectFit: 'cover',
@@ -181,7 +183,12 @@ export default function ProductImages({ images }: ProductImagesProps) {
                 alt={`Product image ${index + 1}`}
                 fill
                 sizes='(max-width: 600px) 100vw, 588px'
-                style={{ objectFit: 'cover', pointerEvents: 'none' }}
+                sx={{
+                  objectFit: 'cover',
+                  pointerEvents: 'none',
+                  width: '100%',
+                  height: '100%',
+                }}
                 priority={index === 0}
               />
             </Box>

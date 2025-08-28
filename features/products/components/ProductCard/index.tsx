@@ -3,7 +3,8 @@ import { DropDownMenu } from '@/shared/components/ui';
 import Link from 'next/link';
 import type { ProductCardProps } from '../../types';
 import WishlistButton from '@/shared/components/ui/WishlistButton';
-import Image from 'next/image';
+import { useState } from 'react';
+import { ImageWithLoading } from '@/shared/components/ui/ImageWithLoading';
 
 export default function ProductCard({
   card,
@@ -12,7 +13,7 @@ export default function ProductCard({
   filled,
 }: ProductCardProps) {
   const { img, name, price, gender, id } = card;
-
+  const [isLoading, setIsLoading] = useState(true);
   function renderButton() {
     switch (variant) {
       case 'dropdown':
@@ -60,14 +61,15 @@ export default function ProductCard({
         href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <Image
+        <ImageWithLoading
           src={img.src}
           alt={name}
           title={name}
           width={320}
           height={380}
           priority
-          style={{
+          onLoad={() => setIsLoading(false)}
+          sx={{
             aspectRatio: '320 / 380',
             objectFit: 'cover',
             width: '100%',

@@ -17,6 +17,7 @@ import { Button } from '@/shared/components/ui';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { ImageWithLoading } from '@/shared/components/ui/ImageWithLoading';
 
 export default function MyProductsPage() {
   const { session, isLoading } = useUser();
@@ -65,16 +66,19 @@ export default function MyProductsPage() {
   return (
     <ScrollableContainer>
       <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-        <Box
+        <ImageWithLoading
+          src={'/banner.png'}
+          fill
           sx={{
             position: 'relative',
             height: { xs: '132px', lg: '262px' },
-            backgroundImage: 'url(/banner.png)',
+
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             marginBottom: '90px',
           }}
+          alt={''}
         >
           <Box
             sx={{
@@ -122,7 +126,7 @@ export default function MyProductsPage() {
               </Typography>
             </Box>
           </Box>
-        </Box>
+        </ImageWithLoading>
         <Box sx={{ flex: 1, padding: '32px' }}>
           <Box
             display='flex'
