@@ -121,6 +121,23 @@ export default function ShopLayout({
                   >
                     {loading ? 'Loading...' : buttonText}
                   </Button>
+                  {pathname === '/checkout' ? null : (
+                    <Button
+                      variant='outline'
+                      onClick={() => router.push('/products')}
+                      disabled={loading}
+                      sx={{
+                        width: '100%',
+                        mt: '10px',
+                        position: 'sticky',
+                        bottom: 10,
+                        mx: 'auto',
+                        mb: 1,
+                      }}
+                    >
+                      {loading ? 'Loading...' : 'Continue Shopping'}
+                    </Button>
+                  )}
                 </Box>
               )}
             </Box>
@@ -133,6 +150,8 @@ export default function ShopLayout({
                   mt: '30px',
                   position: 'sticky',
                   display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   bottom: { xs: 0, sm: 30 },
                 }}
               >
@@ -140,7 +159,7 @@ export default function ShopLayout({
                   onClick={handleNavigate}
                   disabled={loading}
                   sx={{
-                    width: '100%',
+                    width: { xs: 'calc(100% - 32px)', sm: 'calc(100% - 64px)' },
                     position: 'sticky',
                     bottom: 10,
                     mx: { xs: '16px', sm: '32px' },
@@ -149,6 +168,25 @@ export default function ShopLayout({
                 >
                   {loading ? 'Loading...' : buttonText}
                 </Button>
+                {pathname === '/checkout' ? null : (
+                  <Button
+                    variant='outline'
+                    onClick={() => router.push('/products')}
+                    disabled={loading}
+                    sx={{
+                      width: {
+                        xs: 'calc(100% - 32px)',
+                        sm: 'calc(100% - 64px)',
+                      },
+                      position: 'sticky',
+                      bottom: 10,
+                      mx: { xs: '16px', sm: '32px' },
+                      my: 1,
+                    }}
+                  >
+                    {loading ? 'Loading...' : 'Continue Shopping'}
+                  </Button>
+                )}
               </Box>
             )}
           </Box>
