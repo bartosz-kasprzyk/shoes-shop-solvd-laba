@@ -7,13 +7,13 @@ import { RecentlyViewedIcon } from '@/shared/icons';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
-import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
+import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 
 export default function RecentlyViewedPage() {
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<
     Product[]
   >([]);
-  const { handleAddToWishlist } = useAddToWishlist();
+  const { wishlistIds, toggleWishlist } = useWishlistStore();
 
   useEffect(() => {
     const saved = localStorage.getItem('recentlyViewed');
@@ -116,8 +116,9 @@ export default function RecentlyViewedPage() {
           <Box px={2}>
             <ProductsContainer
               products={recentlyViewedProducts}
-              variant='addToWishlist'
-              onProductAction={handleAddToWishlist}
+              variant='toggleWishlist'
+              onProductAction={toggleWishlist}
+              wishlistIds={wishlistIds}
             />
           </Box>
         </Box>

@@ -9,6 +9,7 @@ export default function ProductCard({
   card,
   variant,
   onClick,
+  filled,
 }: ProductCardProps) {
   const { img, name, price, gender, id } = card;
 
@@ -16,10 +17,21 @@ export default function ProductCard({
     switch (variant) {
       case 'dropdown':
         return <DropDownMenu id={id} />;
+
+      case 'toggleWishlist':
+        return (
+          onClick && (
+            <WishlistButton
+              operation='toggle'
+              filled={filled}
+              onClick={onClick}
+            />
+          )
+        );
+
       case 'removeFromWishlist':
         return <WishlistButton operation='remove' onClick={onClick} />;
-      case 'addToWishlist':
-        return onClick && <WishlistButton operation='add' onClick={onClick} />;
+
       default:
         return null;
     }

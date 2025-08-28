@@ -76,7 +76,6 @@ describe('ProductDetails', () => {
     expect(showSnackbarMock).toHaveBeenCalledWith(
       'Product added to wishlist',
       'success',
-      5000,
     );
   });
 

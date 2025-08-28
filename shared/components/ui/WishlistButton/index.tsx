@@ -3,12 +3,24 @@
 import { IconButton } from '@mui/material';
 import RemoveFromWishlistIcon from '@/shared/icons/RemoveFromWishlistIcon';
 import AddToWishlistIcon from '@/shared/icons/AddToWishlistIcon';
+import AddedToWishlistIcon from '@/shared/icons/AddedToWishlistIcon';
 import type { WishlistButtonProps } from './interface';
 
 export default function WishlistButton({
   onClick,
   operation,
+  filled,
 }: WishlistButtonProps) {
+  let icon;
+
+  if (operation === 'remove') {
+    icon = <RemoveFromWishlistIcon />;
+  } else if (operation === 'toggle') {
+    icon = filled ? <AddedToWishlistIcon /> : <AddToWishlistIcon />;
+  } else {
+    icon = <AddToWishlistIcon />;
+  }
+
   return (
     <IconButton
       onClick={onClick}
@@ -16,8 +28,8 @@ export default function WishlistButton({
         position: 'absolute',
         top: '10px',
         right: '10px',
-        width: { xs: '35px', md: '40px', lg: '44px' },
-        height: { xs: '35px', md: '40px', lg: '44px' },
+        width: { xs: '35px', sm: '38px', md: '40px', xl: '44px' },
+        height: { xs: '35px', sm: '38px', md: '40px', xl: '44px' },
         padding: '10px',
         borderRadius: '12px',
         backgroundColor: 'rgba(255, 255, 255, 0.45)',
@@ -34,11 +46,7 @@ export default function WishlistButton({
         },
       }}
     >
-      {operation === 'remove' ? (
-        <RemoveFromWishlistIcon />
-      ) : (
-        <AddToWishlistIcon />
-      )}
+      {icon}
     </IconButton>
   );
 }
