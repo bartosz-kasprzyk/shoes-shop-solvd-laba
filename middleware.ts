@@ -50,6 +50,7 @@ export default withAuth(
     if (isExpired && isProtectedPage) {
       const res = NextResponse.redirect(new URL('/sign-in', req.url));
       res.cookies.delete('next-auth.session-token');
+      res.cookies.delete('__Secure-next-auth.session-token');
       return res;
     }
 
