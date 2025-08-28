@@ -2,9 +2,22 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import WishlistPage from '..';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
+import { useSession } from 'next-auth/react';
 
 const showSnackbarMock = jest.fn();
-const removeFromWishlistMock = jest.fn();
+const removeFromWishlistMock = jest.fn<
+  void,
+  [number, string?, typeof showSnackbarMock?]
+>();
+const setInitialWishlistMock = jest.fn();
+
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(),
+}));
+
+(useSession as jest.Mock).mockReturnValue({
+  data: { user: { id: '1', accessToken: 'fake' } },
+});
 
 jest.mock('@/features/wishlist/stores/wishlistStore', () => ({
   useWishlistStore: jest.fn(),
@@ -52,6 +65,7 @@ describe('WishlistPage', () => {
     (useWishlistStore as unknown as jest.Mock).mockReturnValue({
       wishlistIds: new Set(),
       removeFromWishlist: removeFromWishlistMock,
+      setInitialWishlist: jest.fn(),
     });
 
     render(<WishlistPage />);
@@ -71,6 +85,7 @@ describe('WishlistPage', () => {
     (useWishlistStore as unknown as jest.Mock).mockReturnValue({
       wishlistIds: new Set([1, 2]),
       removeFromWishlist: removeFromWishlistMock,
+      setInitialWishlist: setInitialWishlistMock,
     });
 
     render(<WishlistPage />);
@@ -89,11 +104,10 @@ describe('WishlistPage', () => {
     const removeBtn = await screen.findByRole('button', { name: 'remove-1' });
     fireEvent.click(removeBtn);
 
-    expect(removeFromWishlistMock).toHaveBeenCalledWith(1);
-    expect(showSnackbarMock).toHaveBeenCalledWith(
-      'Product removed from wishlist',
-      'warning',
-      5000,
+    expect(removeFromWishlistMock).toHaveBeenCalledWith(
+      1,
+      '1',
+      showSnackbarMock,
     );
   });
 });

@@ -11,11 +11,19 @@ import ProductsContainer from '@/features/products/components/ProductsContainer'
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 import { useWishlistStore } from '../../stores/wishlistStore';
+import useUser from '@/shared/hooks/useUser';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<ProductFromServer[]>([]);
-  const { wishlistIds, removeFromWishlist } = useWishlistStore();
+  const { wishlistIds, removeFromWishlist, setInitialWishlist } =
+    useWishlistStore();
   const { showSnackbar } = useSnackbar();
+  const { session } = useUser();
+  const userId = session?.user?.id?.toString();
+
+  useEffect(() => {
+    setInitialWishlist(userId);
+  }, [userId, setInitialWishlist]);
 
   useEffect(() => {
     const fetchWishlistProducts = async () => {
@@ -35,11 +43,9 @@ export default function WishlistPage() {
   }, [wishlistIds]);
 
   const handleRemoveFromWishlist = (productId: number) => {
-    removeFromWishlist(productId);
+    removeFromWishlist(productId, userId, showSnackbar);
 
     setWishlist((prev) => prev.filter((p) => p.id !== productId));
-
-    showSnackbar('Product removed from wishlist', 'warning', 5000);
   };
 
   if (wishlist.length === 0) {
