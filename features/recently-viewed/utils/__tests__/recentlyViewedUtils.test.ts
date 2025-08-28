@@ -38,6 +38,8 @@ const createMockProduct = (id: number, name: string): ProductFromServer => ({
   },
 });
 
+const userId = 'mock-user-id';
+
 describe('updateRecentlyViewed', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -46,9 +48,9 @@ describe('updateRecentlyViewed', () => {
   it('stores product in localStorage when viewed', () => {
     const product = createMockProduct(1, 'Test');
 
-    updateRecentlyViewed(product, product.id);
+    updateRecentlyViewed(product, product.id, userId);
 
-    const storedString = localStorage.getItem('recentlyViewed');
+    const storedString = localStorage.getItem(`recentlyViewed:${userId}`);
     expect(storedString).not.toBeNull();
 
     const stored = JSON.parse(storedString as string);
@@ -62,10 +64,10 @@ describe('updateRecentlyViewed', () => {
     const amountOfExtraProducts = 3;
     for (let i = 1; i <= limit + amountOfExtraProducts; i++) {
       const product = createMockProduct(i, `Test ${i}`);
-      updateRecentlyViewed(product, product.id);
+      updateRecentlyViewed(product, product.id, userId);
     }
 
-    const storedString = localStorage.getItem('recentlyViewed');
+    const storedString = localStorage.getItem(`recentlyViewed:${userId}`);
     expect(storedString).not.toBeNull();
     const stored = storedString ? JSON.parse(storedString) : [];
 

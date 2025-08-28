@@ -8,19 +8,23 @@ import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
+import useUser from '@/shared/hooks/useUser';
 
 export default function RecentlyViewedPage() {
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<
     Product[]
   >([]);
   const { wishlistIds, toggleWishlist } = useWishlistStore();
+  const { session } = useUser();
+  const userId = session?.user?.id;
 
   useEffect(() => {
-    const saved = localStorage.getItem('recentlyViewed');
+    const key = userId ? `recentlyViewed:${userId}` : 'recentlyViewed:guest';
+    const saved = localStorage.getItem(key);
     if (saved) {
       setRecentlyViewedProducts(JSON.parse(saved));
     }
-  }, []);
+  }, [userId]);
 
   if (recentlyViewedProducts.length === 0) {
     return (

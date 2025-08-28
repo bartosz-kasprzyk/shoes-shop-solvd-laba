@@ -2,11 +2,17 @@ import type { ProductFromServer } from '@/features/products/types/shared.interfa
 
 export const RECENTLY_VIEWED_LIMIT = 12;
 
+function getRecentlyViewedKey(userId?: string) {
+  return userId ? `recentlyViewed:${userId}` : 'recentlyViewed:guest';
+}
+
 export function updateRecentlyViewed(
   product: ProductFromServer,
   productId: number,
+  userId?: string,
 ): void {
-  const stored = localStorage.getItem('recentlyViewed');
+  const key = getRecentlyViewedKey(userId);
+  const stored = localStorage.getItem(key);
   let storedProducts: ProductFromServer[] = stored ? JSON.parse(stored) : [];
 
   storedProducts = storedProducts.filter((elem) => elem.id !== productId);
@@ -16,15 +22,16 @@ export function updateRecentlyViewed(
     storedProducts.pop();
   }
 
-  localStorage.setItem('recentlyViewed', JSON.stringify(storedProducts));
+  localStorage.setItem(key, JSON.stringify(storedProducts));
 }
 
-export function removeRecentlyViewed(productId: number) {
-  const stored = localStorage.getItem('recentlyViewed');
+export function removeRecentlyViewed(productId: number, userId?: string) {
+  const key = getRecentlyViewedKey(userId);
+  const stored = localStorage.getItem(key);
   if (!stored) return;
 
   let storedProducts: ProductFromServer[] = JSON.parse(stored);
   storedProducts = storedProducts.filter((p) => p.id !== productId);
 
-  localStorage.setItem('recentlyViewed', JSON.stringify(storedProducts));
+  localStorage.setItem(key, JSON.stringify(storedProducts));
 }

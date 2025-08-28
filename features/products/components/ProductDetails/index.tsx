@@ -28,16 +28,15 @@ export default function ProductDetails({ initialData }: ProductDetailsProps) {
   const { session } = useUser();
   const userId = session?.user?.id?.toString();
   const isAuthenticated = !!session?.user?.accessToken;
+  const product = initialData.data.attributes;
 
   useEffect(() => {
     setInitialWishlist(userId);
   }, [userId, setInitialWishlist]);
 
-  const product = initialData.data.attributes;
-
   useEffect(() => {
-    updateRecentlyViewed(initialData.data, initialData.data.id);
-  }, [initialData.data]);
+    updateRecentlyViewed(initialData.data, initialData.data.id, userId);
+  }, [initialData.data, userId]);
 
   const availableSizes = new Set(
     Array.isArray(product.sizes.data)
