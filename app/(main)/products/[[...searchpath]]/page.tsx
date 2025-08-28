@@ -12,13 +12,12 @@ import mergeFilterValues from '@/features/filter/utils/mergeFilterValues';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import ProductsPageClient from '@/features/products/components/ProductsPage';
 
-export function generateStaticParams() {
-  const popularCombinations = [{}];
-
-  return popularCombinations.map(() => {
-    const searchpath: string[] = [];
-    return { searchpath };
-  });
+export async function generateStaticParams() {
+  return [
+    {
+      searchpath: [],
+    },
+  ];
 }
 
 export default async function ProductsPage({
