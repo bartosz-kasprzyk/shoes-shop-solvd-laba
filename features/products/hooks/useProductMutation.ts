@@ -1,11 +1,11 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createProduct } from '@/app/api/products';
+import { createProduct, updateProduct } from '@/app/api/products';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import useUser from '@/shared/hooks/useUser';
 import type { ProductSchemaType } from '../types';
-import { updateProductAction } from '@/app/api/updateProducts';
+import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
 type MutationType = 'create' | 'update';
 
@@ -21,7 +21,7 @@ export function useProductMutation(
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
 
-  const mutationFn = type === 'create' ? createProduct : updateProductAction;
+  const mutationFn = type === 'create' ? createProduct : updateProduct;
 
   const mutation = useMutation({
     mutationFn,
@@ -35,6 +35,7 @@ export function useProductMutation(
         predicate: (query) =>
           query.queryKey[0] === 'myProducts' && query.queryKey[1] === id,
       });
+      revalidateProductPaths(productID);
       if (onSuccessCallback) {
         onSuccessCallback();
       }
