@@ -1,18 +1,19 @@
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-import { createProduct } from '@/app/api/products';
-import { updateProductAction } from '@/app/api/updateProducts';
+import { createProduct, updateProduct } from '@/app/api/products';
 import useUser from '@/shared/hooks/useUser';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { useProductMutation } from '../useProductMutation';
 import type { ImageData, ProductSchemaType } from '../../types';
+import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
 jest.mock('@/app/api/products');
-jest.mock('@/app/api/updateProducts');
 jest.mock('@/shared/hooks/useUser');
 jest.mock('@/shared/hooks/useSnackbar');
+jest.mock('@/shared/actions/revalidateProductPaths', () => ({
+  revalidateProductPaths: jest.fn(),
+}));
 
 const queryClient = new QueryClient();
 
@@ -73,10 +74,11 @@ describe('useProductMutation', () => {
       5000,
     );
     expect(queryClient.invalidateQueries).toHaveBeenCalled();
+    expect(revalidateProductPaths).toHaveBeenCalledWith(undefined);
   });
 
-  it('calls updateProductAction and shows success snackbar', async () => {
-    (updateProductAction as jest.Mock).mockResolvedValue({
+  it('calls updateProduct and shows success snackbar', async () => {
+    (updateProduct as jest.Mock).mockResolvedValue({
       id: 1,
       name: 'Updated',
     });
@@ -95,7 +97,7 @@ describe('useProductMutation', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(updateProductAction).toHaveBeenCalledWith({
+    expect(updateProduct).toHaveBeenCalledWith({
       ...validProduct,
       productID: 55,
       userID: 123,
@@ -109,6 +111,7 @@ describe('useProductMutation', () => {
       5000,
     );
     expect(queryClient.invalidateQueries).toHaveBeenCalled();
+    expect(revalidateProductPaths).toHaveBeenCalledWith(55);
     expect(onSuccessCallback).toHaveBeenCalled();
   });
 
