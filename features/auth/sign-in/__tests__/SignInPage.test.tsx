@@ -39,6 +39,7 @@ describe('SignIn Page', () => {
     (useSearchParams as jest.Mock).mockReturnValue(mockSearchParams);
     mockSearchParams.get.mockReturnValue(null);
   });
+
   it('shows server error on incorrect credentials', async () => {
     (signIn as jest.Mock).mockResolvedValueOnce({
       error: 'Invalid credentials',
@@ -57,6 +58,27 @@ describe('SignIn Page', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Invalid email or password',
+    );
+  });
+
+  it('shows server error on unverified email', async () => {
+    (signIn as jest.Mock).mockResolvedValueOnce({
+      error: 'Your account email is not confirmed',
+    });
+
+    render(<SignInPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'correctButUnverified@mail.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: '12341234bestpassword' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Please confirm your email before signing in.',
     );
   });
 

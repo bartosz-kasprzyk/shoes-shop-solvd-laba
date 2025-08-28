@@ -42,9 +42,9 @@ export default function CartPageEmpty() {
             Cart
           </Typography>
           <EmptyState
-            title="You don't have any products yet"
-            description='Post can contain video, images and text'
-            buttonText='Add product'
+            title="You haven't added any products to the cart yet"
+            description='Click below to see available products'
+            buttonText='Shop Now'
             buttonHref='/products'
           />
         </Box>

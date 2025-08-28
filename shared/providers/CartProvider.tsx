@@ -17,10 +17,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const userId = session?.user.id.toString() || 'guest';
   const cartKey = `cart_${userId}`;
-  const generateId = () =>
-    typeof crypto !== 'undefined' && crypto.randomUUID
-      ? crypto.randomUUID()
-      : Math.random().toString(36).substring(2, 15);
+  const generateId = (): string => {
+    if (
+      typeof crypto !== 'undefined' &&
+      typeof crypto.randomUUID === 'function'
+    ) {
+      return crypto.randomUUID();
+    }
+    return Math.random().toString(36).substring(2, 15);
+  };
 
   const resetCartID = () => {
     setCartState((prev) => ({
@@ -53,7 +58,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } else if (!cartState.cartId) {
       localStorage.removeItem(cartKey);
     }
-  }, [cartState]);
+  }, [cartState, cartKey]);
 
   const addItem = (item: CartAddedItem) => {
     setCartState((prev) => {

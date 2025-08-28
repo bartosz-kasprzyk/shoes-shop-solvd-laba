@@ -3,7 +3,7 @@
 import type { CartAddedItem } from '@/features/cart/components/interface';
 import { createContext } from 'react';
 
-interface CartContextType {
+export interface CartContextType {
   cart: CartAddedItem[];
   cartId: string | null;
   resetCartID: () => void;

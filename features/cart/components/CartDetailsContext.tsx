@@ -1,23 +1,15 @@
 'use client';
 
 import React, { createContext, useContext, useEffect } from 'react';
-import type { CartItemForDisplay, CartItemWithProduct } from './interface';
+import type {
+  CartDetailsContextType,
+  CartItemForDisplay,
+  CartItemWithProduct,
+} from './interface';
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 import type { ProductFromServer } from '@/features/products/types/shared.interface';
 import { useQueries } from '@tanstack/react-query';
 import { useCart } from '@/shared/hooks/useCart';
-
-interface CartDetailsContextType {
-  cartItems: CartItemForDisplay[];
-  handleQuantityChange: (
-    productId: string,
-    size: string,
-    newQuantity: number,
-  ) => void;
-  handleDeleteItem: (productId: string, size: string) => void;
-  isCartDetailsLoading: boolean;
-  refetchAllProducts: () => void;
-}
 
 const CartDetailsContext = createContext<CartDetailsContextType | null>(null);
 

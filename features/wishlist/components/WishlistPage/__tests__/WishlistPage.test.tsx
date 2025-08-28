@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import WishlistPage from '..';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 import { useSession } from 'next-auth/react';
+import type { ProductCardProps } from '@/features/products/types';
 
 const showSnackbarMock = jest.fn();
 const removeFromWishlistMock = jest.fn<
@@ -29,7 +30,7 @@ jest.mock('@/shared/hooks/useSnackbar', () => ({
 
 jest.mock('@/features/products/components/ProductCard', () => ({
   __esModule: true,
-  default: ({ card, onClick }: any) => (
+  default: ({ card, onClick }: ProductCardProps) => (
     <div>
       <span>{card.name}</span>
       <button onClick={onClick}>remove-{card.id}</button>

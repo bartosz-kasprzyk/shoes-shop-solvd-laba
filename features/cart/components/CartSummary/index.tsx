@@ -3,11 +3,11 @@
 import { Box, Collapse, Typography } from '@mui/material';
 import type { BoxProps } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { mockPromocodes as validPromocodes } from '@/shared/mocks/mockPromocodes';
-import type { promocode } from './interface';
+import { validPromocodes } from '../PromocodesSection/consts';
+import type { promocode } from '../PromocodesSection/interface';
 import SummaryLine from './SummaryLine';
 import DiscountLine from './DiscountLine';
-import PromocodeSection from './PromocodeSection';
+import PromocodeSection from '../PromocodesSection';
 import TotalSection from './TotalSection';
 import { TransitionGroup } from 'react-transition-group';
 import { useCartDetails } from '../CartDetailsContext';
@@ -40,6 +40,7 @@ export default function CartSummary(props: BoxProps) {
   const handleDeletePromocode = (code: string) => {
     setPromocodes((prev) => prev.filter((p) => p.code !== code));
   };
+
   return (
     <Box
       {...props}

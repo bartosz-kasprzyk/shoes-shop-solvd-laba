@@ -29,3 +29,15 @@ export interface CartItemForDisplay {
 export interface CartPageProps {
   cartItems: CartItemForDisplay[];
 }
+
+export interface CartDetailsContextType {
+  cartItems: CartItemForDisplay[];
+  handleQuantityChange: (
+    productId: string,
+    size: string,
+    newQuantity: number,
+  ) => void;
+  handleDeleteItem: (productId: string, size: string) => void;
+  isCartDetailsLoading: boolean;
+  refetchAllProducts: () => void;
+}

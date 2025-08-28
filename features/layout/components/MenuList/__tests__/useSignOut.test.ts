@@ -37,7 +37,7 @@ describe('useSignOut', () => {
     });
   });
 
-  it('should store pending snackbar message and call signOut when sign out succeeds', async () => {
+  it('stores pending snackbar message and call signOut when sign out succeeds', async () => {
     mockSignOut.mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useSignOut());

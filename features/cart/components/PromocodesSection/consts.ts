@@ -1,6 +1,6 @@
-import type { promocode } from '@/features/cart/components/CartSummary/interface';
+import type { promocode } from './interface';
 
-export const mockPromocodes: promocode[] = [
+export const validPromocodes: promocode[] = [
   { code: 'savingMoney', text: '-20%', discoutInPercent: 0.2 },
   { code: 'huntingPromos', text: '-10%', discoutInPercent: 0.1 },
   {

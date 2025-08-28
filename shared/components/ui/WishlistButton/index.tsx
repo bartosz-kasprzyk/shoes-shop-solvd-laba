@@ -15,10 +15,8 @@ export default function WishlistButton({
 
   if (operation === 'remove') {
     icon = <RemoveFromWishlistIcon />;
-  } else if (operation === 'toggle') {
-    icon = filled ? <AddedToWishlistIcon /> : <AddToWishlistIcon />;
   } else {
-    icon = <AddToWishlistIcon />;
+    icon = filled ? <AddedToWishlistIcon /> : <AddToWishlistIcon />;
   }
 
   return (

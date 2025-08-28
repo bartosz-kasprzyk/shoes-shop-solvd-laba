@@ -55,7 +55,6 @@ const productData = {
 
 describe('ProductDetails', () => {
   beforeEach(() => {
-    showSnackbarMock.mockClear();
     window.alert = jest.fn();
     localStorage.clear();
   });

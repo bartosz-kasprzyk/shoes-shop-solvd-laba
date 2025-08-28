@@ -3,7 +3,10 @@ import { filtersSections } from '@/features/filter/consts/filtersSections';
 import { filterTypeToUrlSegmentMap } from '@/features/filter/mappings';
 import type { Filter } from '@/features/filter/types';
 import { apiItemToFilterValue } from '@/features/filter/utils/apiItemToFilterValue';
-import { authRoutes, protectedRoutes } from '@/middleware';
+import {
+  authRoutes,
+  protectedRoutes,
+} from '@/features/auth/nextauth/middlewareCore';
 import { getQueryClient } from '@/shared/lib/getQueryClient';
 // import { mistral } from '@ai-sdk/mistral';
 import { google } from '@ai-sdk/google';

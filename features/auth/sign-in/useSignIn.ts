@@ -18,10 +18,10 @@ export const useSignIn = (
   const signInUser = async (data: SignInFormData) => {
     setServerError('');
 
-    // Get the callback URL from search params or passed through props or default to '/products'
+    // Get the callback URL from search params or passed through props or use default
+    const defaultUrl = '/products';
     const callbackUrl =
-      searchParams.get('callbackUrl') || passedCallbackUrl || '/products';
-
+      searchParams.get('callbackUrl') || passedCallbackUrl || defaultUrl;
     const res = await signIn('credentials', {
       redirect: false,
       identifier: data.email,
@@ -29,13 +29,18 @@ export const useSignIn = (
       remember: data.remember,
       callbackUrl,
     });
+
     if (res?.error) {
-      setServerError('Invalid email or password.');
+      if (res.error.toLowerCase().includes('not confirmed')) {
+        setServerError('Please confirm your email before signing in.');
+      } else {
+        setServerError('Invalid email or password.');
+      }
       return false;
     } else {
       setSuccess(true);
       const redirectUrl =
-        res?.url || callbackUrl || passedCallbackUrl || '/products';
+        res?.url || callbackUrl || passedCallbackUrl || defaultUrl;
       router.push(redirectUrl);
       return true;
     }

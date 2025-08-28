@@ -5,24 +5,17 @@ import { useState } from 'react';
 
 import { TransitionGroup } from 'react-transition-group';
 
-import type { promocode } from './interface';
+import type { PromocodeSectionProps } from './interface';
 import { Button, Input } from '@/shared/components/ui';
 import { DropdownArrowIcon } from '@/shared/icons';
 import PromocodeItem from './PromocodeItem';
-
-interface Props {
-  promocodes: promocode[];
-  setPromocodes: React.Dispatch<React.SetStateAction<promocode[]>>;
-  validPromocodes: promocode[];
-  handleDeletePromocode: (code: string) => void;
-}
 
 export default function PromocodeSection({
   promocodes,
   setPromocodes,
   validPromocodes,
   handleDeletePromocode,
-}: Props) {
+}: PromocodeSectionProps) {
   const [arePromocodesOpened, setArePromocodesOpened] = useState(false);
   const [inputPromocode, setInputPromocode] = useState('');
   const [isInputError, setIsInputError] = useState(false);
@@ -48,7 +41,6 @@ export default function PromocodeSection({
     <Box marginBottom='30px'>
       <Box
         onClick={() => setArePromocodesOpened((prev) => !prev)}
-        // component='button'
         sx={{ cursor: 'pointer', userSelect: 'none' }}
         display='flex'
         alignItems={'center'}
@@ -92,7 +84,6 @@ export default function PromocodeSection({
                   <Button
                     onClick={handleAddPromocode}
                     sx={{
-                      // position: 'absolute',
                       zIndex: 10,
                       width: '10ch',
                       right: 0,

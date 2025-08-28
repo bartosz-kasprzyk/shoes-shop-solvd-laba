@@ -2,8 +2,9 @@
 
 import { useContext } from 'react';
 import { ServerSessionContext } from '../contexts/ServerSessionContext';
+import type { Session } from 'next-auth';
 
-export const useServerSession = () => {
+export const useServerSession = (): Session => {
   const session = useContext(ServerSessionContext);
   if (!session) {
     throw new Error(

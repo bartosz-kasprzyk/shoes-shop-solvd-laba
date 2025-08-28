@@ -145,4 +145,29 @@ describe('SignUp Page', () => {
       await screen.findByText(/password must be at least 8 characters/i),
     ).toBeInTheDocument();
   });
+
+  it('shows validation error for invalid email format', async () => {
+    render(<SignUpPage />);
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'invalid@email' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+    expect(await screen.findByText(/invalid email/i)).toBeInTheDocument();
+  });
+
+  it('shows validation error when name does not contain a "full" name', async () => {
+    render(<SignUpPage />);
+
+    fireEvent.change(screen.getByLabelText(/name/i), {
+      target: { value: 'John' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+    expect(
+      await screen.findByText(/enter your full name/i),
+    ).toBeInTheDocument();
+  });
 });

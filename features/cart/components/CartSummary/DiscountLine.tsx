@@ -2,7 +2,7 @@
 
 import { Box, Typography } from '@mui/material';
 import DiscountIcon from '../../../../shared/icons/DiscountIcon';
-import type { promocode } from './interface';
+import type { promocode } from '../PromocodesSection/interface';
 
 export default function DiscountLine({
   promocode,
