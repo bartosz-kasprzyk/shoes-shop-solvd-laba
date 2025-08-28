@@ -22,6 +22,7 @@ import MenuIcon from './MenuIcon';
 import ShippedIcon from './ShippedIcon';
 import PdfIcon from './PdfIcon';
 import RobotIcon from './RobotIcon';
+import ArrowUp from './ArrowUp';
 
 export {
   HorizontalArrowIcon,
@@ -48,4 +49,5 @@ export {
   ShippedIcon,
   PdfIcon,
   RobotIcon,
+  ArrowUp,
 };

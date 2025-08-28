@@ -22,9 +22,11 @@ export default function UserMessage({
         sx={{
           width: { xs: '24px', lg: '36px' },
           height: { xs: '24px', lg: '36px' },
-          backgroundColor: 'white',
+          //   backgroundColor: 'white',
         }}
-      />
+      >
+        {session?.user.name ? session?.user.name.charAt(0).toUpperCase() : '?'}
+      </Avatar>
       <Box
         border={1}
         sx={{

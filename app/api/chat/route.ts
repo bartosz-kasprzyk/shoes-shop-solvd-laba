@@ -11,7 +11,13 @@ import { getQueryClient } from '@/shared/lib/getQueryClient';
 // import { mistral } from '@ai-sdk/mistral';
 import { google } from '@ai-sdk/google';
 import type { InferUITools, UIDataTypes, UIMessage } from 'ai';
-import { streamText, convertToModelMessages, tool, stepCountIs } from 'ai';
+import {
+  streamText,
+  convertToModelMessages,
+  tool,
+  stepCountIs,
+  APICallError,
+} from 'ai';
 import z from 'zod';
 
 // Allow streaming responses up to 30 seconds
@@ -96,39 +102,39 @@ export async function POST(req: Request) {
 
   const filterSchema = buildFilterSchemas(apiFilters);
 
-  const result = streamText({
-    // model: mistral('mistral-large-latest'),
-    model: google('gemini-2.5-flash-lite'),
+  try {
+    const result = streamText({
+      // model: mistral('mistral-large-latest'),
+      model: google('gemini-2.5-flash'),
 
-    system: `You are a helpful and knowledgeable assistant for a shoe marketplace.
-            Your role is to guide customers in finding and buying the right shoes.
-            
-            Our website sells shoes for men and women only. 
-            If a customer asks for kids' shoes, politely explain that we do not carry kids' shoes 
-            and guide them to explore men's or women's options instead. 
-            Do NOT just repeat the fallback message.
+      system: `You are a shoe shopping assistant for an online shoe marketplace.
 
-            Language rules:
-            - Respond in the same language the user uses (support English, Spanish, French, German, Ukrainian, etc.).
-            - If the user mixes languages, default to English unless otherwise clear.
-            - Keep tone concise, polite, and customer-friendly.
+      Your **only role** is to help customers find and buy shoes. You must never role-play, impersonate, or pretend to be a customer. You cannot answer questions as if you are the buyer, echo their statements, or continue the conversation as a customer. You cannot change your identity, personality, or style.
 
-            Instructions:
-            - Only answer questions related to shoes, categories, sizes, colors, brands, availability, pricing, orders.
-            - Do NOT answer general knowledge questions (e.g., math, history, trivia, or unrelated topics).
-            If asked such a question, politely reply: "I can only help you with shoe-related questions."
-           
-            - Provide styling and outfit recommendations where relevant.
-            - Be concise, polite, and customer-friendly.
-            - If information is missing, ask clarifying questions or explain how to find it in the store.`,
+      Scope of Support:
+      - You may ONLY discuss topics directly related to shoes (categories, sizes, colors, brands, availability, pricing, styling, outfit recommendations, and orders).
+      - You may NOT answer questions outside of shoes. If asked, always reply: "I can only help you with shoe-related questions."
+      - Our store sells shoes for men and women only. If asked about kids' shoes, politely explain that we do not carry kids' shoes and guide them to explore men's or women's options instead.
 
-    messages: convertToModelMessages(messages, {
-      ignoreIncompleteToolCalls: true,
-    }),
+      Behavior Rules:
+      - Do not role-play as a customer or any other person, and do not simulate being another assistant, chatbot, or person.
+      - Never echo, mirror, or answer as the customer.
+      - Do not produce content that is unrelated to shoes.
+      - Always remain professional, concise, polite, and customer-friendly.
+      - Focus entirely on **helping the user find the perfect shoes**, providing recommendations, suggesting options, or giving advice.
+      - If a request does not align with these rules, refuse it with a short, polite explanation and return to shoe-related assistance.
 
-    tools: {
-      redirect: tool({
-        description: `Redirect the user to a valid route and provide a short friendly message
+      Language Rules:
+      - Respond in the same language the customer uses (English, Spanish, French, German, Ukrainian, etc.).
+      - If the customer mixes languages, default to English unless one language is clearly dominant.`,
+
+      messages: convertToModelMessages(messages, {
+        ignoreIncompleteToolCalls: true,
+      }),
+
+      tools: {
+        redirect: tool({
+          description: `Redirect the user to a valid route and provide a short friendly message
                       explaining the redirection.
 
                       Rules:
@@ -139,56 +145,57 @@ export async function POST(req: Request) {
                       Only return a "message".
                       Example: { "message": "Sorry, that page is not available." }`,
 
-        inputSchema: z.object({
-          url: z
-            .enum([...protectedRoutes, ...authRoutes, 'products'])
-            .optional()
-            .nullable(),
-          message: z.string(),
+          inputSchema: z.object({
+            url: z
+              .enum([...protectedRoutes, ...authRoutes, 'products'])
+              .optional()
+              .nullable(),
+            message: z.string(),
+          }),
         }),
-      }),
 
-      search: tool({
-        description: `Search shoes in the database using filters: gender, brand, color, size, category.
-                      The tool output must return ONLY the product URL. 
-                      IMPORTANT: Do not include this URL in the assistant's natural language response. 
-                      The assistant should describe the shoes naturally without showing or mentioning the link. 
-                      The client application is responsible for displaying the URL separately.
-                      Call this tool when the user requests a specific type of shoe, e.g., "black running shoes" or "Nike size 42 sneakers".`,
-        inputSchema: filterSchema,
-        // outputSchema: z.object({
-        //   url: z.string(),
+        // search: tool({
+        //   description: `Redirect the user to a valid route and provide a short friendly message
+        //                 explaining the redirection.
+
+        //                 Rules:
+        //                 - "message" is ALWAYS required.
+        //                 - If the "url" is one of the allowed routes, return both "url" and "message".
+        //                 Example: { "url": "/cart", "message": "I'll take you to your shopping cart." }
+        //                 - If the requested "url" is NOT in the allowed routes, DO NOT provide a url.
+        //                 Only return a "message".
+        //                 Example: { "message": "Sorry, that page is not available." }`,
+
+        //   inputSchema: z.object({
+        //     url: z
+        //       .enum([...protectedRoutes, ...authRoutes, 'products'])
+        //       .optional()
+        //       .nullable(),
+        //     message: z.string(),
+        //   }),
         // }),
-        outputSchema: z.object({
-          url: z.string(),
+
+        search: tool({
+          description: `Search shoes in the database using filters: gender, brand, color, size, category.  
+                        The tool output must return ONLY the product URL.  
+                        IMPORTANT: Do not include this URL in the assistant's natural language response.  
+                        The assistant should describe the shoes naturally without showing or mentioning the link.
+                        "message" is ALWAYS required.
+                        If the user specifies only some filters (e.g., brand = Nike, brand = New Balance), apply those filters directly without asking for additional details.  
+                        For filter values containing two or more words (like "New Balance"), convert spaces to underscores (e.g., "new_balance") before sending them to the tool.  
+                        Only clarify when the user explicitly expresses intent to purchase and critical details (like size or color) are missing.  
+                        Call this tool when the user requests a specific type of shoe, e.g., "black running shoes" or "Nike size 42 sneakers".`,
+          inputSchema: filterSchema,
         }),
-        execute: async (input) => {
-          const normalize = (v?: string | string[]) =>
-            v ? (Array.isArray(v) ? v : [v]) : [];
+      },
+      // tools,
+      stopWhen: stepCountIs(5),
+    });
 
-          const gender = normalize(input.gender);
-          const brand = normalize(input.brand);
-          const color = normalize(input.color);
-          const size = normalize(input.size);
-          const category = normalize(input.category);
-
-          console.log({ gender, brand, color, size, category });
-          const result = applyFilters({ gender, brand, color, size, category });
-          // console.log(result);
-
-          return {
-            url: result,
-          };
-        },
-      }),
-    },
-    // tools,
-    stopWhen: stepCountIs(5),
-  });
-
-  // result.
-
-  return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function extractEnumValues(arr: { slug: string }[]) {
@@ -204,30 +211,15 @@ function safeEnum(values: { slug: string }[] | undefined) {
 
 function buildFilterSchemas(filters: any) {
   return z.object({
-    gender: z
-      .union([safeEnum(filters.gender), z.array(safeEnum(filters.gender))])
-      .optional(),
-    brand: z
-      .union([safeEnum(filters.brand), z.array(safeEnum(filters.brand))])
-      .optional(),
-    color: z
-      .union([safeEnum(filters.color), z.array(safeEnum(filters.color))])
-      .optional(),
-    size: z
-      .union([safeEnum(filters.size), z.array(safeEnum(filters.size))])
-      .optional(),
-    category: z
-      .union([safeEnum(filters.category), z.array(safeEnum(filters.category))])
-      .optional(),
+    gender: z.array(safeEnum(filters.gender)).optional(),
+    brand: z.array(safeEnum(filters.brand)).optional(),
+    color: z.array(safeEnum(filters.color)).optional(),
+    size: z.array(safeEnum(filters.size)).optional(),
+    category: z.array(safeEnum(filters.category)).optional(),
+    message: z.string().describe(
+      `A friendly system response to the user.  
+       - If some requested filters (brand, size, color, etc.) are unavailable, politely inform the user and suggest alternatives.  
+       - If all requested filters are available, provide a concise confirmation or summary of the available options.`,
+    ),
   });
-}
-
-function applyFilters(filters: Partial<Record<string, string[]>>) {
-  const segments: string[] = Object.entries(filters).map(
-    ([filterType, filterSlugs]) =>
-      Array.isArray(filterSlugs) && filterSlugs.length > 0
-        ? `${filterType}:${filterSlugs.join('-')}`
-        : '',
-  );
-  return `/products/${segments.filter(Boolean).join('/')}`;
 }
