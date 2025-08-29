@@ -9,9 +9,10 @@ const UploadedImageCard = ({
   idx,
   preview,
   deleteImage,
+  variant,
 }: UploadedImageCardProps) => {
   return (
-    <ImageOverlay variant='delete' onDelete={() => deleteImage(idx)}>
+    <ImageOverlay variant={variant} onDelete={() => deleteImage(idx)}>
       <Box
         sx={{
           width: '100%',

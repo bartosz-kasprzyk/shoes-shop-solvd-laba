@@ -97,6 +97,9 @@ const UploadedImagesContainer = ({
               idx={idx}
               preview={preview}
               deleteImage={deleteImage}
+              variant={
+                preview.startsWith('blob') ? 'delete' : 'deleteWithModal'
+              }
             />
           ))}
           {images.length < MAX_IMAGES && (

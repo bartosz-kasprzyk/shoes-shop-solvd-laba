@@ -102,7 +102,6 @@ export default function DropDownMenu({ id }: { id: number }) {
           View
         </MenuItem>
         <MenuItem onClick={() => setIsEditModalOpen(true)}>Edit</MenuItem>
-        {/* <MenuItem onClick={() => handleAction('Duplicate')}>Duplicate</MenuItem> */}
         <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Delete</MenuItem>
       </Menu>
       {isDeleteModalOpen &&
@@ -113,7 +112,7 @@ export default function DropDownMenu({ id }: { id: number }) {
             onClose={() => setIsDeleteModalOpen(false)}
             onDelete={handleDeleteProduct}
             header='Are you sure to delete selected item '
-            text='Lorem ipsum dolor sit amet consectetur. Sed imperdiet tempor facilisi massa aliquet sit habitant. Lorem ipsum dolor sit amet consectetur. '
+            text='Deleting this product is permanent and cannot be undone. Please confirm if you want to proceed with the deletion.'
           />,
           document.body,
         )}

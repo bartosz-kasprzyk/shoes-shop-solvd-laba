@@ -132,9 +132,12 @@ export default function MyProductsPage() {
           <Box
             display='flex'
             justifyContent='space-between'
-            alignItems='center'
             gap='20px'
             mb={6}
+            sx={{
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'start', sm: 'center' },
+            }}
           >
             <Typography
               variant='h4'

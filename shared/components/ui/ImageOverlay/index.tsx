@@ -1,16 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 
 import { DeleteIcon, CartLogoIcon } from '@/shared/icons';
 import type { ImageOverlayProps } from './interface';
+import DeleteConfirmationModal from '@/features/products/components/DeleteConfirmationModal';
+import { createPortal } from 'react-dom';
 
 export default function ImageOverlay({
   children,
   variant,
   onDelete,
 }: ImageOverlayProps) {
+  const [isDeleteImageModalOpen, setIsDeleteImageModalOpen] = useState(false);
+  const handleClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (variant === 'delete') {
+      onDelete?.();
+    }
+    if (variant === 'deleteWithModal') {
+      setIsDeleteImageModalOpen(true);
+    }
+  };
   return (
     <Box
       sx={{
@@ -40,14 +52,7 @@ export default function ImageOverlay({
       {children}
       <IconButton
         className='overlayButton'
-        onClick={(event) => {
-          event.preventDefault();
-          if (variant === 'delete') {
-            onDelete?.();
-          } else {
-            alert('Added to cart!');
-          }
-        }}
+        onClick={handleClick}
         aria-label={variant === 'delete' ? 'Delete item' : 'Add to cart'}
         sx={{
           position: 'absolute',
@@ -92,6 +97,18 @@ export default function ImageOverlay({
           <DeleteIcon />
         )}
       </IconButton>
+      {isDeleteImageModalOpen &&
+        typeof window !== 'undefined' &&
+        createPortal(
+          <DeleteConfirmationModal
+            isOpen={true}
+            onClose={() => setIsDeleteImageModalOpen(false)}
+            onDelete={() => onDelete?.()}
+            header='Are you sure to delete product image'
+            text='This image will be permanently removed from your product. Please confirm if you want to proceed with deletion.'
+          />,
+          document.body,
+        )}
     </Box>
   );
 }

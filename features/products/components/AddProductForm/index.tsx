@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dropdown, Input, Label } from '@/shared/components/ui';
 import SizeDisplayCheckbox from '../SizeDisplayCheckbox';
 import { Box } from '@mui/material';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
-import type { AddProductFormProps } from '../../types';
+import type { AddProductFormProps, ImageData } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
 import type { ProductSchemaType } from '../../types';
 import { useProductMutation } from '../../hooks/useProductMutation';
@@ -30,7 +30,10 @@ const AddProductForm = ({
     mode,
     productId,
     onClose,
+    resetAddForm,
   );
+  const [initialImages, setInitialImages] = useState<ImageData[]>([]);
+
   const productForm = useForm<ProductSchemaType>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -65,6 +68,7 @@ const AddProductForm = ({
     if (initialData) {
       const adaptedProduct = adaptProductForEdit(initialData);
       productForm.reset(adaptedProduct);
+      setInitialImages(adaptedProduct.images);
       setImages(adaptedProduct.images);
     } else {
       reset({
@@ -85,12 +89,20 @@ const AddProductForm = ({
       setImagesError('Please upload at least one image');
       return;
     }
-    mutateProduct({ ...data, images });
-    if (mode === 'create') {
-      reset();
-      setImages([]);
-    }
+    const deletedImageIds = initialImages.reduce<number[]>((acc, img) => {
+      if (img.id && !images.some((image) => image.id === img.id)) {
+        acc.push(img.id);
+      }
+      return acc;
+    }, []);
+
+    mutateProduct({ ...data, images, deletedImageIds });
   };
+
+  function resetAddForm() {
+    reset();
+    setImages([]);
+  }
 
   const selectedSizes = watch('sizes') || [];
 

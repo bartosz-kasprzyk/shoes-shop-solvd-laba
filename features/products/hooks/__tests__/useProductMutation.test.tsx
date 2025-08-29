@@ -8,11 +8,19 @@ import { useProductMutation } from '../useProductMutation';
 import type { ImageData, ProductSchemaType } from '../../types';
 import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
+const mockPush = jest.fn();
+
 jest.mock('@/app/api/products');
 jest.mock('@/shared/hooks/useUser');
 jest.mock('@/shared/hooks/useSnackbar');
 jest.mock('@/shared/actions/revalidateProductPaths', () => ({
   revalidateProductPaths: jest.fn(),
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
 }));
 
 const queryClient = new QueryClient();
@@ -28,7 +36,9 @@ describe('useProductMutation', () => {
 
   const mockSnackbar = jest.fn();
 
-  const validProduct: ProductSchemaType & { images: ImageData[] | [] } = {
+  const validProduct: ProductSchemaType & { images: ImageData[] | [] } & {
+    deletedImageIds: number[];
+  } = {
     name: 'Test Product',
     price: 100,
     description: 'Some description',
@@ -38,19 +48,22 @@ describe('useProductMutation', () => {
     categories: '',
     sizes: [],
     images: [],
+    deletedImageIds: [],
   };
 
   beforeEach(() => {
     (useUser as jest.Mock).mockReturnValue({ session });
     (useSnackbar as jest.Mock).mockReturnValue({ showSnackbar: mockSnackbar });
+    mockPush.mockClear();
   });
 
-  it('calls createProduct and shows success snackbar', async () => {
+  it('calls createProduct, shows success snackbar, reset form, and navigates', async () => {
     (createProduct as jest.Mock).mockResolvedValue({ id: 1, name: 'Created' });
     jest.spyOn(queryClient, 'invalidateQueries');
+    const resetAddForm = jest.fn();
 
     const { result } = renderHook(
-      () => useProductMutation('create', undefined),
+      () => useProductMutation('create', undefined, undefined, resetAddForm),
       { wrapper },
     );
 
@@ -75,6 +88,7 @@ describe('useProductMutation', () => {
     );
     expect(queryClient.invalidateQueries).toHaveBeenCalled();
     expect(revalidateProductPaths).toHaveBeenCalledWith(undefined);
+    expect(resetAddForm).toHaveBeenCalled();
   });
 
   it('calls updateProduct and shows success snackbar', async () => {

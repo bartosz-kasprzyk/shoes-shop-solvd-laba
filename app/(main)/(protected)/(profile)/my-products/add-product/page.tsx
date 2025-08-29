@@ -33,11 +33,9 @@ export default function AddProductsPage() {
         <Typography
           sx={{ color: '#5C5C5C', fontWeight: 300, maxWidth: '890px' }}
         >
-          Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in
-          laying out print, graphic or web designs. The passage is attributed to
-          an unknown typesetter in the 15th century who is thought to have
-          scrambled parts of Ciceros De Finibus Bonorum et Malorum for use in a
-          type specimen book. It usually begins with:
+          Fill in the details below to add a new product. Provide a name, price,
+          description, category, color, brand, sizes, and at least one image.
+          Once saved, your product will appear in your product list.
         </Typography>
         <Box
           sx={{ display: 'flex', gap: '20px', justifyContent: 'space-between' }}

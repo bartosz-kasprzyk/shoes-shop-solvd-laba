@@ -75,6 +75,8 @@ export interface UploadedImageCardProps {
   idx: number;
   preview: string;
   deleteImage: (idx: number) => void;
+  variant: 'delete' | 'deleteWithModal';
+  fileId?: number;
 }
 
 export type ImageFile = {
@@ -96,6 +98,7 @@ export interface CreateProductDataProps {
   images: ImageFile[];
   userID: number;
   teamName: string;
+  deletedImageIds?: number[];
 }
 
 export interface ProductAttributesProps {

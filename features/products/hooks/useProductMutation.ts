@@ -7,16 +7,20 @@ import useUser from '@/shared/hooks/useUser';
 import type { ProductSchemaType } from '../types';
 import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
+import { useRouter } from 'next/navigation';
+
 type MutationType = 'create' | 'update';
 
 export function useProductMutation(
   type: MutationType,
   productID: number | undefined,
   onSuccessCallback?: () => void,
+  resetAddForm?: () => void,
 ) {
   const queryClient = useQueryClient();
   const { session } = useUser();
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
@@ -39,13 +43,19 @@ export function useProductMutation(
       if (onSuccessCallback) {
         onSuccessCallback();
       }
+      if (resetAddForm) {
+        resetAddForm();
+        router.push('/my-products');
+      }
     },
     onError: () => {
       showSnackbar('Server error, please try later', 'error', 3000);
     },
   });
 
-  const mutateProduct = (data: ProductSchemaType & { images: any[] }) => {
+  const mutateProduct = (
+    data: ProductSchemaType & { images: any[] } & { deletedImageIds: any[] },
+  ) => {
     mutation.mutate({
       ...data,
       productID,

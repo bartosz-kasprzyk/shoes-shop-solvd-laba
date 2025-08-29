@@ -55,12 +55,17 @@ export default function EditProductModal({
               flexDirection: 'column',
               gap: '35px',
               backgroundColor: '#fff',
-              padding: '53px 80px 53px 40px',
+              padding: { xs: '53px 24px', sm: '53px 80px 53px 40px' },
               position: 'relative',
             }}
           >
             <CloseIcon
-              style={{ position: 'absolute', right: '20px', top: '20px' }}
+              style={{
+                position: 'absolute',
+                right: '20px',
+                top: '20px',
+                cursor: 'pointer',
+              }}
               onClick={onClose}
             />
             <Typography variant='h3' fontWeight={500}>
@@ -69,11 +74,10 @@ export default function EditProductModal({
             <Typography
               sx={{ color: '#5C5C5C', fontWeight: 300, maxWidth: '890px' }}
             >
-              Lorem ipsum, or lipsum as it is sometimes known, is dummy text
-              used in laying out print, graphic or web designs. The passage is
-              attributed to an unknown typesetter in the 15th century who is
-              thought to have scrambled parts of Ciceros De Finibus Bonorum et
-              Malorum for use in a type specimen book. It usually begins with:
+              Update your product information below. You can edit the product
+              name, price, description, category, color, brand, sizes, and
+              images. Make sure to upload at least one image before saving. All
+              changes will be reflected immediately in your product list.
             </Typography>
             <Box
               sx={{

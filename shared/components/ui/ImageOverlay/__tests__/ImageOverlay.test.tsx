@@ -1,10 +1,10 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ImageOverlay from '..';
 
 const renderOverlay = (
-  variant: 'addToCart' | 'delete',
+  variant: 'delete' | 'addToCart',
   onDelete?: () => void,
 ) =>
   render(
@@ -37,16 +37,7 @@ describe('ImageOverlay', () => {
     ).toBeInTheDocument();
   });
 
-  it('triggers alert on button click (Added to cart!)', async () => {
-    window.alert = jest.fn();
-    renderOverlay('addToCart');
-
-    await userEvent.click(screen.getByRole('button'));
-
-    expect(window.alert).toHaveBeenCalledWith('Added to cart!');
-  });
-
-  it('renders the Delete button when variant is delete', async () => {
+  it('calls onDelete callback when Delete button is clicked', async () => {
     const onDeleteMock = jest.fn();
     renderOverlay('delete', onDeleteMock);
 

@@ -1,5 +1,5 @@
 export interface ImageOverlayProps {
   children: React.ReactNode;
-  variant: 'delete' | 'addToCart';
+  variant: 'delete' | 'deleteWithModal' | 'addToCart';
   onDelete?: () => void;
 }

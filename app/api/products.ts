@@ -85,16 +85,26 @@ export async function createProduct(
 export async function updateProduct(
   data: CreateProductDataProps,
 ): Promise<ProductResponseProps> {
-  const { token, productID, ...productData } = data;
+  const {
+    token,
+    productID,
+    images,
+    deletedImageIds = [],
+    ...productData
+  } = data;
   const imageIDs: number[] = [];
 
-  for (const img of data.images) {
+  for (const img of images) {
     if (img.file) {
       const id = await uploadImageToServer(img.file, token);
       imageIDs.push(id);
     } else if (img.id) {
       imageIDs.push(img.id);
     }
+  }
+
+  for (const id of deletedImageIds) {
+    await deleteImageFile(id, token);
   }
 
   const productPayload = {
@@ -195,6 +205,25 @@ export async function deleteProduct(
   );
   if (!res.ok) {
     throw new Error('Failed to delete product');
+  }
+
+  return res.json();
+}
+
+export async function deleteImageFile(id: number, token: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/upload/files/${id}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  if (!res.ok) {
+    throw new Error('Failed to delete image');
   }
 
   return res.json();
