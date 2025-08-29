@@ -19,6 +19,7 @@ import { useCheckoutStore } from '../../stores/checkoutStore';
 import { useCart } from '@/shared/hooks/useCart';
 import { useCartDetails } from '@/features/cart/components/CartDetailsContext';
 import { usePathname, useRouter } from 'next/navigation';
+import Spinner from '@/shared/components/ui/Loading';
 
 export const personalInfoSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -292,25 +293,20 @@ export default function CheckoutForm() {
             onChange={handleShippingInfoChange}
           />
 
-          {clientSecret && (
+          {clientSecret ? (
             <Box px={{ xs: 2, sm: 0 }} py={1}>
               <Typography variant='h6' sx={{ my: 3, fontWeight: 500 }}>
                 Payment info
               </Typography>
               <PaymentElement
                 options={{
-                  layout: {
-                    type: 'tabs',
-                    defaultCollapsed: false,
-                  },
-                  fields: {
-                    billingDetails: {
-                      address: 'never',
-                    },
-                  },
+                  layout: { type: 'tabs', defaultCollapsed: false },
+                  fields: { billingDetails: { address: 'never' } },
                 }}
               />
             </Box>
+          ) : (
+            <Spinner />
           )}
           <Typography
             mt={2}

@@ -13,6 +13,7 @@ export default function TopBarCart() {
       component={Link}
       replace={false}
       href='/checkout/cart'
+      data-testid='cart-icon'
       sx={{
         cursor: 'pointer',
         borderRadius: '50%',

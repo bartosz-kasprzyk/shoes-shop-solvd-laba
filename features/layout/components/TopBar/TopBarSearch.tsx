@@ -60,6 +60,7 @@ export default function TopBarSearch({
           onKeyDown={onKeyDown}
           inputRef={inputRef}
           placeholder='Search'
+          data-testid='topbar-search'
           slotProps={{
             input: {
               startAdornment: (

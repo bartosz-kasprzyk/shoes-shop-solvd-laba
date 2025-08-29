@@ -1,0 +1,22 @@
+{
+  "data": {
+    "personalInfo": {
+      "name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "phoneNumber": "+1234567890"
+    },
+    "shippingInfo": {
+      "country": "US",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001",
+      "address": "123 Main St"
+    },
+    "paymentInfo": {
+      "cardNumber": "4242424242424242",
+      "expDate": "12/26",
+      "cvc": "123"
+    }
+  }
+}

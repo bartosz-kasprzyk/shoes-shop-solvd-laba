@@ -18,7 +18,7 @@
         "name": "next"
       }
     ],
-    "types": ["next-auth"],
+    "types": ["next-auth", "cypress"],
     "paths": {
       "@/*": ["./*"],
       "@components/*": ["./app/components/*"]

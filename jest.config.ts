@@ -206,6 +206,8 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  testPathIgnorePatterns: ['<rootDir>/cypress/'],
 };
 
 export default createJestConfig(config);
