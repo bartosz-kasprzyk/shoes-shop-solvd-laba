@@ -15,6 +15,9 @@ export function filtersSlugsFromSlug(slug: string[]): Filter {
       else if (filtersSlugs[key]) filtersSlugs[key].push({ slug: value });
     });
   });
-
+  if (filtersSlugs.search && filtersSlugs.search?.length > 1)
+    filtersSlugs.search = [
+      { slug: filtersSlugs.search?.map((s) => s.slug).join('-') },
+    ];
   return filtersSlugs;
 }

@@ -17,6 +17,9 @@ export function useFiltersSlugsFromPath(): Filter {
       else if (filtersSlugs[key]) filtersSlugs[key].push({ slug: value });
     });
   });
-
+  if (filtersSlugs.search)
+    filtersSlugs.search = [
+      { slug: filtersSlugs.search?.map((s) => s.slug).join('-') },
+    ];
   return filtersSlugs;
 }
