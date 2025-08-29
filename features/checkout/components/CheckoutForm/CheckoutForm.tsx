@@ -11,7 +11,7 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import convertToSubcurrency from '@/features/shop/lib/convertToSubcurrency';
+import convertToSubcurrency from '@/features/checkout/lib/convertToSubcurrency';
 import useUser from '@/shared/hooks/useUser';
 
 import { z } from 'zod';

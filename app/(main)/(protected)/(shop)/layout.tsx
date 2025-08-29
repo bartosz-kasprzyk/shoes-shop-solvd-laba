@@ -1,7 +1,7 @@
 'use client';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import convertToSubcurrency from '@/features/shop/lib/convertToSubcurrency';
+import convertToSubcurrency from '@/features/checkout/lib/convertToSubcurrency';
 import { CartDetailsProvider } from '@/features/cart/components/CartDetailsContext';
 
 const stripePromise = loadStripe(
