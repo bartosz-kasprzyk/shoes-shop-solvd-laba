@@ -47,10 +47,10 @@ describe('SignUp Page', () => {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/^password$/i), {
-      target: { value: '12345678' },
+      target: { value: 'Qwerty12@' },
     });
     fireEvent.change(screen.getByLabelText(/confirm password/i), {
-      target: { value: '12345678' },
+      target: { value: 'Qwerty12@' },
     });
 
     fireEvent.change(screen.getByLabelText(/email/i), {
@@ -143,6 +143,44 @@ describe('SignUp Page', () => {
 
     expect(
       await screen.findByText(/password must be at least 8 characters/i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows validation error for invalid password and password confirmation', async () => {
+    render(<SignUpPage />);
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: '1234' },
+    });
+
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
+      target: { value: '1234' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+    expect(
+      await screen.findByText(/password must be at least 8 characters/i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows validation error for invalid password and password confirmation (weak password policy)', async () => {
+    render(<SignUpPage />);
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: 'qwerty123' },
+    });
+
+    fireEvent.change(screen.getByLabelText(/confirm password/i), {
+      target: { value: 'qwerty123' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+    expect(
+      await screen.findByText(
+        /password must include uppercase, lowercase, number, and special character/i,
+      ),
     ).toBeInTheDocument();
   });
 
