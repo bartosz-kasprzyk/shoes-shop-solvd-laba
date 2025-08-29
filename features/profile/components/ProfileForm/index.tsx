@@ -125,7 +125,7 @@ export default function ProfileForm() {
           color: '#5C5C5C',
         }}
       >
-        Welcome back! Please enter your details to log into your account.
+        Welcome back! Here you can update your account settings and preferences.
       </Typography>
 
       <Box
