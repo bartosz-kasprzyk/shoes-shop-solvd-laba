@@ -37,6 +37,7 @@ export default function CartItemDetails({ cartItem }: CartItemDetailsProps) {
             {cartItem.name}
           </Link>
         </Typography>
+
         <Typography
           lineHeight={'inherit'}
           fontSize={'inherit'}
@@ -49,14 +50,64 @@ export default function CartItemDetails({ cartItem }: CartItemDetailsProps) {
           }).format(cartItem.quantity * cartItem.price)}
         </Typography>
       </Box>
-      <Typography
-        fontSize={{ xs: '1em', sm: '0.7em' }}
-        fontWeight={500}
-        color='color-mix(in srgb, black 60%, transparent)'
-        component='p'
+      <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
       >
-        {cartItem.gender}&apos;s Shoes | Size {cartItem.size}
-      </Typography>
+        <Typography
+          fontSize={'0.7em'}
+          fontWeight={500}
+          color='color-mix(in srgb, black 60%, transparent)'
+          component='p'
+          flexGrow={1}
+          display={{ xs: 'none', sm: 'block' }}
+        >
+          {cartItem.gender}&apos;s Shoes | Size&nbsp;{cartItem.size}
+        </Typography>
+        <Box display={{ xs: 'flex', sm: 'none' }} flexDirection={'column'}>
+          <Typography
+            fontSize={'1em'}
+            lineHeight={'inherit'}
+            fontWeight={500}
+            color='color-mix(in srgb, black 60%, transparent)'
+            component='p'
+            flexGrow={1}
+            py={'1px'}
+          >
+            {cartItem.gender}&apos;s Shoes
+          </Typography>
+          <Typography
+            fontSize={'1em'}
+            lineHeight={'inherit'}
+            fontWeight={500}
+            color='color-mix(in srgb, black 60%, transparent)'
+            component='p'
+            flexGrow={1}
+          >
+            Size&nbsp;{cartItem.size}
+          </Typography>
+        </Box>
+        {cartItem.quantity > 1 && (
+          <Typography
+            lineHeight={'inherit'}
+            fontSize={{ xs: '0.7em', sm: '0.45em' }}
+            fontWeight={'inherit'}
+            color='color-mix(in srgb, black 60%, transparent)'
+            pr={1}
+            pl={2}
+            pt={0.5}
+            textAlign={'right'}
+          >
+            {`Unit price: ${new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            }).format(cartItem.price)}`}
+          </Typography>
+        )}
+      </Box>
       <Typography
         display={{ xs: 'none', sm: 'block' }}
         fontSize='0.85em'
