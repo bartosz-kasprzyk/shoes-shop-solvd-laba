@@ -4,6 +4,8 @@ import OrderHistoryList from '../OrderHistoryList';
 import { getUserTransactions } from '../../actions/getTransactions';
 import { mapTransactionToOrder } from '../../utils/mapTransactionToOrder';
 import type { Transaction } from '../../types';
+import { EmptyState } from '@/shared/components/ui';
+import { OrderHistoryIcon } from '@/shared/icons';
 
 export default async function OrderHistoryPage() {
   const receivedTransactions = await getUserTransactions();
@@ -14,27 +16,28 @@ export default async function OrderHistoryPage() {
 
   return (
     <ScrollableContainer>
-      <Box
-        sx={{
-          px: { xs: 2, lg: '60px' },
-          py: {
-            xs: '20px',
-            md: '40px',
-          },
-        }}
-      >
+      <Box sx={{ flex: 1, padding: { xs: '20px 30px', md: '40px 60px' } }}>
         <Typography
-          variant='h1'
+          variant='h4'
+          component='h2'
           sx={{
-            fontSize: { xs: '30px', md: '38px', lg: '45px' },
-            transition:
-              'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
             fontWeight: 500,
-            mb: { xs: '12px', md: '24px' },
+            marginBottom: 6,
+            color: '#1f2937',
+            fontSize: { xs: 35, lg: 42 },
           }}
         >
           Order history
         </Typography>
+
+        {transactions.length === 0 && (
+          <EmptyState
+            title="You haven't ordered any products yet"
+            buttonText='Browse products'
+            buttonHref='/products'
+            icon={<OrderHistoryIcon />}
+          />
+        )}
 
         <OrderHistoryList transactions={transactions} />
       </Box>

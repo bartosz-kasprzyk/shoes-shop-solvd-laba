@@ -1,7 +1,6 @@
 'use client';
 
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
-import EmptyStateForMuProducts from '@/features/products/components/EmptyStateForMuProducts';
 import useUser from '@/shared/hooks/useUser';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMyProducts } from '@/app/api/products';
@@ -13,11 +12,12 @@ import {
   CircularProgress,
 } from '@mui/material';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
-import { Button } from '@/shared/components/ui';
+import { Button, EmptyState } from '@/shared/components/ui';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ImageWithLoading } from '@/shared/components/ui/ImageWithLoading';
+import CartIcon from '@/shared/icons/CartIcon';
 
 export default function MyProductsPage() {
   const { session, isLoading } = useUser();
@@ -139,7 +139,7 @@ export default function MyProductsPage() {
               variant='h4'
               component='h2'
               sx={{
-                fontWeight: 600,
+                fontWeight: 500,
                 color: '#1f2937',
                 fontSize: { xs: 35, lg: 42 },
               }}
@@ -167,7 +167,13 @@ export default function MyProductsPage() {
               </Slide>
             </>
           ) : (
-            <EmptyStateForMuProducts />
+            <EmptyState
+              title="You don't have any products yet"
+              description='Post can contain video, images and text'
+              buttonText='Add product'
+              buttonHref='/my-products/add-product'
+              icon={<CartIcon />}
+            />
           )}
         </Box>
       </Box>

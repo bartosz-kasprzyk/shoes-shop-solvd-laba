@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { EmptyState } from '@/shared/components/ui';
 import { ScrollableContainer } from '@/features/layout/components/ScrollableContainer';
+import { BagIcon } from '@/shared/icons';
 
 export default function CartPageEmpty() {
   return (
@@ -46,6 +47,7 @@ export default function CartPageEmpty() {
             description='Click below to see available products'
             buttonText='Shop Now'
             buttonHref='/products'
+            icon={<BagIcon />}
           />
         </Box>
       </Box>

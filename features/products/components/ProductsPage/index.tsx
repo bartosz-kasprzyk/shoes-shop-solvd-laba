@@ -9,10 +9,11 @@ import useFilterStore from '@/features/filter/stores/filterStore';
 import type { Filter } from '@/features/filter/types';
 import ProductsContainer from '../ProductsContainer';
 import useProductsCountStore from '@/features/filter/stores/productCount';
-import EmptyState from '../EmptyState';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import useUser from '@/shared/hooks/useUser';
+import { EmptyState } from '@/shared/components/ui';
+import CartIcon from '@/shared/icons/CartIcon';
 
 export default function ProductsPageClient({ filters }: { filters: Filter }) {
   const {
@@ -74,12 +75,11 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
     );
   if (!data.pages[0]?.total)
     return (
-      <>
-        <EmptyState
-          text='There are no products match search'
-          subText='Try to apply diffrent filters.'
-        />
-      </>
+      <EmptyState
+        title='There are no products match search'
+        description='Try to apply diffrent filters'
+        icon={<CartIcon />}
+      />
     );
   return (
     <Box px={2}>

@@ -1,14 +1,16 @@
+'use client';
+
 import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Button } from '@/shared/components/ui';
-import { BagIcon } from '@/shared/icons';
+import { usePathname } from 'next/navigation';
 
 interface EmptyStateProps {
   title: string;
-  description: string;
-  buttonText: string;
-  buttonHref: string;
-  icon?: React.ReactNode;
+  description?: string;
+  buttonText?: string;
+  buttonHref?: string;
+  icon: React.ReactNode;
 }
 
 export default function EmptyState({
@@ -18,60 +20,73 @@ export default function EmptyState({
   buttonHref,
   icon,
 }: EmptyStateProps) {
+  const pathname = usePathname();
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        padding: { xs: 2, sm: 3, md: 4 },
-      }}
-    >
+    <Box sx={{ flex: 1 }}>
       <Box
         sx={{
-          width: { xs: 56, sm: 64, md: 72 },
-          height: { xs: 56, sm: 64, md: 72 },
-          backgroundColor: '#f3f4f6',
-          borderRadius: '50%',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: { xs: 2, sm: 3 },
+          textAlign: 'center',
+          paddingTop:
+            pathname === '/my-products'
+              ? { xs: '20px', md: '30px' }
+              : { xs: '50px', md: '100px' },
         }}
       >
-        {icon || <BagIcon />}
-      </Box>
-      <Typography
-        variant='h6'
-        sx={{
-          fontWeight: 600,
-          marginBottom: { xs: 1, sm: 1.5 },
-          color: '#1f2937',
-          fontSize: { xs: 18, sm: 20, md: 22 },
-          lineHeight: 1.3,
-        }}
-      >
-        {title}
-      </Typography>
-      <Typography
-        variant='body2'
-        sx={{
-          color: '#6b7280',
-          marginBottom: { xs: 3, sm: 4 },
-          maxWidth: { xs: '280px', sm: '320px', md: '360px' },
-          fontSize: { xs: 14, sm: 16, md: 18 },
-          lineHeight: 1.5,
-          px: { xs: 1, sm: 0 },
-        }}
-      >
-        {description}
-      </Typography>
+        <Box
+          sx={{
+            width: 64,
+            height: 64,
+            backgroundColor: '#f3f4f6',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 3,
+          }}
+        >
+          {icon}
+        </Box>
 
-      <Link href={buttonHref} passHref>
-        <Button variant='primary'>{buttonText}</Button>
-      </Link>
+        <Typography
+          variant='h6'
+          sx={{
+            fontWeight: 600,
+            marginBottom: 1,
+            color: '#1f2937',
+            fontSize: { xs: 16, lg: 22 },
+          }}
+        >
+          {title}
+        </Typography>
+        {description && (
+          <Typography
+            variant='body2'
+            sx={{
+              color: '#6b7280',
+              marginBottom: 4,
+              maxWidth: '360px',
+              fontSize: { xs: 14, lg: 18 },
+            }}
+          >
+            {description}
+          </Typography>
+        )}
+
+        {buttonHref && (
+          <Link href={buttonHref} passHref>
+            <Button
+              variant='primary'
+              sx={{ p: 1, px: 2, mt: description ? 0 : 3 }}
+            >
+              {buttonText}
+            </Button>
+          </Link>
+        )}
+      </Box>
     </Box>
   );
 }

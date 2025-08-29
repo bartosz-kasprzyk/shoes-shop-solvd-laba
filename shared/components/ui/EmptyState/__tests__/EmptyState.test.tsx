@@ -12,11 +12,6 @@ jest.mock('next/link', () => {
   return Link;
 });
 
-jest.mock('@/shared/icons', () => {
-  const BagIcon = () => <svg data-testid='bag-icon' />;
-  return { BagIcon };
-});
-
 describe('EmptyState Component', () => {
   const defaultProps = {
     title: 'Your Cart is Empty',
@@ -24,9 +19,10 @@ describe('EmptyState Component', () => {
       'Looks like you haven’t added anything to your cart yet. Go ahead and explore our products!',
     buttonText: 'Shop Now',
     buttonHref: '/products',
+    icon: <svg data-testid='bag-icon' />,
   };
 
-  it('renders correctly with default icon', () => {
+  it('renders correctly', () => {
     render(<EmptyState {...defaultProps} />);
 
     expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
@@ -41,14 +37,6 @@ describe('EmptyState Component', () => {
     expect(linkElement).toHaveAttribute('href', defaultProps.buttonHref);
 
     expect(screen.getByTestId('bag-icon')).toBeInTheDocument();
-  });
-
-  it('renders with a custom icon', () => {
-    const CustomIcon = () => <span data-testid='custom-icon'>Custom</span>;
-    render(<EmptyState {...defaultProps} icon={<CustomIcon />} />);
-
-    expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
-    expect(screen.queryByTestId('bag-icon')).not.toBeInTheDocument();
   });
 
   it('applies correct accessibility attributes to the button link', () => {
