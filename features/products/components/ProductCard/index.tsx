@@ -13,7 +13,7 @@ export default function ProductCard({
   filled,
 }: ProductCardProps) {
   const { img, name, price, gender, id } = card;
-  const [isLoading, setIsLoading] = useState(true);
+  const [hover, setHover] = useState(false);
   function renderButton() {
     switch (variant) {
       case 'dropdown':
@@ -62,20 +62,25 @@ export default function ProductCard({
         href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <ImageWithLoading
-          src={img.src}
-          alt={name}
-          title={name}
-          width={320}
-          height={380}
-          priority
-          sx={{
-            aspectRatio: '320 / 380',
-            objectFit: 'cover',
-            width: '100%',
-            height: 'auto',
-          }}
-        />
+        <Box
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+        >
+          <ImageWithLoading
+            src={hover && img.hover ? img.hover : img.src}
+            alt={name}
+            title={name}
+            width={320}
+            height={380}
+            priority
+            sx={{
+              aspectRatio: '320 / 380',
+              objectFit: 'cover',
+              width: '100%',
+              height: 'auto',
+            }}
+          />
+        </Box>
         <Box sx={{ p: '10px' }}>
           <Box
             sx={{

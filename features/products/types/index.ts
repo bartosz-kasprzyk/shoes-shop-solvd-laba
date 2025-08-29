@@ -42,7 +42,7 @@ export interface EditModalProps {
 export interface Card {
   id: number;
   name: string;
-  img: { src: string };
+  img: { src: string; hover?: string };
   price: number;
   gender: 'Men' | 'Women';
 }

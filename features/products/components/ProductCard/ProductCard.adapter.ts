@@ -10,6 +10,7 @@ export function adaptProductToCard(product: Product | ProductFromServer): Card {
       src:
         product.attributes?.images?.data?.[0].attributes.url ??
         '/shoe-welcome.png',
+      hover: product.attributes?.images?.data?.[1]?.attributes?.url,
     },
     price: product.attributes.price ?? 0,
     gender:
