@@ -2,7 +2,11 @@ import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Button, TextUnderButton } from '@/shared/components/ui';
 
-export default function GuestSideBar() {
+interface GuestSideBarProps {
+  onClose?: () => void;
+}
+
+export default function GuestSideBar({ onClose }: GuestSideBarProps) {
   return (
     <Box
       sx={{
@@ -46,12 +50,17 @@ export default function GuestSideBar() {
         flexDirection={'column'}
         gap={1}
       >
+        <Link href='/products' passHref>
+          <Button sx={{ width: '100%' }} variant='outline' onClick={onClose}>
+            Browse shoes
+          </Button>
+        </Link>
+        or
         <Link href='/sign-in' passHref>
           <Button sx={{ width: '100%' }} variant='primary'>
             Sign in
           </Button>
         </Link>
-
         <TextUnderButton
           text="Don't have an account?"
           linkText='Sign up'

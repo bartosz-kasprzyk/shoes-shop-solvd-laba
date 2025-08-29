@@ -87,7 +87,7 @@ export default function DesktopMenu({ user }: DesktopMenuProps) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {user ? <MenuList /> : <GuestSideBar />}
+        {user ? <MenuList /> : <GuestSideBar onClose={handleClose} />}
       </Menu>
     </Box>
   );

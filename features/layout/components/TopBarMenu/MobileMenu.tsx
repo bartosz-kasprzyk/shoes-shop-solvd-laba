@@ -77,7 +77,7 @@ export default function MobileMenu({ user }: MobileMenuProps) {
                     <Sidebar />
                   </Box>
                 ) : (
-                  <GuestSideBar />
+                  <GuestSideBar onClose={() => setIsSideBarOpen(false)} />
                 )}
               </ScrollableContainer>
             </Box>
