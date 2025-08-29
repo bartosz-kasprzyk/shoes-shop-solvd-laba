@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Button, Fade, IconButton, Slide } from '@mui/material';
+import { Box, Fade, IconButton, Slide } from '@mui/material';
 import { CloseIcon, MenuIcon } from '@/shared/icons';
 import Sidebar from '../UserSideBar';
 import type { UserProfile } from '../TopBar/interface';
@@ -17,12 +17,9 @@ export default function MobileMenu({ user }: MobileMenuProps) {
 
   return (
     <>
-      <Button
+      <IconButton
         sx={{
           cursor: 'pointer',
-          borderRadius: '50%',
-          p: 1,
-          minWidth: 'auto',
           transition: 'background-color 0.2s',
           '&:hover': {
             backgroundColor: '#f3f4f6',
@@ -31,7 +28,7 @@ export default function MobileMenu({ user }: MobileMenuProps) {
         onClick={() => setIsSideBarOpen(true)}
       >
         <MenuIcon />
-      </Button>
+      </IconButton>
 
       <Box
         sx={{
