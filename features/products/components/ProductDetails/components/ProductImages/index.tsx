@@ -1,11 +1,12 @@
 import { Box } from '@mui/material';
-// import Image from 'next/image';
 import ArrowIcon from '@/shared/icons/HorizontalArrowIcon';
 import { useState, useRef, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import type { ProductImagesProps } from '@/features/products/types/components.interface';
 import { RoundButton } from '../RoundButton';
 import { ImageWithLoading as Image } from '@/shared/components/ui/ImageWithLoading';
+import ProductImageDialog from './ProductImageDialog';
+import { useImageExpand } from './useImageExpand';
 
 export default function ProductImages({ images }: ProductImagesProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -13,8 +14,9 @@ export default function ProductImages({ images }: ProductImagesProps) {
   const [dragOffset, setDragOffset] = useState(0);
   const [startX, setStartX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-
   const isMobile = useMediaQuery('(max-width:600px)');
+  const [didDrag, setDidDrag] = useState(false);
+  const { expandedUrl, handleImageClick, handleClose } = useImageExpand();
 
   useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
@@ -49,12 +51,16 @@ export default function ProductImages({ images }: ProductImagesProps) {
     setIsDragging(true);
     setStartX(clientX);
     setDragOffset(0);
+    setDidDrag(false);
   };
 
   const handleMove = (clientX: number) => {
     if (!isDragging || !isMobile) return;
     const offset = clientX - startX;
     setDragOffset(offset);
+    if (Math.abs(offset) > 5) {
+      setDidDrag(true);
+    }
   };
 
   const handleEnd = () => {
@@ -176,6 +182,12 @@ export default function ProductImages({ images }: ProductImagesProps) {
                 height: '100%',
                 position: 'relative',
                 flexShrink: 0,
+                cursor: 'zoom-in',
+              }}
+              onClick={() => {
+                if (!isDragging && !didDrag) {
+                  handleImageClick(img.attributes.url);
+                }
               }}
             >
               <Image
@@ -188,6 +200,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
                   pointerEvents: 'none',
                   width: '100%',
                   height: '100%',
+                  cursor: 'zoom-in',
                 }}
                 priority={index === 0}
               />
@@ -251,6 +264,8 @@ export default function ProductImages({ images }: ProductImagesProps) {
           />
         ))}
       </Box>
+
+      <ProductImageDialog imageUrl={expandedUrl} onClose={handleClose} />
     </Box>
   );
 }

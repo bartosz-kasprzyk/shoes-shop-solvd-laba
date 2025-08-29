@@ -204,6 +204,7 @@ export default function ProductsLayout({
               display={'flex'}
               alignItems={'start'}
               onClick={() => setIsSideBarOpen((prev) => !prev)}
+              sx={{ cursor: 'pointer' }}
             >
               <Typography color='#5C5C5C' fontWeight={300}>
                 Filters
