@@ -66,7 +66,7 @@ export default function MyProductsPage() {
 
   return (
     <ScrollableContainer>
-      <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <ImageWithLoading
           src={'/banner.png'}
           fill

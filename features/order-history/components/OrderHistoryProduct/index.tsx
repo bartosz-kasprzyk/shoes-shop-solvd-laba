@@ -21,7 +21,7 @@ export default function OrderHistoryProduct({
       <Image
         width={104}
         height={104}
-        style={{ borderRadius: '4px' }}
+        style={{ borderRadius: '4px', objectFit: 'cover' }}
         src={product.imageUrl}
         alt={product.name}
       />
@@ -65,7 +65,7 @@ export default function OrderHistoryProduct({
               'font-size 0.3s ease-in-out, line-height 0.3s ease-in-out',
           }}
         >
-          {`Size: ${product.size} UK`}
+          {`Size: ${product.size} EU`}
         </Typography>
       </Box>
     </Box>

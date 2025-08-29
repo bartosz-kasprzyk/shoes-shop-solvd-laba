@@ -1,17 +1,14 @@
-'use client';
-
-import { DropdownArrowIcon, PdfIcon } from '@/shared/icons';
+import { DropdownArrowIcon } from '@/shared/icons';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Typography,
 } from '@mui/material';
 import OrderHistoryProduct from '../OrderHistoryProduct';
 import type { Order } from '../../types';
-import { generateInvoicePdf } from '../../utils/generateInvoicePdf';
+import DownloadPdfFile from '../DownloadPdfButton';
 
 interface OrderHistoryCardProps {
   transaction: Order;
@@ -67,7 +64,6 @@ export default function OrderHistoryCard({
       <AccordionSummary
         expandIcon={<DropdownArrowIcon />}
         sx={{
-          // height: '56px',
           mr: 3,
           '& .MuiAccordionSummary-content': {
             display: 'flex',
@@ -91,7 +87,19 @@ export default function OrderHistoryCard({
             <Text title={transaction.date} hidden />
           </Box>
 
-          <Text title='Products ' value={transaction.productsQuantity} hidden />
+          <Box
+            sx={{
+              '@media (max-width:1150px)': {
+                display: 'none',
+              },
+            }}
+          >
+            <Text
+              title='Products '
+              value={transaction.productsQuantity}
+              hidden
+            />
+          </Box>
 
           <Text
             title='Summary: '
@@ -131,7 +139,7 @@ export default function OrderHistoryCard({
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
-              gap: { xs: 2, md: 5 },
+              gap: 2,
               justifyContent: 'space-between',
               alignItems: {
                 xs: 'stretch',
@@ -165,28 +173,7 @@ export default function OrderHistoryCard({
             pt: '20px',
           }}
         >
-          <Button
-            onClick={() => generateInvoicePdf(transaction)}
-            sx={{
-              fontWeight: 700,
-              fontSize: '12px',
-              color: '#1E2832',
-              display: 'flex',
-              gap: '8px',
-              alignItems: 'center',
-              padding: 0,
-              minWidth: 'auto',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'transparent',
-                color: '#1E2832',
-                textDecoration: 'underline',
-              },
-            }}
-          >
-            <PdfIcon />
-            Pdf invoice download
-          </Button>
+          <DownloadPdfFile transaction={transaction} />
         </Box>
       </AccordionDetails>
     </Accordion>

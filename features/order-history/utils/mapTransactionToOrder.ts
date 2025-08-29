@@ -7,9 +7,11 @@ export function mapTransactionToOrder(transaction: Transaction): Order {
     orderId: transaction.metadata.orderId ?? 'unknown',
     amount: transaction.amount ?? 0,
     productsQuantity: cart.length,
-    date: new Intl.DateTimeFormat('de-DE').format(
-      new Date((transaction.created ?? 0) * 1000),
-    ),
+    date: new Intl.DateTimeFormat('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(new Date((transaction.created ?? 0) * 1000)),
     delivery:
       Object.values(transaction.shipping?.address ?? {})
         .filter(Boolean)

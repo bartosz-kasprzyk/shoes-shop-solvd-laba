@@ -27,7 +27,11 @@ export default function RecentlyViewedPage() {
 
   return (
     <ScrollableContainer>
-      <Box sx={{ flex: 1, padding: { xs: '20px 30px', md: '40px 60px' } }}>
+      <Box
+        sx={{
+          padding: { xs: '20px 16px', sm: '20px 24px', md: '40px 60px' },
+        }}
+      >
         <Typography
           variant='h4'
           component='h2'

@@ -20,9 +20,8 @@ export default function OrderStatus({ title, icon, color }: OrderStatusProps) {
         sx={{
           fontSize: '14px',
           fontWeight: 700,
-          display: {
-            xs: 'none',
-            sm: 'block',
+          '@media (max-width:1150px)': {
+            display: 'none',
           },
         }}
       >
