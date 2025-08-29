@@ -18,16 +18,18 @@ export default function BotMessage({
         sx={{
           width: 'fit-content',
           maxWidth: '80%',
-          bgcolor: 'color-mix(in srgb, var(--color-primary) 20%, transparent)',
+          bgcolor: '#f3f4f6',
           borderRadius: '10px 10px 0px 10px',
+          //   color: 'white',
           px: 2,
           py: 1,
           mb: 1,
+          fontSize: '0.8rem',
         }}
       >
         {children}
       </Box>
-      <Avatar
+      {/* <Avatar
         src={'/bot.png'}
         alt={'Bot'}
         sx={{
@@ -35,7 +37,7 @@ export default function BotMessage({
           height: { xs: '24px', lg: '36px' },
           backgroundColor: 'white',
         }}
-      />
+      /> */}
     </Box>
   );
 }

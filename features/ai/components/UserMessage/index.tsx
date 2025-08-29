@@ -16,7 +16,7 @@ export default function UserMessage({
         alignItems: 'flex-end',
       }}
     >
-      <Avatar
+      {/* <Avatar
         src={session?.user.image || undefined}
         alt={'User'}
         sx={{
@@ -26,19 +26,20 @@ export default function UserMessage({
         }}
       >
         {session?.user.name ? session?.user.name.charAt(0).toUpperCase() : '?'}
-      </Avatar>
+      </Avatar> */}
       <Box
         border={1}
         sx={{
           width: 'fit-content',
           maxWidth: '80%',
-          bgcolor: '#FE645E',
+          bgcolor: '#6e7378', //6e7378
           color: 'white',
           wordBreak: 'break-word',
           borderRadius: '10px 10px 10px 0px',
           px: 2,
           py: 1,
           mb: 1,
+          fontSize: '0.8rem',
         }}
       >
         {children}

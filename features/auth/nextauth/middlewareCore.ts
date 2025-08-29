@@ -11,7 +11,7 @@ export const protectedRoutes = [
   '/recently-viewed',
   '/settings',
   // other
-  '/cart',
+  '/checkout/summary',
   '/checkout',
   '/checkout/cart',
 ];
