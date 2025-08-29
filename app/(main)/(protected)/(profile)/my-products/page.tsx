@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ImageWithLoading } from '@/shared/components/ui/ImageWithLoading';
 import CartIcon from '@/shared/icons/CartIcon';
+import Spinner from '@/shared/components/ui/Loading';
 
 export default function MyProductsPage() {
   const { session, isLoading } = useUser();
@@ -51,7 +52,7 @@ export default function MyProductsPage() {
     }
   }, [fetchNextPage, inView, hasNextPage]);
 
-  if (isLoading || status === 'pending') return <div>Loading...</div>;
+  if (isLoading || status === 'pending') return <Spinner />;
 
   if (status === 'error') {
     return (

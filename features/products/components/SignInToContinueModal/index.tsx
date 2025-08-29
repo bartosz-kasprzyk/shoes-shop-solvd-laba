@@ -6,6 +6,7 @@ import { AuthPagesWrapper } from '@/features/layout/components/AuthPagesWrapper'
 import { SignInForm } from '@/features/auth/sign-in/SignInForm';
 import { Suspense } from 'react';
 import type { SignInModalProps } from './interface';
+import Spinner from '@/shared/components/ui/Loading';
 
 export function SignInModal({
   isOpen,
@@ -56,7 +57,7 @@ export function SignInModal({
           title='Welcome back'
           description='Welcome back! Please enter your details to log into your account.'
           form={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Spinner />}>
               <SignInForm callbackUrl={callbackUrl} closeModal={onClose} />
             </Suspense>
           }

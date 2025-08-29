@@ -11,10 +11,13 @@ import type { AvatarOperation, Profile } from '../../types';
 import AvatarUploader from '../AvatarUploader';
 import useUser from '@/shared/hooks/useUser';
 import { normalizeName } from '@/shared/utils/normalizeName';
+import Spinner from '@/shared/components/ui/Loading';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 export default function ProfileForm() {
   const { profile, onSubmit, isSubmitting } = useProfile();
   const { session, update } = useUser();
+  const { showSnackbar } = useSnackbar();
 
   const profileForm = useForm<Profile>({
     resolver: zodResolver(profileSchema),
@@ -76,24 +79,33 @@ export default function ProfileForm() {
       avatar: avatarOperation === 'delete' ? null : rest.avatar,
     };
 
-    await onSubmit({
-      profile: cleanedProfile,
-      avatarOperation,
-      avatarFile,
-    });
+    try {
+      await onSubmit({
+        profile: cleanedProfile,
+        avatarOperation,
+        avatarFile,
+      });
 
-    await update({
-      ...session,
-      user: {
-        ...session?.user,
-        name: `${firstName} ${lastName}`,
-        image: avatarUrl || undefined,
-      },
-    });
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          name: `${firstName} ${lastName}`,
+          image: avatarUrl || undefined,
+        },
+      });
+      showSnackbar('Your profile is updated!', 'success', 3000);
+    } catch (error) {
+      showSnackbar(
+        'Something went wrong, please try again later',
+        'error',
+        3000,
+      );
+    }
   }
 
   return profile.isLoading ? (
-    <Box>Loading...</Box>
+    <Spinner />
   ) : (
     <Box
       component='form'

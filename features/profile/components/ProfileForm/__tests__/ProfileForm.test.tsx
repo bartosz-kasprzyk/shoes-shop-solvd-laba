@@ -3,11 +3,14 @@ import userEvent from '@testing-library/user-event';
 import ProfileForm from '..';
 import useProfile from '../../../hooks/useProfile';
 import { useSession } from 'next-auth/react';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 jest.mock('../../../hooks/useProfile');
 jest.mock('next-auth/react');
+jest.mock('@/shared/hooks/useSnackbar');
 
 const mockUpdate = jest.fn();
+const mockSnackbar = jest.fn();
 
 jest.mock('@/shared/hooks/useServerSession', () => ({
   useServerSession: jest.fn(() => ({
@@ -54,6 +57,7 @@ beforeEach(() => {
     isLoadingSession: false,
     isAuthenticated: true,
   });
+  (useSnackbar as jest.Mock).mockReturnValue({ showSnackbar: mockSnackbar });
 });
 
 describe('ProfileForm', () => {
@@ -138,7 +142,7 @@ describe('ProfileForm', () => {
     });
   });
 
-  it('shows loading state when profile is loading', () => {
+  it('shows spinner when profile is loading', () => {
     (useProfile as jest.Mock).mockReturnValue({
       profile: { isLoading: true },
       isSubmitting: false,
@@ -149,7 +153,7 @@ describe('ProfileForm', () => {
 
     render(<ProfileForm />);
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   it('disables the submit button when submitting', () => {
@@ -177,5 +181,37 @@ describe('ProfileForm', () => {
 
     const submitText = screen.queryByText(/submit/i);
     expect(submitText).not.toBeInTheDocument();
+  });
+
+  it('shows success snackbar on submit success', async () => {
+    mockOnSubmit.mockResolvedValueOnce({});
+    render(<ProfileForm />);
+
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockSnackbar).toHaveBeenCalledWith(
+        'Your profile is updated!',
+        'success',
+        3000,
+      );
+    });
+  });
+
+  it('shows error snackbar on submit failure', async () => {
+    mockOnSubmit.mockRejectedValueOnce(new Error('server error'));
+    render(<ProfileForm />);
+
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockSnackbar).toHaveBeenCalledWith(
+        'Something went wrong, please try again later',
+        'error',
+        3000,
+      );
+    });
   });
 });
