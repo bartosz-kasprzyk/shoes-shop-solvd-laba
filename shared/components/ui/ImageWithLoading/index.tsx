@@ -20,7 +20,7 @@ export function ImageWithLoading({
   return (
     <Box
       sx={{
-        position: 'relative',
+        // position: 'relative',
         display: 'inline-block',
         width: props.width,
         height: props.height,

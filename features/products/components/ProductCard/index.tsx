@@ -57,6 +57,7 @@ export default function ProductCard({
       }}
     >
       {variant && renderButton()}
+
       <Link
         href={`/product/${id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
@@ -68,7 +69,6 @@ export default function ProductCard({
           width={320}
           height={380}
           priority
-          onLoad={() => setIsLoading(false)}
           sx={{
             aspectRatio: '320 / 380',
             objectFit: 'cover',
