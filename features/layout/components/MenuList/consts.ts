@@ -4,10 +4,16 @@ import {
   OrderHistoryIcon,
   RecentlyViewedIcon,
   SettingsIcon,
+  ShoeIcon,
 } from '@/shared/icons';
 import type { MenuItem } from './interface';
 
 export const menuItems: MenuItem[] = [
+  {
+    label: 'Products',
+    icon: ShoeIcon,
+    href: '/products',
+  },
   {
     label: 'My products',
     icon: MyProductsIcon,
