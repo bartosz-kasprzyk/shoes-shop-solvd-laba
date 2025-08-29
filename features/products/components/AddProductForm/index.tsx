@@ -11,7 +11,7 @@ import type { AddProductFormProps, ImageData } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
 import type { ProductSchemaType } from '../../types';
 import { useProductMutation } from '../../hooks/useProductMutation';
-import { adaptProductForEdit } from '../EditProductModal/EditProduct.adapter';
+import { adaptProductForEdit } from '../EditProductContent/EditProduct.adapter';
 
 const AddProductForm = ({
   images,

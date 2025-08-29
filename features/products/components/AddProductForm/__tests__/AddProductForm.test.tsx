@@ -2,11 +2,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AddProductForm from '..';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import { useProductMutation } from '@/features/products/hooks/useProductMutation';
-import { adaptProductForEdit } from '../../EditProductModal/EditProduct.adapter';
+import { adaptProductForEdit } from '../../EditProductContent/EditProduct.adapter';
 
 jest.mock('@/shared/hooks/useAllOptions');
 jest.mock('@/features/products/hooks/useProductMutation');
-jest.mock('../../EditProductModal/EditProduct.adapter');
+jest.mock('../../EditProductContent/EditProduct.adapter');
 
 const mockMutateProduct = jest.fn();
 const mockSetImages = jest.fn();

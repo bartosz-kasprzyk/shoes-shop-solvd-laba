@@ -19,6 +19,7 @@ export default function DeleteConfirmationModal({
         onClose={onClose}
         sx={{
           padding: 3,
+          zIndex: 4000,
           '& .mui-4nmryk-MuiBackdrop-root-MuiModal-backdrop': {
             backgroundColor: 'rgba(243, 243, 243, 0.9)',
           },

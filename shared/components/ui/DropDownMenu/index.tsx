@@ -10,13 +10,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useUser from '@/shared/hooks/useUser';
 import { deleteProduct } from '@/app/api/products';
 import { DropdownDotsIcon } from '@/shared/icons';
-import EditProductModal from '@/features/products/components/EditProductModal';
 import { revalidateProductPaths } from '@/shared/actions/revalidateProductPaths';
 
 export default function DropDownMenu({ id }: { id: number }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
   const { session } = useUser();
@@ -101,7 +99,15 @@ export default function DropDownMenu({ id }: { id: number }) {
         >
           View
         </MenuItem>
-        <MenuItem onClick={() => setIsEditModalOpen(true)}>Edit</MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            router.push(`/my-products/edit-product/${id}`);
+          }}
+        >
+          Edit
+        </MenuItem>
+        {/* <MenuItem onClick={() => handleAction('Duplicate')}>Duplicate</MenuItem> */}
         <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Delete</MenuItem>
       </Menu>
       {isDeleteModalOpen &&
@@ -113,16 +119,6 @@ export default function DropDownMenu({ id }: { id: number }) {
             onDelete={handleDeleteProduct}
             header='Are you sure to delete selected item '
             text='Deleting this product is permanent and cannot be undone. Please confirm if you want to proceed with the deletion.'
-          />,
-          document.body,
-        )}
-      {isEditModalOpen &&
-        typeof window !== 'undefined' &&
-        createPortal(
-          <EditProductModal
-            isOpen={true}
-            onClose={() => setIsEditModalOpen(false)}
-            productId={id}
           />,
           document.body,
         )}

@@ -36,7 +36,7 @@ jest.mock('@/features/products/components/DeleteConfirmationModal', () => ({
     ) : null,
 }));
 
-jest.mock('@/features/products/components/EditProductModal', () => ({
+jest.mock('@/features/products/components/EditProductContent', () => ({
   __esModule: true,
   default: ({ isOpen, onClose, productId }: EditModalProps) =>
     isOpen ? (
@@ -119,21 +119,11 @@ describe('DropDownMenu', () => {
     expect(push).toHaveBeenCalledWith('/product/1');
   });
 
-  it('opens EditProductModal when Edit is clicked', () => {
+  it('navigates when Edit is clicked', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
     fireEvent.click(screen.getByText('Edit'));
-
-    expect(screen.getByTestId('edit-modal')).toBeInTheDocument();
-    expect(screen.getByText('Edit Product 1')).toBeInTheDocument();
-  });
-
-  it('opens DeleteConfirmationModal when Delete is clicked', () => {
-    renderComponent();
-    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-    fireEvent.click(screen.getByText('Delete'));
-
-    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+    expect(push).toHaveBeenCalledWith('/my-products/edit-product/1');
   });
 
   it('calls deleteProduct mutation and invalidates queries on successful delete', async () => {
@@ -188,21 +178,6 @@ describe('DropDownMenu', () => {
 
     await waitFor(() => {
       expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
-    });
-  });
-
-  it('closes EditProductModal when "Edit Close" is clicked', async () => {
-    renderComponent();
-    fireEvent.click(screen.getByRole('button', { name: /more icon/i }));
-    fireEvent.click(screen.getByText('Edit'));
-
-    expect(screen.getByTestId('edit-modal')).toBeInTheDocument();
-
-    const editCloseButton = screen.getByRole('button', { name: /edit close/i });
-    fireEvent.click(editCloseButton);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('edit-modal')).not.toBeInTheDocument();
     });
   });
 
