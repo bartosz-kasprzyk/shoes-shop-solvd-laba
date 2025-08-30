@@ -29,6 +29,7 @@ export default function WishlistButton({
         width: { xs: '35px', sm: '38px', md: '40px', xl: '44px' },
         height: { xs: '35px', sm: '38px', md: '40px', xl: '44px' },
         padding: '10px',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
         borderRadius: '12px',
         backgroundColor: 'rgba(255, 255, 255, 0.45)',
         color: '#292D32',

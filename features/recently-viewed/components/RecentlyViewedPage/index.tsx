@@ -8,14 +8,22 @@ import { EmptyState } from '@/shared/components/ui';
 import ProductsContainer from '@/features/products/components/ProductsContainer';
 import { useWishlistStore } from '@/features/wishlist/stores/wishlistStore';
 import useUser from '@/shared/hooks/useUser';
+import { useSnackbar } from '@/shared/hooks/useSnackbar';
 
 export default function RecentlyViewedPage() {
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<
     Product[]
   >([]);
-  const { wishlistIds, toggleWishlist } = useWishlistStore();
+  const { wishlistIds, toggleWishlist, setInitialWishlist } =
+    useWishlistStore();
+  const { showSnackbar } = useSnackbar();
+
   const { session } = useUser();
-  const userId = session?.user?.id;
+  const userId = session?.user?.id?.toString();
+
+  useEffect(() => {
+    setInitialWishlist(userId);
+  }, [userId, setInitialWishlist]);
 
   useEffect(() => {
     const key = userId ? `recentlyViewed:${userId}` : 'recentlyViewed:guest';
@@ -57,7 +65,9 @@ export default function RecentlyViewedPage() {
         <ProductsContainer
           products={recentlyViewedProducts}
           variant='toggleWishlist'
-          onProductAction={toggleWishlist}
+          onProductAction={(id: number) =>
+            toggleWishlist(id, userId, showSnackbar)
+          }
           wishlistIds={wishlistIds}
         />
       </Box>
