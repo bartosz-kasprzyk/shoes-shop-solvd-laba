@@ -12,6 +12,7 @@ export default function TopBarCart() {
     <Button
       component={Link}
       replace={false}
+      prefetch={false}
       href='/checkout/cart'
       data-testid='cart-icon'
       sx={{
