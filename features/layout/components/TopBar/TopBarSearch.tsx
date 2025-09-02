@@ -180,7 +180,7 @@ export default function TopBarSearch({
                   flexDirection='column'
                   gap='0.8em'
                   pt='2em'
-                  pb='4em'
+                  pb='2em'
                 >
                   <SearchSuggestions term={value} />
                 </Box>
@@ -190,9 +190,8 @@ export default function TopBarSearch({
                   position='absolute'
                   zIndex={-1}
                   top={0}
-                  height='140%'
-                  width={'210vw'}
                   left={'-100vw'}
+                  sx={{ width: '210vw', height: { xs: '220px', sm: '250px' } }}
                 />
               </Box>
             </Box>
