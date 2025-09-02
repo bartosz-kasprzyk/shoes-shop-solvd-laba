@@ -70,10 +70,10 @@ export default function MyProductsPage() {
         <ImageWithLoading
           src={'/banner.png'}
           fill
+          sizes='(max-width: 900px) 100vw, 80vw'
           sx={{
             position: 'relative',
             height: { xs: '132px', lg: '262px' },
-
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

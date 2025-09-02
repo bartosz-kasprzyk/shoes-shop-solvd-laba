@@ -24,7 +24,7 @@ export default function HeroImage() {
         sx={{
           position: 'relative',
           width: '100%',
-          height: '100%',
+          height: { xs: 0, md: 500 },
           borderRadius: 3,
           overflow: 'hidden',
           boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
@@ -34,6 +34,7 @@ export default function HeroImage() {
           src='/shoe-welcome.png'
           alt='Premium Shoes Collection'
           fill
+          sizes={'30vw'}
           style={{
             objectFit: 'cover',
           }}
