@@ -11,7 +11,7 @@ import { useSearchStore } from '../../stores/searchStore';
 
 export default function SearchSuggestions({ term }: { term: string }) {
   const queryClient = useQueryClient();
-  const debouncedTerm = useDebounce(term, 500);
+  const debouncedTerm = useDebounce(term, 300);
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['suggestions'] });
   });
