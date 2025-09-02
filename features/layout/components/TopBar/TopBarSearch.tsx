@@ -63,6 +63,9 @@ export default function TopBarSearch({
           data-testid='topbar-search'
           slotProps={{
             input: {
+              inputProps: {
+                autoComplete: 'off',
+              },
               startAdornment: (
                 <>
                   {/* Icon inside search input (mobile & desktop) */}
