@@ -85,7 +85,8 @@ export default function MyProductsPage() {
             sx={{
               position: 'absolute',
               bottom: { xs: '-58px', lg: '-90px' },
-              left: '55px',
+              left: { xs: '30px', sm: '55px' },
+              right: '25px',
               display: 'flex',
               alignItems: 'center',
               gap: '16px',
