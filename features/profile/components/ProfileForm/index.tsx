@@ -152,6 +152,7 @@ export default function ProfileForm() {
           id='firstName'
           error={!!errors.firstName}
           helperText={errors.firstName?.message}
+          required
         ></Input>
 
         <Input
@@ -160,6 +161,7 @@ export default function ProfileForm() {
           id='lastName'
           error={!!errors.lastName}
           helperText={errors.lastName?.message}
+          required
         ></Input>
 
         <Input

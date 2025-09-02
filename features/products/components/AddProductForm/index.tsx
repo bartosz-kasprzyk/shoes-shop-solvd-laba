@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dropdown, Input, Label } from '@/shared/components/ui';
 import SizeDisplayCheckbox from '../SizeDisplayCheckbox';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useAllOptions } from '@/shared/hooks/useAllOptions';
 import type { AddProductFormProps, ImageData } from '../../types';
 import { productSchema } from '../../schemas/product.schema';
@@ -110,7 +110,7 @@ const AddProductForm = ({
     const updatedSizes = selectedSizes.includes(sizeValue)
       ? selectedSizes.filter((s: string) => s !== sizeValue)
       : [...selectedSizes, sizeValue];
-    setValue('sizes', updatedSizes);
+    setValue('sizes', updatedSizes, { shouldValidate: true });
   };
 
   return (
@@ -131,6 +131,7 @@ const AddProductForm = ({
           {...register('name')}
           error={!!errors.name}
           helperText={errors.name?.message}
+          required
         />
         <Input
           title='Price'
@@ -156,6 +157,7 @@ const AddProductForm = ({
           {...register('price', { valueAsNumber: true })}
           error={!!errors.price}
           helperText={errors.price?.message}
+          required
         />
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Dropdown
@@ -213,10 +215,20 @@ const AddProductForm = ({
           value={watch('description')}
           error={!!errors.description}
           helperText={errors.description?.message}
+          required
         />
         <Box>
-          <Label id='sizes'>Add size</Label>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          <Label id='sizes' required>
+            Add size
+          </Label>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 2,
+              mt: { xs: 0.5, sm: 1 },
+            }}
+          >
             {(sizes || []).map((size: { value: string; label: string }) => {
               const isChecked = selectedSizes.includes(size.value);
               return (
@@ -229,9 +241,18 @@ const AddProductForm = ({
               );
             })}
           </Box>
-          {errors.sizes && (
-            <p style={{ color: 'red' }}>{errors.sizes.message}</p>
-          )}
+
+          <Typography
+            style={{
+              color: 'var(--color-primary) !important',
+              marginLeft: '10px',
+              marginTop: '5px',
+              fontSize: '12px',
+              minHeight: '18px',
+            }}
+          >
+            {errors.sizes && errors.sizes.message}
+          </Typography>
         </Box>
       </Box>
     </form>

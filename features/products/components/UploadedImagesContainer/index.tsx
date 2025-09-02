@@ -81,7 +81,9 @@ const UploadedImagesContainer = ({
   return (
     <>
       <Box display='flex' flexDirection='column' width='100%' maxWidth='690px'>
-        <Label id='product-images'>Product images</Label>
+        <Label id='product-images' required>
+          Product images
+        </Label>
         <Box
           display='grid'
           gridTemplateColumns={{ xs: '1fr', lg: '1fr 1fr' }}
@@ -106,7 +108,14 @@ const UploadedImagesContainer = ({
             <UploadeImageInput handleAddImage={handleAddImage} />
           )}
           <Typography
-            style={{ position: 'absolute', color: 'red', bottom: 0, margin: 0 }}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              color: 'var(--color-primary) !important',
+              marginBottom: '5px',
+              marginLeft: '10px',
+              fontSize: '12px',
+            }}
           >
             {imagesError}
           </Typography>
