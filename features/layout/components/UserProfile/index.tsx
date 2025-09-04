@@ -2,6 +2,7 @@
 
 import { Avatar, Box, IconButton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function UserProfile() {
   const { data: session } = useSession();
@@ -22,7 +23,7 @@ export default function UserProfile() {
         gap: 3,
       }}
     >
-      <IconButton href='/settings'>
+      <IconButton component={Link} href='/settings'>
         <Avatar
           src={user?.avatar}
           alt={user?.name || 'User'}
