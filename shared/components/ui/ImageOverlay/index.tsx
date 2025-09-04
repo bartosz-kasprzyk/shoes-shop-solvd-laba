@@ -29,7 +29,7 @@ export default function ImageOverlay({
         width: '100%',
         position: 'relative',
         display: 'inline-block',
-        ...(variant === 'delete' && {
+        ...((variant === 'delete' || variant === 'deleteWithModal') && {
           '&::after': {
             content: '""',
             position: 'absolute',
@@ -53,7 +53,11 @@ export default function ImageOverlay({
       <IconButton
         className='overlayButton'
         onClick={handleClick}
-        aria-label={variant === 'delete' ? 'Delete item' : 'Add to cart'}
+        aria-label={
+          variant === 'delete' || variant === 'deleteWithModal'
+            ? 'Delete item'
+            : 'Add to cart'
+        }
         sx={{
           position: 'absolute',
           top: '50%',
