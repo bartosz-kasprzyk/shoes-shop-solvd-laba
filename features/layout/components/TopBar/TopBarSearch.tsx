@@ -174,8 +174,8 @@ export default function TopBarSearch({
               <Box
                 position='relative'
                 height='auto'
-                minHeight={'20vh'}
                 zIndex={1111101}
+                minHeight={{ xs: '220px', sm: '250px' }}
               >
                 <Box
                   display='flex'
@@ -194,7 +194,8 @@ export default function TopBarSearch({
                   zIndex={-1}
                   top={0}
                   left={'-100vw'}
-                  sx={{ width: '210vw', height: { xs: '220px', sm: '250px' } }}
+                  width='210vw'
+                  height='100%'
                 />
               </Box>
             </Box>
