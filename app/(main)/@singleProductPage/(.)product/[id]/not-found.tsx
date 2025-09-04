@@ -2,15 +2,16 @@
 
 import NotFound from '@/app/not-found';
 import { removeRecentlyViewed } from '@/features/recently-viewed/utils/recentlyViewedUtils';
-import { removeFromWishlist } from '@/features/wishlist/utils/wishlist';
+import useUser from '@/shared/hooks/useUser';
 import { usePathname } from 'next/navigation';
 
 export default function Error() {
   const id = usePathname().split('/').slice(-1)[0];
+  const { session } = useUser();
+  const userId = session?.user.id.toString();
   try {
     const parsedId = parseInt(id);
-    removeFromWishlist(parsedId);
-    removeRecentlyViewed(parsedId);
+    removeRecentlyViewed(parsedId, userId);
   } catch (e) {
     console.log(e);
   }
