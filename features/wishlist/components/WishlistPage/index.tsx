@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useSnackbar } from '@/shared/hooks/useSnackbar';
 import { MyWishlistIcon } from '@/shared/icons';
