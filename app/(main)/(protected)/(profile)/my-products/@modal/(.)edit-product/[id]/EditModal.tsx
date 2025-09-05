@@ -21,7 +21,7 @@ export default function EditModal({
       boxSizing={'border-box'}
       left={0}
       overflow={'hidden'}
-      zIndex={3000}
+      zIndex={{ xs: 0, sm: 3000 }}
       padding={{ xs: 0, md: 3 }}
       sx={{
         backgroundColor: { xs: 'white', md: 'rgba(243, 243, 243, 0.9)' },
