@@ -58,6 +58,7 @@ export default function Dropdown({
             </Typography>
           )}
           MenuProps={{
+            style: { zIndex: 3001 },
             PaperProps: {
               sx: {
                 maxHeight: 400,

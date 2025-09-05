@@ -29,16 +29,6 @@ export const filterTypeToFetchName: Record<FilterType, string> = {
   search: 'search',
 };
 
-export const filterTypeToValueType: Record<FilterType, string> = {
-  gender: 'name',
-  brand: 'name',
-  color: 'name',
-  size: 'value',
-  price: 'name',
-  category: 'name',
-  search: 'name',
-};
-
 export const mapFiltersToParams = (filters: Filter): FetchProductsParams => {
   const strapiFilters: any = { $and: [] };
 

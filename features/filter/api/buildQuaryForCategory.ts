@@ -5,8 +5,6 @@ export const buildQueryForCategory = (nestedFilterKey?: string): string => {
 
   const target = nestedFilterKey ? (filters[nestedFilterKey] = {}) : filters;
 
-  target.teamName = { $eq: 'team-5' };
-
   const pagination = {
     withCount: false,
     pageSize: 1000,
