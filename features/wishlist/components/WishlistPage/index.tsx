@@ -11,6 +11,8 @@ import type { ProductFromServer } from '@/features/products/types/shared.interfa
 import { fetchProductById } from '@/features/products/components/ProductDetails/api/productApi';
 import { useWishlistStore } from '../../stores/wishlistStore';
 import useUser from '@/shared/hooks/useUser';
+import { getWishlist } from '../../utils/wishlist';
+import LoadingProductsSkeleton from '@/features/products/components/LoadingProductsSkeleton/LoadingProductsSkeleton';
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<ProductFromServer[]>([]);
@@ -19,6 +21,7 @@ export default function WishlistPage() {
   const { showSnackbar } = useSnackbar();
   const { session } = useUser();
   const userId = session?.user?.id?.toString();
+  const ids = getWishlist(userId);
 
   useEffect(() => {
     setInitialWishlist(userId);
@@ -67,7 +70,11 @@ export default function WishlistPage() {
           My Wishlist
         </Typography>
 
-        {wishlist.length === 0 && (
+        {ids.length !== 0 && wishlist.length === 0 && (
+          <LoadingProductsSkeleton cardCount={ids.length} />
+        )}
+
+        {ids.length === 0 && (
           <EmptyState
             title="You don't have any products in your wishlist yet"
             buttonText='Browse products'
