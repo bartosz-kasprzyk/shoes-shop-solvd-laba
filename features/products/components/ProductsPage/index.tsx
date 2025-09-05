@@ -61,7 +61,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
   if (status === 'pending')
     return (
       <>
-        <LoadingProductsSkeleton />
+        <LoadingProductsSkeleton cardCount={24} />
       </>
     );
 

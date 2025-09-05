@@ -1,18 +1,24 @@
 import { Box, Grid, Skeleton, Typography } from '@mui/material';
 
-export default function LoadingProductsSkeleton() {
+export default function LoadingProductsSkeleton({
+  cardCount,
+}: {
+  cardCount: number;
+}) {
   const products = [];
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < cardCount; i++) {
     products.push(i);
   }
 
   return (
     <>
-      {products.map((product) => (
-        <Grid key={product} size={{ xs: 6, md: 4, lg: 3 }}>
-          <ProductCardSkeleton />
-        </Grid>
-      ))}
+      <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
+        {products.map((product) => (
+          <Grid key={product} size={{ xs: 6, md: 4, lg: 3, xl: 3 }}>
+            <ProductCardSkeleton />
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 }
@@ -28,7 +34,6 @@ export function ProductCardSkeleton() {
         position: 'relative',
         transition: 'all 0.3s ease',
         border: '1px solid transparent',
-        padding: '5px',
         gap: '11px',
         borderRadius: 0,
       }}
@@ -51,6 +56,7 @@ export function ProductCardSkeleton() {
               width: '100%',
               justifyContent: 'space-between',
               overflow: 'hidden',
+              mt: '10px',
             }}
           >
             <Typography
