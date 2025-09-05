@@ -46,11 +46,6 @@ export default function Input({
               borderColor: 'var(--color-primary)',
               borderWidth: '1px',
             },
-
-            '& .MuiFormHelperText-root': {
-              color: error ? 'var(--color-primary) !important' : 'inherit',
-              marginLeft: '5px',
-            },
             '& .MuiOutlinedInput-input': {
               fontWeight: 500,
               fontSize: '16px',
@@ -72,6 +67,10 @@ export default function Input({
             '& input[type=number]': {
               MozAppearance: 'textfield',
             },
+          },
+          '& .MuiFormHelperText-root': {
+            color: error ? 'var(--color-primary) !important' : 'inherit',
+            marginLeft: '10px',
           },
         }}
         {...props}

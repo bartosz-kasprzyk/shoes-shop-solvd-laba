@@ -63,6 +63,9 @@ export default function TopBarSearch({
           data-testid='topbar-search'
           slotProps={{
             input: {
+              inputProps: {
+                autoComplete: 'off',
+              },
               startAdornment: (
                 <>
                   {/* Icon inside search input (mobile & desktop) */}
@@ -171,8 +174,8 @@ export default function TopBarSearch({
               <Box
                 position='relative'
                 height='auto'
-                minHeight={'20vh'}
                 zIndex={1111101}
+                minHeight={{ xs: '220px', sm: '250px' }}
               >
                 <Box
                   display='flex'
@@ -180,7 +183,7 @@ export default function TopBarSearch({
                   flexDirection='column'
                   gap='0.8em'
                   pt='2em'
-                  pb='4em'
+                  pb='2em'
                 >
                   <SearchSuggestions term={value} />
                 </Box>
@@ -190,9 +193,9 @@ export default function TopBarSearch({
                   position='absolute'
                   zIndex={-1}
                   top={0}
-                  height='140%'
-                  width={'210vw'}
                   left={'-100vw'}
+                  width='210vw'
+                  height='100%'
                 />
               </Box>
             </Box>

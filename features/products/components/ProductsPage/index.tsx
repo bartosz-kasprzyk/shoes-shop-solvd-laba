@@ -82,7 +82,7 @@ export default function ProductsPageClient({ filters }: { filters: Filter }) {
       />
     );
   return (
-    <Box px={2}>
+    <Box px={4}>
       <ProductsContainer
         variant='toggleWishlist'
         onProductAction={

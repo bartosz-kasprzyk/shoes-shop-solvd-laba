@@ -149,7 +149,7 @@ export default function ProductsLayout({
           boxSizing: 'border-box',
         }}
       >
-        <Typography px={2} pt={4} pb={1} variant='h4'>
+        <Typography px={4} pt={4} pb={1} variant='h4'>
           Search results
         </Typography>
         <Box
@@ -157,7 +157,7 @@ export default function ProductsLayout({
           alignItems={'start'}
           right={0}
           top={0}
-          px={2}
+          px={4}
           pt={4}
           position='absolute'
           onClick={() => setIsSideBarOpen((prev) => !prev)}
@@ -179,7 +179,7 @@ export default function ProductsLayout({
         <Divider sx={{ display: { xs: 'block', md: 'none' } }} />
 
         <Box
-          px={1}
+          px={3}
           py={0.5}
           width={'100%'}
           bgcolor={'white'}
@@ -190,7 +190,7 @@ export default function ProductsLayout({
           gap={1}
         >
           <Box
-            px={2}
+            px={1}
             display={{ xs: 'flex', md: 'none' }}
             alignItems={'baseline'}
             justifyContent={'space-between'}
@@ -200,7 +200,7 @@ export default function ProductsLayout({
               {productsCount ? ` (${productsCount})` : ''}
             </Typography>
             <Box
-              px={1}
+              px={6}
               display={'flex'}
               alignItems={'start'}
               onClick={() => setIsSideBarOpen((prev) => !prev)}

@@ -78,7 +78,7 @@ export default function HeroContent() {
             fontSize: { xs: '0.9rem', md: '1.1rem' },
             fontWeight: 600,
             borderRadius: 2,
-            minWidth: { xs: 140, md: 160 },
+            minWidth: { xs: 180, sm: 140, md: 160 },
           }}
         >
           Shop Now
@@ -88,12 +88,12 @@ export default function HeroContent() {
           LinkComponent={Link}
           href='/products'
           sx={{
-            px: { xs: 3, md: 4 },
+            px: { xs: 3, lg: 4 },
             py: { xs: 1.2, md: 1.5 },
             fontSize: { xs: '0.9rem', md: '1.1rem' },
             fontWeight: 600,
             borderRadius: 2,
-            minWidth: { xs: 140, md: 160 },
+            minWidth: { xs: 180, sm: 140, md: 160 },
           }}
         >
           Explore Collection

@@ -21,6 +21,7 @@ export function ScrollableContainer({
           backgroundColor: 'transparent',
         },
         scrollbarWidth: 'thin',
+        scrollbarGutter: 'stable',
         scrollbarColor: '#D3D3D3 transparent',
       }}
     >
