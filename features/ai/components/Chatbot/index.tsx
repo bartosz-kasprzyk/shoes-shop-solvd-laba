@@ -305,7 +305,7 @@ export default function Chatbot() {
                   '& fieldset': { border: 'none' },
                   '& .MuiOutlinedInput-input': {
                     px: 0,
-                    fontSize: '.9rem',
+                    fontSize: '16px',
                   },
                   height: '100%',
                 }}
