@@ -77,7 +77,6 @@ export default function TopBar() {
           sx={{
             width: '100%',
             flexBasis: '100%',
-            maxWidth: '1920px',
             margin: '0 auto',
             px: { xs: 2, sm: 3, md: 4 },
           }}
