@@ -22,6 +22,7 @@ export async function jwtCallback({
     token.accessToken = user.accessToken;
     token.maxAge = user.maxAge;
     token.loginAt = now;
+    token.image = user.image;
   }
 
   // On client update()
@@ -47,7 +48,7 @@ export async function sessionCallback({
   if (token.accessToken) {
     session.user.accessToken = token.accessToken as string;
     session.user.name = token.name as string;
-    if (token.image) session.user.image = token.image as string;
+    session.user.image = token.image as string;
   }
 
   return session;
