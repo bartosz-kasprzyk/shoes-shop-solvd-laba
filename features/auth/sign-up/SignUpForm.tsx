@@ -74,7 +74,7 @@ export const SignUpForm = () => {
           </Typography>
           <Fade in={success}>
             <Typography textAlign='center' color='success.main'>
-              Success! Redirecting...
+              Success! Please check your email to activate your account.
             </Typography>
           </Fade>
         </Box>

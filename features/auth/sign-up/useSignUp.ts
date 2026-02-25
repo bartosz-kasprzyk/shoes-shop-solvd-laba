@@ -38,7 +38,6 @@ export const useSignUp = () => {
     }
 
     setSuccess(true);
-    setTimeout(() => router.push('/sign-in'), 3000);
   };
 
   return { registerUser, serverError, success };
