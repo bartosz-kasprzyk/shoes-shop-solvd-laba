@@ -25,10 +25,9 @@ export function useProductMutation(
   const id = session?.user.id as number;
   const token = session?.user.accessToken as string;
 
-  const mutationFn = type === 'create' ? createProduct : updateProduct;
-
   const mutation = useMutation({
-    mutationFn,
+    mutationFn: (variables: any) =>
+      type === 'create' ? createProduct(variables) : updateProduct(variables),
     onSuccess: () => {
       showSnackbar(
         type === 'create' ? 'Product created!' : 'Product updated!',
