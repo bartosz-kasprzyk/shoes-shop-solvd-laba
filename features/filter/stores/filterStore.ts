@@ -102,13 +102,28 @@ const useFilterStore = create<FiltersState>((set, get) => ({
         const values = filters[key] || [];
         if (values.length === 0) return '';
 
-        const sortedSlugs = values
+        const sortedSlugs = [...values]
           .map((f) => f.slug)
-          .sort((a, b) => a.localeCompare(b));
+          .sort((a, b) => {
+            if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+              return Number(a) - Number(b);
+            }
+            return a.localeCompare(b);
+          })
+          .map((slug, index, array) => {
+            const num = parseFloat(slug);
+            if (!isNaN(num) && key === 'price') {
+              return index === 0
+                ? Math.floor(num).toString()
+                : Math.ceil(num).toString();
+            }
+            return slug;
+          });
 
         return `${key}:${sortedSlugs.join('-')}`;
       })
       .filter((s) => s !== '');
+
     return `/products/${segments.join('/')}`;
   },
 

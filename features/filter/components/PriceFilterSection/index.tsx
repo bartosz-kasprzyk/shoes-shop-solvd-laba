@@ -31,7 +31,9 @@ export default function PriceFilterSection() {
   const isPriceSet =
     innerPrice &&
     !(min === Math.min(...innerPrice) && max === Math.max(...innerPrice));
-  const additionalText = isPriceSet ? '$' + innerPrice.join('-$') : '';
+  const additionalText = isPriceSet
+    ? `$${Math.floor(innerPrice[0])}-$${Math.ceil(innerPrice[1])}`
+    : '';
 
   const handlePriceChange = (_: Event, newValue: number | number[]) => {
     if (Array.isArray(newValue)) {
@@ -74,6 +76,9 @@ export default function PriceFilterSection() {
             getAriaLabel={() => 'Price range'}
             getAriaValueText={formatPrice}
             valueLabelDisplay='auto'
+            valueLabelFormat={(value, index) =>
+              index === 0 ? Math.floor(value) : Math.ceil(value)
+            }
             min={min}
             max={max}
           />
