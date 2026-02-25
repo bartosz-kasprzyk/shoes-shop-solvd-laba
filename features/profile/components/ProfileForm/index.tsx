@@ -80,21 +80,26 @@ export default function ProfileForm() {
     };
 
     try {
-      await onSubmit({
+      const result = (await onSubmit({
         profile: cleanedProfile,
         avatarOperation,
         avatarFile,
-      });
+      })) as any;
+
+      const permanentServerUrl = result?.avatar?.url;
 
       await update({
         ...session,
         user: {
           ...session?.user,
           name: `${firstName} ${lastName}`,
-          image: avatarUrl || undefined,
+          image: permanentServerUrl || undefined,
         },
       });
+
       showSnackbar('Your profile is updated!', 'success', 3000);
+      setAvatarFile(undefined);
+      setAvatarOperation('none');
     } catch (error) {
       showSnackbar(
         'Something went wrong, please try again later',

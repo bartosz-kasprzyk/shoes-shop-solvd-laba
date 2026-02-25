@@ -34,10 +34,7 @@ export default function useProfile() {
   });
 
   const onSubmit = (data: OnSubmitPayload) => {
-    // if (!isSessionReady) {
-    //   return;
-    // }
-    mutation.mutate(data);
+    return mutation.mutateAsync(data);
   };
 
   return {
