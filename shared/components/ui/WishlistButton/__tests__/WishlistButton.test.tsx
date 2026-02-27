@@ -4,7 +4,7 @@ import WishlistButton from '..';
 describe('WishlistButton', () => {
   it('renders AddToWishlistIcon when onRemove is not provided', () => {
     const onAddMock = jest.fn();
-    render(<WishlistButton operation='add' onClick={onAddMock} />);
+    render(<WishlistButton operation='toggle' onClick={onAddMock} />);
 
     expect(screen.getByTestId('AddToWishlistIcon')).toBeInTheDocument();
   });
@@ -18,7 +18,7 @@ describe('WishlistButton', () => {
 
   it('calls onAdd when clicked and onRemove is not provided', () => {
     const onAddMock = jest.fn();
-    render(<WishlistButton operation='add' onClick={onAddMock} />);
+    render(<WishlistButton operation='toggle' onClick={onAddMock} />);
 
     fireEvent.click(screen.getByRole('button'));
     expect(onAddMock).toHaveBeenCalledTimes(1);

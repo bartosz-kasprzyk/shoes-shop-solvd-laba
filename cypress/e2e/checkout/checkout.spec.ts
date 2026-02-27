@@ -43,7 +43,7 @@ describe('Checkout Flow', () => {
         .then((text) => {
           const newTotal = parseFloat(text.replace('$', ''));
           cy.get('@initialTotal').then((initialTotal) => {
-            expect(newTotal).to.be.greaterThan(initialTotal as any);
+            cy.wrap(newTotal).should('be.gt', initialTotal);
           });
         });
 
