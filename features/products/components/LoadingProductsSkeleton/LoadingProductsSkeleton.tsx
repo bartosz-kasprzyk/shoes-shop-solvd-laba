@@ -14,7 +14,7 @@ export default function LoadingProductsSkeleton({
     <>
       <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
         {products.map((product) => (
-          <Grid key={product} size={{ xs: 6, md: 4, lg: 3, xl: 3 }}>
+          <Grid key={product} item xs={6} md={4} lg={3} xl={3}>
             <ProductCardSkeleton />
           </Grid>
         ))}
