@@ -21,7 +21,7 @@ export default function PersonalInfoSection({
         Personal info
       </Typography>
       <Grid container columnSpacing={1.5}>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid item xs={12} sm={6}>
           <Input
             id='name'
             title='Name'
@@ -33,7 +33,7 @@ export default function PersonalInfoSection({
             required
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid item xs={12} sm={6}>
           <Input
             id='surname'
             title='Surname'
@@ -45,7 +45,7 @@ export default function PersonalInfoSection({
             required
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid item xs={12} sm={6}>
           <Input
             id='email'
             title='Email'
@@ -58,7 +58,7 @@ export default function PersonalInfoSection({
             required
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid item xs={12} sm={6}>
           <Input
             id='phoneNumber'
             title='Phone number'

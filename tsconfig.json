@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -22,17 +18,10 @@
         "name": "next"
       }
     ],
-    "types": [
-      "next-auth",
-      "cypress"
-    ],
+    "types": ["next-auth", "cypress"],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@components/*": [
-        "./app/components/*"
-      ]
+      "@/*": ["./*"],
+      "@components/*": ["./app/components/*"]
     }
   },
   "include": [
@@ -42,7 +31,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
