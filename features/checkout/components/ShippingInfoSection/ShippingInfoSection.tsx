@@ -34,7 +34,7 @@ export default function ShippingInfoSection({
         }}
       >
         <Grid container columnSpacing={1.5}>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid item xs={12} sm={3}>
             <Dropdown
               id='country'
               title='Country'
@@ -45,7 +45,7 @@ export default function ShippingInfoSection({
               options={countryList} // required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid item xs={12} sm={3}>
             <Input
               id='city'
               title='City'
@@ -57,7 +57,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid item xs={12} sm={3}>
             <Input
               id='state'
               title='State'
@@ -69,7 +69,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid item xs={12} sm={3}>
             <Input
               id='zipCode'
               title='Zip Code'
@@ -81,7 +81,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={12}>
+          <Grid item xs={12}>
             <Input
               id='address'
               title='Address'
