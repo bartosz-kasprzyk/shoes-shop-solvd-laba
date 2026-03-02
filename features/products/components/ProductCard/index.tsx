@@ -60,6 +60,7 @@ export default function ProductCard({
 
       <Link
         href={`/product/${id}`}
+        prefetch={false}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <Box
