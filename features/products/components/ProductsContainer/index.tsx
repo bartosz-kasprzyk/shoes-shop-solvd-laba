@@ -12,9 +12,12 @@ export function ProductsContainer({
 }: ProductsContainerProps) {
   const items = products ? products : pages.flatMap((page) => page.data);
   return (
-    <Grid container spacing={{ xs: 2, md: 2, lg: 3, xl: 4 }}>
+    <Grid container {...({ spacing: { xs: 2, md: 2, lg: 3, xl: 4 } } as any)}>
       {items.map((product) => (
-        <Grid key={product.id} size={{ xs: 6, md: 4, lg: 3, xl: 3 }}>
+        <Grid
+          key={product.id}
+          {...({ size: { xs: 6, md: 4, lg: 3, xl: 3 } } as any)}
+        >
           <ProductCard
             card={adaptProductToCard(product)}
             variant={variant}

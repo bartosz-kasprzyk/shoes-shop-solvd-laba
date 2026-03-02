@@ -34,7 +34,7 @@ export default function ShippingInfoSection({
         }}
       >
         <Grid container columnSpacing={1.5}>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid {...({ size: { xs: 12, sm: 6 } } as any)}>
             <Dropdown
               id='country'
               title='Country'
@@ -42,10 +42,10 @@ export default function ShippingInfoSection({
               onChange={(e) => onChange('country', e.target.value)}
               error={!!shippingErrors.country}
               helperText={shippingErrors.country}
-              options={countryList} // required
+              options={countryList}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid {...({ size: { xs: 12, sm: 6 } } as any)}>
             <Input
               id='city'
               title='City'
@@ -57,7 +57,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid {...({ size: { xs: 12, sm: 6 } } as any)}>
             <Input
               id='state'
               title='State'
@@ -69,7 +69,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
+          <Grid {...({ size: { xs: 12, sm: 6 } } as any)}>
             <Input
               id='zipCode'
               title='Zip Code'
@@ -81,7 +81,7 @@ export default function ShippingInfoSection({
               required
             />
           </Grid>
-          <Grid size={12}>
+          <Grid {...({ size: 12 } as any)}>
             <Input
               id='address'
               title='Address'
