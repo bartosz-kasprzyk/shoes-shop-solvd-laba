@@ -29,17 +29,19 @@ export default function Layout({
             flexDirection: 'column',
           }}
         >
-          <Box
-            component={Link}
-            href={'/'}
-            padding={2}
-            borderBottom={{
-              xs: '1px solid color-mix(in srgb, black 20%, transparent)',
-              sm: 'none',
-            }}
-          >
-            <CompanyLogoIcon />
-          </Box>
+          <Link href='/' style={{ textDecoration: 'none' }}>
+            <Box
+              padding={2}
+              sx={{
+                borderBottom: {
+                  xs: '1px solid color-mix(in srgb, black 20%, transparent)',
+                  sm: 'none',
+                },
+              }}
+            >
+              <CompanyLogoIcon />
+            </Box>
+          </Link>
           <Box
             sx={{
               width: '100%',

@@ -12,22 +12,20 @@ export default function ProductImageDialog({
       open={!!imageUrl}
       onClose={onClose}
       onClick={onClose}
-      slotProps={{
-        paper: {
-          sx: {
-            m: 0,
-            p: 0,
-            width: '100%',
-            height: '100%',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            background: 'transparent',
-            boxShadow: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          },
+      PaperProps={{
+        sx: {
+          m: 0,
+          p: 0,
+          width: '100%',
+          height: '100%',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          background: 'transparent',
+          boxShadow: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
         },
         backdrop: {
           sx: {
