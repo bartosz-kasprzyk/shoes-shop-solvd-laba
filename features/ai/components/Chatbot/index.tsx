@@ -159,7 +159,16 @@ export default function Chatbot() {
         arrow
         placement='left'
         slotProps={{
-          tooltip: { sx: { bgcolor: '#FE645E', fontSize: '0.9rem', p: 1.5 } },
+          popper: {
+            sx: {
+              bgcolor: '#FE645E',
+              fontSize: '0.9rem',
+              p: 1.5,
+              '& .MuiTooltip-tooltip': {
+                bgcolor: '#FE645E',
+              },
+            },
+          },
           arrow: {
             sx: {
               color: '#FE645E',

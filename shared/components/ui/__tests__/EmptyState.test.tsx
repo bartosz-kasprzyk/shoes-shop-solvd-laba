@@ -20,6 +20,7 @@ describe('EmptyState', () => {
     description: 'Try adjusting your filters or browse other categories.',
     buttonText: 'Browse Products',
     buttonHref: '/products',
+    icon: <div />,
   };
 
   it('renders title, description and button', () => {
