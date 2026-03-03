@@ -78,21 +78,21 @@ export function ThankYouPage({ orderNumber }: ThankYouPageProps) {
           </Typography>
 
           <Box sx={{ display: 'flex', gap: { xs: '15px', md: '30px' } }}>
-            <Button
-              component={Link}
+            <Link
               href='/order-history'
-              variant='outline'
-              sx={{ flex: 1, maxWidth: 280, height: 62 }}
+              passHref
+              style={{ flex: 1, maxWidth: 280 }}
             >
-              View Order
-            </Button>
-            <Button
-              component={Link}
-              href='/products'
-              sx={{ flex: 1, maxWidth: 280, height: 62 }}
-            >
-              Continue Shopping
-            </Button>
+              <Button variant='outline' sx={{ width: '100%', height: 62 }}>
+                View Order
+              </Button>
+            </Link>
+
+            <Link href='/products' passHref style={{ flex: 1, maxWidth: 280 }}>
+              <Button sx={{ width: '100%', height: 62 }}>
+                Continue Shopping
+              </Button>
+            </Link>
           </Box>
         </Box>
 
