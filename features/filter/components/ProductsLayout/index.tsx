@@ -28,7 +28,7 @@ export default function ProductsLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const { filters, removeFilterValue, applyFilters } = useFilterStore();
   const { value: productsCount } = useProductsCountStore();
   const handleRemoveFilter = (type: string, filterValues: FilterValue[]) => {
