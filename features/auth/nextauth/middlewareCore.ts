@@ -47,8 +47,18 @@ export function handleMiddleware(req: NextRequestWithAuth): NextResponse {
 
   if (isExpired && isProtectedPage) {
     const res = NextResponse.redirect(new URL('/sign-in', req.url));
-    res.cookies.delete('next-auth.session-token');
-    res.cookies.delete('__Secure-next-auth.session-token');
+
+    const cookieNames = [
+      'next-auth.session-token',
+      '__Secure-next-auth.session-token',
+    ];
+
+    cookieNames.forEach((name) => {
+      res.cookies.delete(name);
+    });
+
+    res.headers.set('Clear-Site-Data', '"cookies", "storage"');
+
     return res;
   }
 
